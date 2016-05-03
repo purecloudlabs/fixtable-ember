@@ -7,11 +7,27 @@
     <table class="table">
       <thead>
         <tr class="fixtable-column-headers">
-          <!-- column headers go here -->
+          {{#each columns as |column|}}
+            <th>
+              {{#if column.header}}
+                {{column.header}}
+              {{else}}
+                {{column.key}}
+              {{/if}}
+            </th>
+          {{/each}}
         </tr>
       </thead>
       <tbody>
-        <!-- rows go here -->
+        {{#each content as |row|}}
+          <tr>
+            {{#each columns as |column|}}
+              <td>
+                {{get-prop row column.key}}
+              </td>
+            {{/each}}
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
