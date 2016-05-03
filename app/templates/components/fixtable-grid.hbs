@@ -1,4 +1,4 @@
-<div class="fixtable">
+<div class={{if fixtableClass (concat 'fixtable ' fixtableClass) 'fixtable'}}>
   <div class="fixtable-header"></div>
   <div class="fixtable-filters">
     <!-- filter fields go here -->
@@ -9,11 +9,9 @@
         <tr class="fixtable-column-headers">
           {{#each columns as |column|}}
             <th>
-              {{#if column.header}}
-                {{column.header}}
-              {{else}}
-                {{column.key}}
-              {{/if}}
+              <div>
+                {{if column.header column.header column.key}}
+              </div>
             </th>
           {{/each}}
         </tr>

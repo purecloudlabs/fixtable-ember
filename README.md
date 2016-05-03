@@ -57,6 +57,7 @@ Here's an example using percentage width:
 ```
 
 ### Defining Content
+
 The component expects a `content` property to be passed in. This should be an array of objects.
 * Each object element in the array represents a row of data.
 * Each key/value pair in a row object represents a single cell of data. The key should match a key defined in `columns`, and the value represents the content for the column/row intersection.
@@ -70,6 +71,24 @@ For example, this is an example of content corresponding to the name and address
   { name: 'Hank Hill', address: '84 Rainey Street' },
   { name: 'Gandalf Stormcrow' }
 ]
+```
+
+### Adding a CSS Class / Setting a Height
+
+The primary feature of the Fixtable library is its ability to allow scrollable content with a fixed header and footer. To enable this feature, all you need to do is pass in a CSS class with a defined height through the `fixtableClass` property.
+
+For example:
+```css
+.restrict-height {
+  height: 400px;
+}
+```
+
+### Putting it All Together
+Let's say that we defined column definitions and grid content on our model as `columnDefs` and `dataRows` respectively. Let's also say that we have a `restrict-height` CSS class that we want to apply to the Fixtable to limit its height and make the content scrollable. In this example, our markup for the `fixtable-grid` component would look like this:
+
+```handlebars
+{{fixtable-grid columns=model.columnDefs content=model.dataRows fixtableClass='restrict-height'}}
 ```
 
 ## Development / Contributing
