@@ -9,7 +9,19 @@ test('it renders', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
 
-  this.render(hbs`{{fixtable-grid}}`);
+  this.set('columnDefs', [
+    { key: 'name', header: 'Name', width: 200 },
+    { key: 'address', header: 'Address' }
+  ]);
+  this.set('dataRows', [
+    { name: 'Sherlock Holmes ', address: '221B Baker Street' },
+    { name: 'Dudley Dursley', address: '4 Privet Drive' },
+    { name: 'Hank Hill', address: '84 Rainey Street' },
+    { name: 'Gandalf Stormcrow' },
+  ]);
 
-  assert.equal(this.$().text().trim(), '');
+  this.render(hbs`{{fixtable-grid columns=columnDefs content=dataRows}}`);
+
+  assert.ok(this.$('table').length); // there is a table element
+  assert.ok(this.$('.fixtable').length); // there is an element with 'fixtable' class
 });

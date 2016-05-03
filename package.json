@@ -20,7 +20,7 @@
   },
   "author": "Interactive Intelligence",
   "contributors": [
-    "Michael Newman <michaeleugenenewman@gmail.com>",
+    "Michael Newman <michaeleugenenewman@gmail.com>"
   ],
   "license": "MIT",
   "devDependencies": {
