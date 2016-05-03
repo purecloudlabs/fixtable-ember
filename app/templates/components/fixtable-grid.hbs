@@ -1,0 +1,35 @@
+<div class={{if fixtableClass (concat 'fixtable ' fixtableClass) 'fixtable'}}>
+  <div class="fixtable-header"></div>
+  <div class="fixtable-filters">
+    <!-- filter fields go here -->
+  </div>
+  <div class="fixtable-inner">
+    <table class="table">
+      <thead>
+        <tr class="fixtable-column-headers">
+          {{#each columns as |column|}}
+            <th>
+              <div>
+                {{if column.header column.header column.key}}
+              </div>
+            </th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each content as |row|}}
+          <tr>
+            {{#each columns as |column|}}
+              <td>
+                {{get-prop row column.key}}
+              </td>
+            {{/each}}
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class="fixtable-footer">
+    <!-- footer content goes here -->
+  </div>
+</div>
