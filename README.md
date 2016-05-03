@@ -12,6 +12,8 @@ Install this addon in your app using `npm install --save fixtable-ember`.
 
 This addon creates a new component that you can use in your templates: `fixtable-grid`
 
+Although it isn't strictly required, you should also include [Bootstrap 3](http://getbootstrap.com/getting-started/) in your project for optimal display.
+
 ### Defining Columns
 
 The `fixtable-grid` component expects to be passed a `columns` property, which should be a JavaScript array consisting of objects that have the following keys: `key`, `header`, and `width`.

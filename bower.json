@@ -1,5 +1,17 @@
 {
   "name": "fixtable-ember",
+  "version": "0.0.1",
+  "homepage": "https://github.com/MyPureCloud/fixtable-ember",
+  "authors": [
+    "Interactive Intelligence"
+  ],
+  "description": "Ember wrapper for the Fixtable table library",
+  "keywords": [
+    "data",
+    "table",
+    "fixtable"
+  ],
+  "license": "MIT",
   "dependencies": {
     "ember": "~2.5.0",
     "ember-cli-shims": "0.1.1",
