@@ -4,7 +4,7 @@ export default Ember.Route.extend({
   model() {
     return {
       columnDefs: [
-        { key: 'name', header: 'Name' },
+        { key: 'name', header: 'Name', width: 200 },
         { key: 'address', header: 'Address' }
       ],
       dataRows: [
