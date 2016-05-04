@@ -1,0 +1,42 @@
+@import 'colors';
+
+.fixtable {
+  .fixtable-header {
+    background: -webkit-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
+    background: -moz-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
+    background: -ms-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
+    background: -o-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
+    background: linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
+  }
+
+  table.table {
+    border: 1px solid $table-border-color;
+
+    thead {
+      tr {
+        th {
+          border-bottom: 2px solid $pure-blue;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        background-color: $table-body-color;
+      }
+    }
+
+    &.table-hover {
+      tbody {
+        tr:hover {
+          background-color: $table-hover-color;
+
+          td:first-child, th:first-child {
+            -webkit-box-shadow:inset 3px 0 0 0 $pure-blue;
+            box-shadow:inset 3px 0 0 0 $pure-blue;
+          }
+        }
+      }
+    }
+  }
+}
