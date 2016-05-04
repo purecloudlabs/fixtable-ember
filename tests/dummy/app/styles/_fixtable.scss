@@ -1,7 +1,7 @@
 @import 'colors';
 
 .fixtable {
-  background-color: $table-body-color;
+  background-color: $table-empty-color;
 
   .fixtable-header {
     background: -webkit-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
@@ -20,6 +20,12 @@
           th {
             border-bottom: 2px solid $pure-blue;
           }
+        }
+      }
+
+      tbody {
+        tr {
+          background-color: $table-body-color;
         }
       }
 
