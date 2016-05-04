@@ -94,14 +94,33 @@ At its core, the Fixtable is an HTML table element. If you want to customize the
 
 By default, Fixtable already adds the `table` CSS class to the table element. As a result, you do **not** need to pass `table` to the `tableClass` property.
 
-### Putting it All Together
-Let's say that we defined column definitions and grid content on our model as `columnDefs` and `dataRows` respectively. Let's also say that we have a `restrict-height` CSS class that we want to apply to the Fixtable to limit its height and make the content scrollable. In this example, our markup for the `fixtable-grid` component would look like this:
+### Loading Indicator
+
+If your data is being loaded asynchronously, you can show a loading indicator to make this clear to the user. Loading state can be toggled by binding to the `isLoading` property:
 
 ```handlebars
-{{fixtable-grid columns=model.columnDefs content=model.dataRows fixtableClass='restrict-height' tableClass='table-hover'}}
+{{fixtable-grid isLoading=dataIsLoading}}
+```
+
+*In this example, `dataIsLoading` is assumed to be a property on the containing component or controller, indicating whether data has finished loading.*
+
+While `isLoading` is true, a spinning 'loading' indicator will be shown in place of the grid content. When it becomes false, the loading indicator will be replaced with the actual data rows.
+
+### Putting it All Together
+
+In the examples above, we are making the following assumptions:
+* We defined column definitions and grid content on our model as `columnDefs` and `dataRows` respectively
+* We have a `restrict-height` CSS class that we want to apply to the Fixtable to limit its height
+* We want to apply the `table-hover` class to the table element so that rows have a hover style
+* We are indicating whether data has finished loading by binding the component's `isLoading` property to our `dataIsLoading` property
+
+With those assumptions, our final markup for the `fixtable-grid` component ends up looking like this:
+```handlebars
+{{fixtable-grid columns=model.columnDefs content=model.dataRows fixtableClass='restrict-height' tableClass='table-hover' isLoading=dataIsLoading}}
 ```
 
 ## Development / Contributing
+
 ### Installation
 
 * `git clone` this repository
