@@ -1,0 +1,11 @@
+@import 'colors';
+@import 'fixtable';
+
+body {
+  color: $text-color;
+  background-color: $body-background-color;
+}
+
+.restrict-height {
+  height: 400px;
+}

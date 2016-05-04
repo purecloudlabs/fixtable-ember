@@ -4,7 +4,7 @@
     <!-- filter fields go here -->
   </div>
   <div class="fixtable-inner">
-    <table class="table">
+    <table class={{if tableClass (concat 'table ' tableClass) 'table'}}>
       <thead>
         <tr class="fixtable-column-headers">
           {{#each columns as |column|}}

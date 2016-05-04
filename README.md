@@ -75,9 +75,9 @@ For example, this is an example of content corresponding to the name and address
 ]
 ```
 
-### Adding a CSS Class / Setting a Height
+### Adding Custom CSS Classes / Setting a Height
 
-The primary feature of the Fixtable library is its ability to allow scrollable content with a fixed header and footer. To enable this feature, all you need to do is pass in a CSS class with a defined height through the `fixtableClass` property.
+The primary feature of the Fixtable library is its ability to allow scrollable content with a fixed header and footer. To enable this feature, all you need to do is pass in a CSS class with a defined height through the `fixtableClass` property. The class (or classes, if you pass in a space-delimited class name string) specified in `fixtableClass` will be added to the Fixtable container element.
 
 For example:
 ```css
@@ -86,11 +86,19 @@ For example:
 }
 ```
 
+At its core, the Fixtable is an HTML table element. If you want to customize the look of the Fixtable by adding CSS classes directly to the table element, you can do that with the `tableClass` property. For example, we might want to add the `table-hover` class to add Bootstrap's default styles when you hover over a row in the table.
+
+```handlebars
+{{fixtable-grid tableClass='table-hover'}}
+```
+
+By default, Fixtable already adds the `table` CSS class to the table element. As a result, you do **not** need to pass `table` to the `tableClass` property.
+
 ### Putting it All Together
 Let's say that we defined column definitions and grid content on our model as `columnDefs` and `dataRows` respectively. Let's also say that we have a `restrict-height` CSS class that we want to apply to the Fixtable to limit its height and make the content scrollable. In this example, our markup for the `fixtable-grid` component would look like this:
 
 ```handlebars
-{{fixtable-grid columns=model.columnDefs content=model.dataRows fixtableClass='restrict-height'}}
+{{fixtable-grid columns=model.columnDefs content=model.dataRows fixtableClass='restrict-height' tableClass='table-hover'}}
 ```
 
 ## Development / Contributing

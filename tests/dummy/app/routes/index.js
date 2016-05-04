@@ -16,6 +16,7 @@ export default Ember.Route.extend({
         { name: 'Morgoth', address: 'Thangorodrim' },
         { name: 'Manwe', address: 'Valinor' },
         { name: 'Homer Simpson', address: 'Springfield, Illinois' },
+        { name: 'Darth Revan' },
         { name: 'Spongebob Squarepants', address: 'A Pineapple Under the Sea' },
         { name: 'Fitzwilliam Darcy', address: 'Pemberley' },
         { name: 'Nessie', address: 'Loch Ness' },
@@ -27,6 +28,8 @@ export default Ember.Route.extend({
         { name: 'Jor-El', address: 'Krypton' },
         { name: 'Oliver Twist' },
         { name: 'Artemis Fowl', address: 'Fowl Manor' },
+        { name: 'Roland Deschain' },
+        { name: 'Han Solo', address: 'Coruscant' }
       ]
     };
   }
