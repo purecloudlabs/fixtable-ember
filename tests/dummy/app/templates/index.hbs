@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-md-6">
     {{fixtable-grid columns=model.columnDefs content=model.dataRows
-      fixtableClass='restrict-height' tableClass='table-hover' isLoading=dataIsLoading }}
+      fixtableClass='restrict-height' tableClass='table-hover'
+      isLoading=dataIsLoading showPaging=true}}
+    ({{model.dataRows.length}} total rows)
   </div>
 </div>
 

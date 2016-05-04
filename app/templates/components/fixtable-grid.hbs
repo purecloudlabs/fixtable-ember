@@ -37,7 +37,28 @@
       {{/if}}
     </div>
   </div>
-  <div class="fixtable-footer">
-    <!-- footer content goes here -->
-  </div>
+  {{#if showPaging}}
+    <div class="fixtable-footer">
+      <span>Page</span>
+      <button type="button" class="btn btn-default" aria-label="Previous Page" {{action 'goToPreviousPage'}}>
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      </button>
+      {{input class="form-control" value=currentPage}}
+      <button type="button" class="btn btn-default" aria-label="Next Page" {{action 'goToNextPage'}}>
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      </button>
+      <span>of {{totalPages}}</span>
+
+      <span class="pull-right">
+        <select class="form-control" onchange={{action (mut pageSize) value="target.value"}}>
+          {{#each pageSizeOptions as |choice|}}
+            <option value={{choice}} selected={{equals pageSize choice}}>{{choice}}</option>
+          {{/each}}
+        </select>
+        <span>
+          items per page
+        </span>
+      </span>
+    </div>
+  {{/if}}
 </div>

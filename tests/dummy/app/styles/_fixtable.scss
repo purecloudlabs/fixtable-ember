@@ -3,7 +3,7 @@
 .fixtable {
   background-color: $table-empty-color;
 
-  .fixtable-header {
+  .fixtable-header, .fixtable-footer {
     background: -webkit-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
     background: -moz-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
     background: -ms-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
@@ -45,6 +45,14 @@
 
     .fa.fa-spin {
       color: #0F465D;
+    }
+  }
+
+  .fixtable-footer {
+    border-top: 1px solid $table-border-color;
+
+    .btn.btn-default {
+      background-image: linear-gradient(to bottom, $button-gradient-top 0%, $button-gradient-bottom 100%);
     }
   }
 }

@@ -38,5 +38,7 @@ module.exports = {
     this._super.included(app);
     importFontAwesome(app);
     importFixtable(app);
+
+    app.import('vendor/styles/fixtable-ember.css');
   }
 };
