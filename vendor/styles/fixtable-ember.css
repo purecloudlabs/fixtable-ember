@@ -1,12 +1,12 @@
-.fixtable > .fixtable-footer {
+.fixtable .fixtable-footer {
   padding: 5px;
 }
 
-.fixtable > .fixtable-footer .btn.btn-default {
+.fixtable .fixtable-footer .btn {
   padding: 3px 6px;
 }
 
-.fixtable > .fixtable-footer .form-control {
+.fixtable .fixtable-footer .form-control {
   display: inline;
   height: 28px;
   width: 40px;
@@ -14,6 +14,6 @@
   text-align: center;
 }
 
-.fixtable > .fixtable-footer select.form-control {
-  width: 50px;
+.fixtable .fixtable-footer select.form-control {
+  width: 55px;
 }
