@@ -17,17 +17,25 @@
         </tr>
       </thead>
       <tbody>
-        {{#each content as |row|}}
-          <tr>
-            {{#each columns as |column|}}
-              <td>
-                {{get-prop row column.key}}
-              </td>
-            {{/each}}
-          </tr>
-        {{/each}}
+        {{#unless isLoading}}
+          {{#each content as |row|}}
+            <tr>
+              {{#each columns as |column|}}
+                <td>
+                  {{get-prop row column.key}}
+                </td>
+              {{/each}}
+            </tr>
+          {{/each}}
+        {{/unless}}
       </tbody>
     </table>
+    <div class="fixtable-centered">
+      {{#if isLoading}}
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw" aria-hidden="true"></i>
+        <span class="sr-only">Loading...</span>
+      {{/if}}
+    </div>
   </div>
   <div class="fixtable-footer">
     <!-- footer content goes here -->
