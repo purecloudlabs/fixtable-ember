@@ -21,7 +21,7 @@
           {{#each visibleContent as |row|}}
             <tr>
               {{#each columns as |column|}}
-                <td>
+                <td class={{column.cellClass}}>
                   {{#if column.component}}
                     {{!-- render the passed-in component --}}
                     {{component column.component dataRow=row columnDef=column}}

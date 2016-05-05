@@ -9,3 +9,12 @@ body {
 .restrict-height {
   height: 400px;
 }
+
+.monospace {
+  font-family: monospace;
+}
+
+.name {
+  color: $dark-blue;
+  font-weight: bold;
+}

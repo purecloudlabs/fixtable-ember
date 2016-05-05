@@ -80,6 +80,10 @@ For example, this is an example of content corresponding to the name and address
 The primary feature of the Fixtable library is its ability to allow scrollable content with a fixed header and footer. To enable this feature, all you need to do is pass in a CSS class with a defined height through the `fixtableClass` property. The class (or classes, if you pass in a space-delimited class name string) specified in `fixtableClass` will be added to the Fixtable container element.
 
 For example:
+```handlebars
+{{fixtable-grid fixtableClass='restrict-height'}}
+```
+
 ```css
 .restrict-height {
   height: 400px;
@@ -93,6 +97,21 @@ At its core, the Fixtable is an HTML table element. If you want to customize the
 ```
 
 By default, Fixtable already adds the `table` CSS class to the table element. As a result, you do **not** need to pass `table` to the `tableClass` property.
+
+You can also add custom CSS classes directly to the cell (`td`) elements for a given column. This should be done by specifying a `cellClass` for the column in the column definition. For example, let's say we want to add the "name" CSS class to every cell in the Name column. Our column definition would need to look like this:
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    cellClass: 'name'
+  },
+  {
+    key: 'address',
+    header: 'Street Address'
+  }
+]
+```
 
 ### Loading Indicator
 
