@@ -6,7 +6,8 @@ export default Ember.Route.extend({
       columnDefs: [
         { key: 'id', header: 'ID', width: 50 },
         { key: 'name', header: 'Name', width: 200 },
-        { key: 'address', header: 'Address' }
+        { key: 'address', header: 'Address' },
+        { key: 'username', header: 'Username', component: 'user-name' }
       ],
       dataRows: [
         { name: 'Sherlock Holmes ', address: '221B Baker Street' },

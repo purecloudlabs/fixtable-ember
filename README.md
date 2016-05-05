@@ -2,7 +2,7 @@
 
 This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer.
 
-## Usage
+## Basic Usage
 
 ### Getting Started
 
@@ -119,6 +119,8 @@ With those assumptions, our final markup for the `fixtable-grid` component ends 
 {{fixtable-grid columns=model.columnDefs content=model.dataRows fixtableClass='restrict-height' tableClass='table-hover' isLoading=dataIsLoading}}
 ```
 
+## Advanced Usage
+
 ### Pagination
 
 By default, the Fixtable grid assumes that its passed-in content represents **all** of the available content. However, if your content is split into multiple pages, there is built-in support for two different kinds of pagination: client-side and server-side.
@@ -169,6 +171,41 @@ actions: {
 ```
 
 In this example, first we are showing the loading indicator to let the user know that data is loading. Next, we request additional data from the server based on the updated `page` and `pageSize`. When we receive the data, we hide the loading indicator and set the new rows into the model property bound to the `fixtable-grid` component.
+
+### Custom Cell Components
+
+You may want to render something more complicated into a cell than just a simple string value. For example, you might want to make each cell link out to another route, or you might want to embed a Handlebars template into a cell. You can do that by creating a custom cell component.
+
+It's very easy to create a custom cell component -- all you have to do is specify a `component` for the column in the column definitions:
+
+For example, here we have two regular columns and a third "profile" column that will render the `link-to-profile` component in each cell.
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+  },
+  {
+    key: 'address',
+    header: 'Street Address'
+  },
+  {
+    key: 'profile',
+    header: 'Profile',
+    component: 'link-to-profile'
+  }
+]
+```
+
+Custom cell components will automatically be provided with two properties: `columnDef` and `dataRow`. These properties are exactly what they sound like -- the column definition and data row for the cell, respectively.
+
+For example, the Handlebars markup for the example `link-to-profile` component could look like this:
+```handlebars
+{{link-to 'profile' dataRow.name}}
+```
+
+This would render a link to the "profile" route in each row, passing the "name" property as a parameter.
 
 ## Development / Contributing
 
