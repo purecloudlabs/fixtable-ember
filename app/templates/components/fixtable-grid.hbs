@@ -22,7 +22,13 @@
             <tr>
               {{#each columns as |column|}}
                 <td>
-                  {{get-prop row column.key}}
+                  {{#if column.component}}
+                    {{!-- render the passed-in component --}}
+                    {{component column.component dataRow=row columnDef=column}}
+                  {{else}}
+                    {{!-- directly render the cell --}}
+                    {{get-prop row column.key}}
+                  {{/if}}
                 </td>
               {{/each}}
             </tr>
