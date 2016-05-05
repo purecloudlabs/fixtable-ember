@@ -7,46 +7,74 @@ const defaultPageSize = 25;
 export default Ember.Component.extend({
   fixtable: null,
   clientPaging: false,
-  serverPagingOptions: null,
-  currentPage: defaultPage, // TODO - notify consumer when currentPage changes
+  serverPaging: false,
+  totalRowsOnServer: 0, // only used for server paging
 
-  pageSize: defaultPageSize, // TODO - notify consumer when pageSize changes
-  resetCurrentPage: Ember.observer('pageSize', function() {
-    this.set('currentPage', defaultPage);
-  }),
+  currentPage: defaultPage,
+  afterCurrentPageChanged: Ember.observer('currentPage',
+    function fixtableGrid$afterCurrentPageChanged() {
+      Ember.run.once(this, this.notifyPageChanged);
+    }),
 
-  pageSizeOptions: Ember.computed('content.[]', function() {
-    // limit the page size options based on content size
-    for (var i = 0; i < possiblePageSizes.length; i++) {
-      if (possiblePageSizes[i] >= this.get('content').length) {
-        break;
+  pageSize: defaultPageSize,
+  afterPageSizeChanged: Ember.observer('pageSize',
+    function fixtableGrid$afterPageSizeChanged() {
+      Ember.run.once(this, this.notifyPageChanged);
+      this.set('currentPage', defaultPage);
+    }),
+
+  notifyPageChanged: function fixtableGrid$notifyPageChanged() {
+    var handler = this.get('onPageChanged');
+    if (typeof handler === 'function') {
+      handler(this.get('currentPage'), this.get('pageSize'));
+    }
+  },
+
+  pageSizeOptions: Ember.computed('totalRows',
+    function fixtableGrid$pageSizeOptions() {
+      // limit the page size options based on content size
+      for (var i = 0; i < possiblePageSizes.length; i++) {
+        if (possiblePageSizes[i] >= this.get('totalRows')) {
+          break;
+        }
       }
-    }
-    return possiblePageSizes.slice(0, i + 1);
-  }),
+      return possiblePageSizes.slice(0, i + 1);
+    }),
 
-  showPaging: Ember.computed('clientPaging', 'serverPagingOptions', function() {
-    return this.get('clientPaging') || this.get('serverPagingOptions');
-  }),
+  showPaging: Ember.computed('clientPaging', 'serverPaging',
+    function fixtableGrid$showPaging() {
+      return this.get('clientPaging') || this.get('serverPaging');
+    }),
 
-  visibleContent: Ember.computed('content.[]', 'currentPage', 'pageSize', 'clientPaging', function() {
-    var content = this.get('content') || [];
+  visibleContent: Ember.computed('content.[]', 'currentPage', 'pageSize', 'clientPaging',
+    function fixtableGrid$visibleContent() {
+      var content = this.get('content') || [];
 
-    if (!this.get('clientPaging')) {
-      return content; // render everything if no pagination or server pagination
-    }
+      if (!this.get('clientPaging')) {
+        return content; // render everything if no pagination or server pagination
+      }
 
-    var currentPage = this.get('currentPage');
-    var pageSize = this.get('pageSize');
-    return content.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  }),
+      var currentPage = this.get('currentPage');
+      var pageSize = this.get('pageSize');
+      return content.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    }),
 
-  totalPages: Ember.computed('content.[]', 'pageSize', function() {
-    var contentLength = this.get('content').length;
-    var pageSize = this.get('pageSize');
+  totalRows: Ember.computed('content.[]', 'serverPaging', 'totalRowsOnServer',
+    function fixtableGrid$totalRows() {
+      if (this.get('serverPaging'))
+      {
+        return this.get('totalRowsOnServer');
+      }
+      else {
+        var content = this.get('content');
+        return content ? content.length : 0;
+      }
+    }),
 
-    return Math.ceil(contentLength / pageSize);
-  }),
+  totalPages: Ember.computed('totalRows', 'pageSize',
+    function fixtableGrid$totalPages() {
+      return Math.ceil(this.get('totalRows') / this.get('pageSize'));
+    }),
 
   actions: {
     goToPreviousPage() {

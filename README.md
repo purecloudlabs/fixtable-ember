@@ -121,23 +121,54 @@ With those assumptions, our final markup for the `fixtable-grid` component ends 
 
 ### Pagination
 
-#### Client Pagination
+By default, the Fixtable grid assumes that its passed-in content represents **all** of the available content. However, if your content is split into multiple pages, there is built-in support for two different kinds of pagination: client-side and server-side.
 
-To enable client paging, set the `clientPaging` property to true. The Fixtable will then assume that all data has been loaded and is present in the `content` collection, and it will handle pagination logic internally.
+#### Client-Side Pagination
+
+To enable client paging, all you have to do is set the `clientPaging` property to true. The Fixtable will then assume that all data has been loaded and is present in the `content` collection, and it will handle pagination logic internally.
 
 ```handlebars
 {{fixtable-grid columns=model.columnDefs content=model.dataRows clientPaging=true}}
 ```
 
-The Fixtable will now have a pagination footer that shows the current page and the total number of pages. Users will be able to go back or forward a page, jump to a specific page, and configure the page size. The possible options for page size are 25, 50, 100, 250, and 500 -- however, this will be limited based on the number of rows to remove superfluous options for smaller data sets. For example, if there are only 55 rows total, then the possible page sizes will be 25, 50, and 100. There's no need to show the 250 and 500 page size options since they will be functionally identical to a page size of 100.
+With client paging turned on, the Fixtable will now limit the number of rows that are shown in the table at a time. Beneath the table, there will be a pagination footer that shows the current page and the total number of pages. The footer also lets users go back or forward a page, jump to a specific page, and configure the page size.
 
-#### Server Pagination
+The possible options for page size are 25, 50, 100, 250, and 500 -- however, this will be limited based on the number of rows. For example, if there are only 55 rows total, then the possible page sizes will be 25, 50, and 100. There's no need to show the 250 and 500 page size options since they will be functionally identical to a page size of 100.
 
-If it is set to true, the Fixtable will assume that pagination should *not* be handled on the client (or at least, not by the Fixtable itself), and will provide hooks to let the consumer know when the current page or the page size changes.
+#### Server-Side Pagination
 
-TODO - usage examples
+Enabling server paging takes a little more setup:
+* First, set the `serverPaging` property to true.
+* Bind the component's `totalRowsOnServer` property to a value representing the length of the dataset on the server. (The Fixtable needs this information to calculate how many pages there are.)
+* Attach an action to the component's `onPageChanged` property. The action function will receive two parameters -- `page` (the current 1-indexed page number) and `pageSize` (the current page size) -- and is called whenever either the page or the page size changes.
 
-TODO - what are the hooks for server paging?
+Although the same pagination footer will be shown as with client-side pagination, the Fixtable will now assume that pagination should *not* be handled on the client (or at least, not by the Fixtable itself). Instead, it provides a hook named `onPageChanged` to let the consumer know when the current page or the page size changes. The consumer is expected to use this information to update the bound content of the `fixtable-grid` component.
+
+Here's some sample markup:
+``` handlebars
+{{fixtable-grid columns=model.columnDefs content=model.pagedDataRows
+  isLoading=serverPageIsLoading serverPaging=true totalRowsOnServer=model.totalRows
+  onPageChanged=(action 'updatePage') }}
+```
+
+Notice that we've turned on server paging, set the total number of rows, and bound the `updatePage` action to the component's `onPageChanged` property. We've also set a property that lets us toggle the loading indicator.
+
+In our controller, we might define `updatePage` something like this:
+```javascript
+actions: {
+  updatePage(page, pageSize) {
+    this.set('serverPageIsLoading', true);
+
+    this.store.query('rows', { page, pageSize )
+      .then(rows => {
+        this.set('serverPageIsLoading', false);
+        this.set('model.pagedDataRows', rows);
+      });
+  }
+}
+```
+
+In this example, first we are showing the loading indicator to let the user know that data is loading. Next, we request additional data from the server based on the updated `page` and `pageSize`. When we receive the data, we hide the loading indicator and set the new rows into the model property bound to the `fixtable-grid` component.
 
 ## Development / Contributing
 

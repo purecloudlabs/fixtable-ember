@@ -64,6 +64,7 @@ export default Ember.Route.extend({
       ]
     };
     model.dataRows.forEach((row, idx) => row.id = (idx + 1));
+    model.pagedDataRows = model.dataRows.slice(0, 25);
     return model;
-  }
+  },
 });
