@@ -2,8 +2,9 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   model() {
-    return {
+    var model = {
       columnDefs: [
+        { key: 'id', header: 'ID', width: 50 },
         { key: 'name', header: 'Name', width: 200 },
         { key: 'address', header: 'Address' }
       ],
@@ -62,5 +63,7 @@ export default Ember.Route.extend({
         { name: 'Reed Richards', address: 'The Baxter Building' }
       ]
     };
+    model.dataRows.forEach((row, idx) => row.id = (idx + 1));
+    return model;
   }
 });

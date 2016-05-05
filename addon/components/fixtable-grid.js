@@ -6,6 +6,8 @@ const defaultPageSize = 25;
 
 export default Ember.Component.extend({
   fixtable: null,
+  clientPaging: false,
+  serverPagingOptions: null,
   currentPage: defaultPage, // TODO - notify consumer when currentPage changes
 
   pageSize: defaultPageSize, // TODO - notify consumer when pageSize changes
@@ -14,12 +16,29 @@ export default Ember.Component.extend({
   }),
 
   pageSizeOptions: Ember.computed('content.[]', function() {
+    // limit the page size options based on content size
     for (var i = 0; i < possiblePageSizes.length; i++) {
       if (possiblePageSizes[i] >= this.get('content').length) {
         break;
       }
     }
     return possiblePageSizes.slice(0, i + 1);
+  }),
+
+  showPaging: Ember.computed('clientPaging', 'serverPagingOptions', function() {
+    return this.get('clientPaging') || this.get('serverPagingOptions');
+  }),
+
+  visibleContent: Ember.computed('content.[]', 'currentPage', 'pageSize', 'clientPaging', function() {
+    var content = this.get('content') || [];
+
+    if (!this.get('clientPaging')) {
+      return content; // render everything if no pagination or server pagination
+    }
+
+    var currentPage = this.get('currentPage');
+    var pageSize = this.get('pageSize');
+    return content.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   }),
 
   totalPages: Ember.computed('content.[]', 'pageSize', function() {

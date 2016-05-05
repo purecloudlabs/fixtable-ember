@@ -119,6 +119,26 @@ With those assumptions, our final markup for the `fixtable-grid` component ends 
 {{fixtable-grid columns=model.columnDefs content=model.dataRows fixtableClass='restrict-height' tableClass='table-hover' isLoading=dataIsLoading}}
 ```
 
+### Pagination
+
+#### Client Pagination
+
+To enable client paging, set the `clientPaging` property to true. The Fixtable will then assume that all data has been loaded and is present in the `content` collection, and it will handle pagination logic internally.
+
+```handlebars
+{{fixtable-grid columns=model.columnDefs content=model.dataRows clientPaging=true}}
+```
+
+The Fixtable will now have a pagination footer that shows the current page and the total number of pages. Users will be able to go back or forward a page, jump to a specific page, and configure the page size. The possible options for page size are 25, 50, 100, 250, and 500 -- however, this will be limited based on the number of rows to remove superfluous options for smaller data sets. For example, if there are only 55 rows total, then the possible page sizes will be 25, 50, and 100. There's no need to show the 250 and 500 page size options since they will be functionally identical to a page size of 100.
+
+#### Server Pagination
+
+If it is set to true, the Fixtable will assume that pagination should *not* be handled on the client (or at least, not by the Fixtable itself), and will provide hooks to let the consumer know when the current page or the page size changes.
+
+TODO - usage examples
+
+TODO - what are the hooks for server paging?
+
 ## Development / Contributing
 
 ### Installation

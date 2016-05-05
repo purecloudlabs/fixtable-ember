@@ -1,12 +1,33 @@
+<button type="button" class="btn btn-primary" {{action 'toggleLoading'}}>
+  Toggle Loading
+</button>
+<div>Total Rows: {{model.dataRows.length}}</div>
+
+<h3>No Paging</h3>
 <div class="row">
   <div class="col-md-6">
     {{fixtable-grid columns=model.columnDefs content=model.dataRows
       fixtableClass='restrict-height' tableClass='table-hover'
-      isLoading=dataIsLoading showPaging=true}}
-    ({{model.dataRows.length}} total rows)
+      isLoading=dataIsLoading}}
   </div>
 </div>
 
-<button type="button" class="btn btn-primary" {{action 'toggleLoading'}}>
-  Toggle Loading
-</button>
+<h3>Client Paging</h3>
+<div class="row">
+  <div class="col-md-6">
+    {{fixtable-grid columns=model.columnDefs content=model.dataRows
+      fixtableClass='restrict-height' tableClass='table-hover'
+      isLoading=dataIsLoading clientPaging=true}}
+  </div>
+</div>
+
+{{!--
+<h3>Server Paging</h3>
+<div class="row">
+  <div class="col-md-6">
+    {{fixtable-grid columns=model.columnDefs content=model.dataRows
+      fixtableClass='restrict-height' tableClass='table-hover'
+      isLoading=dataIsLoading serverPagingOptions={} }}
+  </div>
+</div>
+--}}

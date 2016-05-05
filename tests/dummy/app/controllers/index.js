@@ -6,7 +6,6 @@ function toggleBooleanProperty(self, propertyName) {
 
 export default Ember.Controller.extend({
   dataIsLoading: false,
-  dataIsPaged: false,
 
   actions: {
     toggleLoading() {
