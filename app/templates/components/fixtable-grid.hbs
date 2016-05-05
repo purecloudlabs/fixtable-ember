@@ -18,7 +18,7 @@
       </thead>
       <tbody>
         {{#unless isLoading}}
-          {{#each content as |row|}}
+          {{#each visibleContent as |row|}}
             <tr>
               {{#each columns as |column|}}
                 <td>
@@ -32,12 +32,33 @@
     </table>
     <div class="fixtable-centered">
       {{#if isLoading}}
-        <i class="fa fa-refresh fa-spin fa-3x fa-fw" aria-hidden="true"></i>
+        <i class="fa fa-refresh fa-spin fa-4x fa-fw" aria-hidden="true"></i>
         <span class="sr-only">Loading...</span>
       {{/if}}
     </div>
   </div>
-  <div class="fixtable-footer">
-    <!-- footer content goes here -->
-  </div>
+  {{#if showPaging}}
+    <div class="fixtable-footer">
+      <span>Page</span>
+      <button type="button" class="btn btn-default" aria-label="Previous Page" {{action 'goToPreviousPage'}}>
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      </button>
+      {{input class="form-control" value=currentPage}}
+      <button type="button" class="btn btn-default" aria-label="Next Page" {{action 'goToNextPage'}}>
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      </button>
+      <span>of {{totalPages}}</span>
+
+      <span class="pull-right">
+        <select class="form-control" onchange={{action (mut pageSize) value="target.value"}}>
+          {{#each pageSizeOptions as |choice|}}
+            <option value={{choice}} selected={{equals pageSize choice}}>{{choice}}</option>
+          {{/each}}
+        </select>
+        <span>
+          items per page
+        </span>
+      </span>
+    </div>
+  {{/if}}
 </div>
