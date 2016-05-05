@@ -221,7 +221,7 @@ Custom cell components will automatically be provided with two properties: `colu
 
 For example, the Handlebars markup for the example `link-to-profile` component could look like this:
 ```handlebars
-{{link-to 'profile' dataRow.name}}
+{{#link-to 'profile' dataRow.name}}Go to profile for {{dataRow.name}}{{/link-to}}
 ```
 
 This would render a link to the "profile" route in each row, passing the "name" property as a parameter.
