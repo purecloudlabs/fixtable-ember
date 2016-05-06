@@ -6,36 +6,13 @@ const defaultPageSize = 25;
 
 export default Ember.Component.extend({
   fixtable: null,
+  columnsByKey: null,
   clientPaging: false,
   serverPaging: false,
   totalRowsOnServer: 0, // only used for server paging
   filters: null,
   filterToApply: null,
   filterDebounce: 500,
-
-  onColumnsChanged: Ember.observer('columns.@each',
-    function fixtableGrid$onColumnsChanged() {
-      this.updateFilterObservers();
-    }),
-
-  updateFilterObservers() {
-    var filters = Ember.Object.create();
-    this.set('filters', filters);
-
-    this.get('columns').forEach(colDef => {
-      if (colDef.filter && typeof filters[colDef.key] === 'undefined') {
-        filters[colDef.key] = "";
-      }
-    });
-
-    var filterKeys = Object.keys(filters);
-    var self = this;
-    filterKeys.forEach(function(key) {
-      if (!filters.hasObserverFor(key)) {
-        filters.addObserver(key, self, 'onFilterChanged');
-      }
-    });
-  },
 
   onFilterChanged: function fixtableGrid$onFilterChanged(/*filters, columnKey*/) {
     Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
@@ -91,11 +68,24 @@ export default Ember.Component.extend({
         return content; // don't filter on the client if server pagination is on
       }
 
+      var columnsByKey = this.get('columnsByKey');
+
       // client filtering
       var filters = this.get('filterToApply') || {};
-      var filteredContent = content.filter(row =>
-        Object.keys(filters).every(columnKey =>
-          !filters[columnKey] || (row[columnKey] || '').toLowerCase().includes(filters[columnKey].toLowerCase())));
+      var filteredContent = content.filter(function(row) {
+        return Object.keys(filters).every(function(columnKey) {
+          if (!filters[columnKey]) { return true; } // no filter
+          var cellData = (row[columnKey] || '').toLowerCase();
+          var filterValue = filters[columnKey].toLowerCase();
+
+          if (columnsByKey[columnKey].filter.type === 'select') {
+            return cellData === filterValue;
+          }
+          else {
+            return cellData.includes(filterValue);
+          }
+        });
+      });
 
       return filteredContent;
     }),
@@ -143,6 +133,31 @@ export default Ember.Component.extend({
   init() {
     this._super(...arguments);
     this.updateFilterObservers();
+
+    var columnsByKey = {};
+    this.get('columns').forEach(column => {
+      columnsByKey[column.key] = column;
+    });
+    this.set('columnsByKey', columnsByKey);
+  },
+
+  updateFilterObservers() {
+    var filters = Ember.Object.create();
+    this.set('filters', filters);
+
+    this.get('columns').forEach(colDef => {
+      if (colDef.filter && typeof filters[colDef.key] === 'undefined') {
+        filters[colDef.key] = "";
+      }
+    });
+
+    var filterKeys = Object.keys(filters);
+    var self = this;
+    filterKeys.forEach(function(key) {
+      if (!filters.hasObserverFor(key)) {
+        filters.addObserver(key, self, 'onFilterChanged');
+      }
+    });
   },
 
   didInsertElement() {

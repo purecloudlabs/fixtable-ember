@@ -30,10 +30,10 @@
 <h3>Server Paging</h3>
 <p>This Fixtable only loads a page at the time and relies on its owning component or controller to provide more data.</p>
 <p>This example is actually still implemented on the client, but it simulates server pagination.</p>
-<p>Because loading data from the server is asynchronous, we can show the loading indicator while we wait.</p>
+<p>Because loading data from the server is asynchronous, we show the loading indicator while we wait to let the user know that something is happening.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnDefs content=model.pagedDataRows
+    {{fixtable-grid columns=model.columnDefs content=model.pagedDataRows
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=serverPageIsLoading serverPaging=true totalRowsOnServer=model.dataRows.length
       onPageChanged=(action 'updatePage') }}

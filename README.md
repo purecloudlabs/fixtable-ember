@@ -247,13 +247,58 @@ For example, this adds a search-type filter to the name column:
 ]
 ```
 
+Similar to how pagination is handled, the implementation of filtering depends on whether all of the Fixtable's content is present on the client.
+
 #### Client-Side Filtering
 
-TODO
+As long as `serverPaging` is not set to true, the Fixtable can handle the filtering logic internally. Adding a filter type to the column definition, as described above, will show a filter field in the column header. Typing into the search field (or selecting a filter option) will automatically filter the visible data rows.
 
 #### Server-Side Filtering
 
-TODO
+This feature is not implemented yet, but stay tuned -- it should be coming soon.
+
+#### Types of Filters
+
+There are two types of filters: search filters and select filters. Search-type filters discriminate rows based on the text typed into the filter field, excluding any row that does not include the searched-for text as a substring (case-insensitive). Select-type filters discriminate rows based on a discretely selected option, where the row's value for that column must be equal to the selected filter option (again, case-insensitive).
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      type: 'search'
+    }
+  },
+  {
+    key: 'grade',
+    header: 'Letter Grade',
+    filter: {
+      type: 'select',
+      selectOptions: [
+        { value: 'A' },
+        { value: 'B' },
+        { value: 'C' },
+        { value: 'D' },
+        { value: 'F' },
+      ]
+    }
+  }
+]
+```
+
+#### Filter Debouncing
+
+To avoid rapid and unnecessary filtering as the user types, the Fixtable automatically debounces the filtering by 500ms. In other words, the filter will not be applied until 500ms after the user stops typing into a filter field. This can be configured by setting the component's `filterDebounce` property, if desired. (The property should be set to a number representing the debounce time in milliseconds.)
+
+For example, this lengthens the debounce time to a full second.
+```handlebars
+{{fixtable-grid columns=model.columnDefs content=model.dataRows filterDebounce=1000}}
+```
+
+#### Filter Caveats
+
+Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
 
 ## Development / Contributing
 

@@ -20,11 +20,20 @@
                 <div>
                   <div class='form-group'>
                     <div class='input-group'>
-                      {{input class='form-control' type='search' aria-label="Filter by column"
-                        value=(mut (get filters column.key))}}
-                      <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                      </span>
+                      {{#if (equals column.filter.type 'select')}}
+                        <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
+                          <option value=""></option>
+                          {{#each column.filter.selectOptions as |choice|}}
+                            <option value={{choice.value}} selected={{equals (get filters column.key) choice}}>{{choice.value}}</option>
+                          {{/each}}
+                        </select>
+                      {{else}}
+                        {{input class='form-control' type='search' aria-label="Filter by column"
+                          value=(mut (get filters column.key))}}
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </span>
+                      {{/if}}
                     </div>
                   </div>
                 </div>
