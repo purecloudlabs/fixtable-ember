@@ -161,23 +161,23 @@ The possible options for page size are 25, 50, 100, 250, and 500 -- however, thi
 Enabling server paging takes a little more setup:
 * First, set the `serverPaging` property to true.
 * Bind the component's `totalRowsOnServer` property to a value representing the length of the dataset on the server. (The Fixtable needs this information to calculate how many pages there are.)
-* Attach an action to the component's `onPageChanged` property. The action function will receive two parameters -- `page` (the current 1-indexed page number) and `pageSize` (the current page size) -- and is called whenever either the page or the page size changes.
+* Attach an action to the component's `onReloadContent` property. The action function will receive two parameters -- `page` (the current 1-indexed page number) and `pageSize` (the current page size) -- and is called whenever either the page or the page size changes.
 
-Although the same pagination footer will be shown as with client-side pagination, the Fixtable will now assume that pagination should *not* be handled on the client (or at least, not by the Fixtable itself). Instead, it provides a hook named `onPageChanged` to let the consumer know when the current page or the page size changes. The consumer is expected to use this information to update the bound content of the `fixtable-grid` component.
+Although the same pagination footer will be shown as with client-side pagination, the Fixtable will now assume that pagination should *not* be handled on the client (or at least, not by the Fixtable itself). Instead, it provides a hook named `onReloadContent` to let the consumer know when the current page or the page size changes. The consumer is expected to use this information to update the bound content of the `fixtable-grid` component.
 
 Here's some sample markup:
 ``` handlebars
 {{fixtable-grid columns=model.columnDefs content=model.pagedDataRows
   isLoading=serverPageIsLoading serverPaging=true totalRowsOnServer=model.totalRows
-  onPageChanged=(action 'updatePage') }}
+  onReloadContent=(action 'updatePage') }}
 ```
 
-Notice that we've turned on server paging, set the total number of rows, and bound the `updatePage` action to the component's `onPageChanged` property. We've also set a property that lets us toggle the loading indicator.
+Notice that we've turned on server paging, set the total number of rows, and bound the `updatePage` action to the component's `onReloadContent` property. We've also set a property that lets us toggle the loading indicator.
 
 In our controller, we might define `updatePage` something like this:
 ```javascript
 actions: {
-  updatePage(page, pageSize) {
+  updatePage(page, pageSize/*, filters*/) {
     this.set('serverPageIsLoading', true);
 
     this.store.query('rows', { page, pageSize )
@@ -255,7 +255,20 @@ As long as `serverPaging` is not set to true, the Fixtable can handle the filter
 
 #### Server-Side Filtering
 
-This feature is not implemented yet, but stay tuned -- it should be coming soon.
+Server-side filtering presents the same user interface as client-side filtering, but the content is not automatically filtered (because the Fixtable cannot assume that all data is present on the client). Server-side filtering is active whenever the `serverPaging` property is set to true. In other words, if you're using server-side pagination, you also need to use server-side filtering.
+
+Server-side filtering uses the same `onReloadContent` event as server-side pagination, so you don't need to define a separate function or property. The third parameter passed to the function (after `page` and `pageSize`) will be `filters`, an object where the key/value pairs link column keys to filter text. For example:
+```javascript
+{
+  name: 'smith',
+  address: ''
+}
+```
+If the value is null or empty, that means that there is no filter applied to that column.
+
+After requesting and receiving the updated data from the server, you should also update the value of `totalRowsOnServer` so that it reflects the total number of *filtered* rows on the server. Otherwise, there may be additional "blank" pages in the Fixtable, because the number of pages shown is determined by `totalRowsOnServer`.
+
+Do note that it's possible for changing the filters to simultaneously change the current page. (The Fixtable automatically jumps to the first page if new filters are applied.) If this happens, the `onReloadContent` function will still only be invoked a single time. As a result, you should likely always include both filter and pagination information in your server request.
 
 #### Types of Filters
 

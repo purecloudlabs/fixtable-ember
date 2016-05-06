@@ -22,25 +22,26 @@ export default Ember.Component.extend({
     // update the filterToApply property to trigger a change in filteredContent
     this.set('filterToApply', JSON.parse(JSON.stringify(this.get('filters'))));
     this.set('currentPage', 1);
+    Ember.run.once(this, this.notifyReloadContent);
   },
 
   currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage',
     function fixtableGrid$afterCurrentPageChanged() {
-      Ember.run.once(this, this.notifyPageChanged);
+      Ember.run.once(this, this.notifyReloadContent);
     }),
 
   pageSize: defaultPageSize,
   afterPageSizeChanged: Ember.observer('pageSize',
     function fixtableGrid$afterPageSizeChanged() {
-      Ember.run.once(this, this.notifyPageChanged);
+      Ember.run.once(this, this.notifyReloadContent);
       this.set('currentPage', defaultPage);
     }),
 
-  notifyPageChanged: function fixtableGrid$notifyPageChanged() {
-    var handler = this.get('onPageChanged');
+  notifyReloadContent: function fixtableGrid$notifyReloadContent() {
+    var handler = this.get('onReloadContent');
     if (typeof handler === 'function') {
-      handler(this.get('currentPage'), this.get('pageSize'));
+      handler(this.get('currentPage'), this.get('pageSize'), this.get('filterToApply') || {});
     }
   },
 

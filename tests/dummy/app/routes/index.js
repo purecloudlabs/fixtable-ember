@@ -87,6 +87,7 @@ export default Ember.Route.extend({
     };
     model.dataRows.forEach((row, idx) => row.id = (idx + 1));
     model.pagedDataRows = model.dataRows.slice(0, 25);
+    model.filteredDataRows = model.dataRows;
 
     // create a version of the column defs that includes filters
     model.filteredColumnDefs = JSON.parse(JSON.stringify(model.columnDefs));
