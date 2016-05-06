@@ -27,7 +27,7 @@ export default Ember.Route.extend({
         }
       ],
       dataRows: [
-        { name: 'Sherlock Holmes ', address: '221B Baker Street' },
+        { name: 'Sherlock Holmes', address: '221B Baker Street' },
         { name: 'Dudley Dursley', address: '4 Privet Drive' },
         { name: 'Hank Hill', address: '84 Rainey Street / Arlen, TX' },
         { name: 'Peggy Hill', address: '84 Rainey Street / Arlen, TX' },

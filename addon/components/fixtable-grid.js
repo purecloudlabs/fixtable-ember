@@ -10,6 +10,7 @@ export default Ember.Component.extend({
   serverPaging: false,
   totalRowsOnServer: 0, // only used for server paging
   filters: null,
+  filterToApply: null,
   filterDebounce: 500,
 
   onColumnsChanged: Ember.observer('columns.@each',
@@ -36,12 +37,14 @@ export default Ember.Component.extend({
     });
   },
 
-  onFilterChanged: function fixtableGrid$onFilterChanged(filters, columnKey) {
+  onFilterChanged: function fixtableGrid$onFilterChanged(/*filters, columnKey*/) {
     Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
   },
 
   applyFilter: function fixtableGrid$applyFilter() {
-    console.log('time to apply filters!');
+    // update the filterToApply property to trigger a change in filteredContent
+    this.set('filterToApply', JSON.parse(JSON.stringify(this.get('filters'))));
+    this.set('currentPage', 1);
   },
 
   currentPage: defaultPage,
@@ -80,28 +83,45 @@ export default Ember.Component.extend({
       return this.get('clientPaging') || this.get('serverPaging');
     }),
 
-  visibleContent: Ember.computed('content.[]', 'currentPage', 'pageSize', 'clientPaging',
-    function fixtableGrid$visibleContent() {
+  filteredContent: Ember.computed('content.[]', 'filterToApply', 'serverPaging',
+    function fixtableGrid$filteredContent() {
       var content = this.get('content') || [];
 
+      if (this.get('serverPaging')) {
+        return content; // don't filter on the client if server pagination is on
+      }
+
+      // client filtering
+      var filters = this.get('filterToApply') || {};
+      var filteredContent = content.filter(row =>
+        Object.keys(filters).every(columnKey =>
+          !filters[columnKey] || (row[columnKey] || '').toLowerCase().includes(filters[columnKey].toLowerCase())));
+
+      return filteredContent;
+    }),
+
+  visibleContent: Ember.computed('filteredContent', 'currentPage', 'pageSize', 'clientPaging', 'serverPaging',
+    function fixtableGrid$visibleContent() {
+      var filteredContent = this.get('filteredContent') || [];
+
       if (!this.get('clientPaging')) {
-        return content; // render everything if no pagination or server pagination
+        return filteredContent; // don't paginate on the client unless client pagination is on
       }
 
       var currentPage = this.get('currentPage');
       var pageSize = this.get('pageSize');
-      return content.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+      return filteredContent.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     }),
 
-  totalRows: Ember.computed('content.[]', 'serverPaging', 'totalRowsOnServer',
+  totalRows: Ember.computed('filteredContent.[]', 'serverPaging', 'totalRowsOnServer',
     function fixtableGrid$totalRows() {
       if (this.get('serverPaging'))
       {
         return this.get('totalRowsOnServer');
       }
       else {
-        var content = this.get('content');
-        return content ? content.length : 0;
+        var filteredContent = this.get('filteredContent');
+        return filteredContent ? filteredContent.length : 0;
       }
     }),
 
