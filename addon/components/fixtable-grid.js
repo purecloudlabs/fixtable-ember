@@ -9,6 +9,40 @@ export default Ember.Component.extend({
   clientPaging: false,
   serverPaging: false,
   totalRowsOnServer: 0, // only used for server paging
+  filters: null,
+  filterDebounce: 500,
+
+  onColumnsChanged: Ember.observer('columns.@each',
+    function fixtableGrid$onColumnsChanged() {
+      this.updateFilterObservers();
+    }),
+
+  updateFilterObservers() {
+    var filters = Ember.Object.create();
+    this.set('filters', filters);
+
+    this.get('columns').forEach(colDef => {
+      if (colDef.filter && typeof filters[colDef.key] === 'undefined') {
+        filters[colDef.key] = "";
+      }
+    });
+
+    var filterKeys = Object.keys(filters);
+    var self = this;
+    filterKeys.forEach(function(key) {
+      if (!filters.hasObserverFor(key)) {
+        filters.addObserver(key, self, 'onFilterChanged');
+      }
+    });
+  },
+
+  onFilterChanged: function fixtableGrid$onFilterChanged(filters, columnKey) {
+    Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
+  },
+
+  applyFilter: function fixtableGrid$applyFilter() {
+    console.log('time to apply filters!');
+  },
 
   currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage',
@@ -84,6 +118,11 @@ export default Ember.Component.extend({
     goToNextPage() {
       this.set('currentPage', Math.min(this.get('totalPages'), this.get('currentPage') + 1));
     }
+  },
+
+  init() {
+    this._super(...arguments);
+    this.updateFilterObservers();
   },
 
   didInsertElement() {

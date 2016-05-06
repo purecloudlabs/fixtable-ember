@@ -3,8 +3,8 @@
 <h3>No Paging</h3>
 <p>This Fixtable loads and renders all of its content without any pagination.</p>
 <div class="row">
-  <div class="col-md-6">
-    {{fixtable-grid columns=model.columnDefs content=model.dataRows
+  <div class="col-md-8">
+    {{fixtable-grid columns=model.filteredColumnDefs content=model.dataRows
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=noPageIsLoading}}
     <button type="button" class="btn btn-primary" {{action 'toggle' 'noPageIsLoading'}}>
@@ -17,7 +17,7 @@
 <p>This Fixtable loads all of its content at once but paginates it on the client.</p>
 <p>We don't need to show the loading indicator while changing pages, since the update should be immediate.</p>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
     {{fixtable-grid columns=model.columnDefs content=model.dataRows
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=clientPageIsLoading clientPaging=true}}
@@ -32,7 +32,7 @@
 <p>This example is actually still implemented on the client, but it simulates server pagination.</p>
 <p>Because loading data from the server is asynchronous, we can show the loading indicator while we wait.</p>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
     {{fixtable-grid columns=model.columnDefs content=model.pagedDataRows
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=serverPageIsLoading serverPaging=true totalRowsOnServer=model.dataRows.length

@@ -1,3 +1,18 @@
+.fixtable .fixtable-column-filters th .form-group {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 3px;
+  font-weight: normal;
+}
+
+.fixtable .fixtable-column-filters th .form-group .form-control {
+  border-right-width: 0;
+}
+
+.fixtable .fixtable-column-filters th .form-group .input-group-addon {
+  background-color: white;
+}
+
 .fixtable .fixtable-footer {
   padding: 5px;
 }

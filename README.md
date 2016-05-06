@@ -226,6 +226,35 @@ For example, the Handlebars markup for the example `link-to-profile` component c
 
 This would render a link to the "profile" route in each row, passing the "name" property as a parameter.
 
+### Filtering
+
+Fixtable supports filtering the displayed rows, either by search text or by selected option. To set this up, add a filter property to the column definition.
+
+For example, this adds a search-type filter to the name column:
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      type: 'search'
+    }
+  },
+  {
+    key: 'address',
+    header: 'Street Address'
+  }
+]
+```
+
+#### Client-Side Filtering
+
+TODO
+
+#### Server-Side Filtering
+
+TODO
+
 ## Development / Contributing
 
 ### Installation

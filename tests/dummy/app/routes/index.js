@@ -4,10 +4,27 @@ export default Ember.Route.extend({
   model() {
     var model = {
       columnDefs: [
-        { key: 'id', header: 'ID', width: 50 },
-        { key: 'name', header: 'Name', width: 200, cellClass: 'name' },
-        { key: 'address', header: 'Address' },
-        { key: 'username', header: 'Username', component: 'user-name', cellClass: 'monospace' }
+        {
+          key: 'id',
+          header: 'ID',
+          width: 50
+        },
+        {
+          key: 'name',
+          header: 'Name',
+          width: 200,
+          cellClass: 'name'
+        },
+        {
+          key: 'address',
+          header: 'Address'
+        },
+        {
+          key: 'username',
+          header: 'Username',
+          component: 'user-name',
+          cellClass: 'monospace'
+        }
       ],
       dataRows: [
         { name: 'Sherlock Holmes ', address: '221B Baker Street' },
@@ -66,6 +83,12 @@ export default Ember.Route.extend({
     };
     model.dataRows.forEach((row, idx) => row.id = (idx + 1));
     model.pagedDataRows = model.dataRows.slice(0, 25);
+
+    // create a version of the column defs that includes filters
+    model.filteredColumnDefs = JSON.parse(JSON.stringify(model.columnDefs));
+    model.filteredColumnDefs[1].filter = { type: 'search' };
+    model.filteredColumnDefs[2].filter = { type: 'search' };
+
     return model;
   },
 });
