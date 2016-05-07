@@ -80,6 +80,10 @@ For example, this is an example of content corresponding to the name and address
 The primary feature of the Fixtable library is its ability to allow scrollable content with a fixed header and footer. To enable this feature, all you need to do is pass in a CSS class with a defined height through the `fixtableClass` property. The class (or classes, if you pass in a space-delimited class name string) specified in `fixtableClass` will be added to the Fixtable container element.
 
 For example:
+```handlebars
+{{fixtable-grid fixtableClass='restrict-height'}}
+```
+
 ```css
 .restrict-height {
   height: 400px;
@@ -93,6 +97,21 @@ At its core, the Fixtable is an HTML table element. If you want to customize the
 ```
 
 By default, Fixtable already adds the `table` CSS class to the table element. As a result, you do **not** need to pass `table` to the `tableClass` property.
+
+You can also add custom CSS classes directly to the cell (`td`) elements for a given column. This should be done by specifying a `cellClass` for the column in the column definition. For example, let's say we want to add the "name" CSS class to every cell in the Name column. Our column definition would need to look like this:
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    cellClass: 'name'
+  },
+  {
+    key: 'address',
+    header: 'Street Address'
+  }
+]
+```
 
 ### Loading Indicator
 
@@ -142,23 +161,23 @@ The possible options for page size are 25, 50, 100, 250, and 500 -- however, thi
 Enabling server paging takes a little more setup:
 * First, set the `serverPaging` property to true.
 * Bind the component's `totalRowsOnServer` property to a value representing the length of the dataset on the server. (The Fixtable needs this information to calculate how many pages there are.)
-* Attach an action to the component's `onPageChanged` property. The action function will receive two parameters -- `page` (the current 1-indexed page number) and `pageSize` (the current page size) -- and is called whenever either the page or the page size changes.
+* Attach an action to the component's `onReloadContent` property. The action function will receive two parameters -- `page` (the current 1-indexed page number) and `pageSize` (the current page size) -- and is called whenever either the page or the page size changes.
 
-Although the same pagination footer will be shown as with client-side pagination, the Fixtable will now assume that pagination should *not* be handled on the client (or at least, not by the Fixtable itself). Instead, it provides a hook named `onPageChanged` to let the consumer know when the current page or the page size changes. The consumer is expected to use this information to update the bound content of the `fixtable-grid` component.
+Although the same pagination footer will be shown as with client-side pagination, the Fixtable will now assume that pagination should *not* be handled on the client (or at least, not by the Fixtable itself). Instead, it provides a hook named `onReloadContent` to let the consumer know when the current page or the page size changes. The consumer is expected to use this information to update the bound content of the `fixtable-grid` component.
 
 Here's some sample markup:
 ``` handlebars
 {{fixtable-grid columns=model.columnDefs content=model.pagedDataRows
   isLoading=serverPageIsLoading serverPaging=true totalRowsOnServer=model.totalRows
-  onPageChanged=(action 'updatePage') }}
+  onReloadContent=(action 'updatePage') }}
 ```
 
-Notice that we've turned on server paging, set the total number of rows, and bound the `updatePage` action to the component's `onPageChanged` property. We've also set a property that lets us toggle the loading indicator.
+Notice that we've turned on server paging, set the total number of rows, and bound the `updatePage` action to the component's `onReloadContent` property. We've also set a property that lets us toggle the loading indicator.
 
 In our controller, we might define `updatePage` something like this:
 ```javascript
 actions: {
-  updatePage(page, pageSize) {
+  updatePage(page, pageSize/*, filters*/) {
     this.set('serverPageIsLoading', true);
 
     this.store.query('rows', { page, pageSize )
@@ -202,10 +221,97 @@ Custom cell components will automatically be provided with two properties: `colu
 
 For example, the Handlebars markup for the example `link-to-profile` component could look like this:
 ```handlebars
-{{link-to 'profile' dataRow.name}}
+{{#link-to 'profile' dataRow.name}}Go to profile for {{dataRow.name}}{{/link-to}}
 ```
 
 This would render a link to the "profile" route in each row, passing the "name" property as a parameter.
+
+### Filtering
+
+Fixtable supports filtering the displayed rows, either by search text or by selected option. To set this up, add a filter property to the column definition.
+
+For example, this adds a search-type filter to the name column:
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      type: 'search'
+    }
+  },
+  {
+    key: 'address',
+    header: 'Street Address'
+  }
+]
+```
+
+Similar to how pagination is handled, the implementation of filtering depends on whether all of the Fixtable's content is present on the client.
+
+#### Client-Side Filtering
+
+As long as `serverPaging` is not set to true, the Fixtable can handle the filtering logic internally. Adding a filter type to the column definition, as described above, will show a filter field in the column header. Typing into the search field (or selecting a filter option) will automatically filter the visible data rows.
+
+#### Server-Side Filtering
+
+Server-side filtering presents the same user interface as client-side filtering, but the content is not automatically filtered (because the Fixtable cannot assume that all data is present on the client). Server-side filtering is active whenever the `serverPaging` property is set to true. In other words, if you're using server-side pagination, you also need to use server-side filtering.
+
+Server-side filtering uses the same `onReloadContent` event as server-side pagination, so you don't need to define a separate function or property. The third parameter passed to the function (after `page` and `pageSize`) will be `filters`, an object where the key/value pairs link column keys to filter text. For example:
+```javascript
+{
+  name: 'smith',
+  address: ''
+}
+```
+If the value is null or empty, that means that there is no filter applied to that column.
+
+After requesting and receiving the updated data from the server, you should also update the value of `totalRowsOnServer` so that it reflects the total number of *filtered* rows on the server. Otherwise, there may be additional "blank" pages in the Fixtable, because the number of pages shown is determined by `totalRowsOnServer`.
+
+Do note that it's possible for changing the filters to simultaneously change the current page. (The Fixtable automatically jumps to the first page if new filters are applied.) If this happens, the `onReloadContent` function will still only be invoked a single time. As a result, you should likely always include both filter and pagination information in your server request.
+
+#### Types of Filters
+
+There are two types of filters: search filters and select filters. Search-type filters discriminate rows based on the text typed into the filter field, excluding any row that does not include the searched-for text as a substring (case-insensitive). Select-type filters discriminate rows based on a discretely selected option, where the row's value for that column must be equal to the selected filter option (again, case-insensitive).
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      type: 'search'
+    }
+  },
+  {
+    key: 'grade',
+    header: 'Letter Grade',
+    filter: {
+      type: 'select',
+      selectOptions: [
+        { value: 'A' },
+        { value: 'B' },
+        { value: 'C' },
+        { value: 'D' },
+        { value: 'F' },
+      ]
+    }
+  }
+]
+```
+
+#### Filter Debouncing
+
+To avoid rapid and unnecessary filtering as the user types, the Fixtable automatically debounces the filtering by 500ms. In other words, the filter will not be applied until 500ms after the user stops typing into a filter field. This can be configured by setting the component's `filterDebounce` property, if desired. (The property should be set to a number representing the debounce time in milliseconds.)
+
+For example, this lengthens the debounce time to a full second.
+```handlebars
+{{fixtable-grid columns=model.columnDefs content=model.dataRows filterDebounce=1000}}
+```
+
+#### Filter Caveats
+
+Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
 
 ## Development / Contributing
 

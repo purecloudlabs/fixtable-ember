@@ -3,6 +3,14 @@
 .fixtable {
   background-color: $table-empty-color;
 
+  .fixtable-header {
+    border-bottom: 1px solid black;
+  }
+
+  .fixtable-filters {
+    background-color: $filter-background-color;
+  }
+
   .fixtable-header, .fixtable-footer {
     background: -webkit-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
     background: -moz-linear-gradient(top, $table-body-color 0%, $table-gradient-color 100%);
@@ -12,16 +20,16 @@
   }
 
   .fixtable-inner {
-    table.table {
-      border: 1px solid $table-border-color;
-
-      thead {
-        tr {
-          th {
-            border-bottom: 2px solid $pure-blue;
-          }
+    thead {
+      tr {
+        th {
+          border-bottom: 2px solid $pure-blue;
         }
       }
+    }
+
+    table.table {
+      border: 1px solid $table-border-color;
 
       tbody {
         tr {

@@ -6,27 +6,42 @@ const defaultPageSize = 25;
 
 export default Ember.Component.extend({
   fixtable: null,
+  columnsByKey: null,
   clientPaging: false,
   serverPaging: false,
   totalRowsOnServer: 0, // only used for server paging
+  filters: null,
+  filterToApply: null,
+  filterDebounce: 500,
+
+  onFilterChanged: function fixtableGrid$onFilterChanged(/*filters, columnKey*/) {
+    Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
+  },
+
+  applyFilter: function fixtableGrid$applyFilter() {
+    // update the filterToApply property to trigger a change in filteredContent
+    this.set('filterToApply', JSON.parse(JSON.stringify(this.get('filters'))));
+    this.set('currentPage', 1);
+    Ember.run.once(this, this.notifyReloadContent);
+  },
 
   currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage',
     function fixtableGrid$afterCurrentPageChanged() {
-      Ember.run.once(this, this.notifyPageChanged);
+      Ember.run.once(this, this.notifyReloadContent);
     }),
 
   pageSize: defaultPageSize,
   afterPageSizeChanged: Ember.observer('pageSize',
     function fixtableGrid$afterPageSizeChanged() {
-      Ember.run.once(this, this.notifyPageChanged);
+      Ember.run.once(this, this.notifyReloadContent);
       this.set('currentPage', defaultPage);
     }),
 
-  notifyPageChanged: function fixtableGrid$notifyPageChanged() {
-    var handler = this.get('onPageChanged');
+  notifyReloadContent: function fixtableGrid$notifyReloadContent() {
+    var handler = this.get('onReloadContent');
     if (typeof handler === 'function') {
-      handler(this.get('currentPage'), this.get('pageSize'));
+      handler(this.get('currentPage'), this.get('pageSize'), this.get('filterToApply') || {});
     }
   },
 
@@ -46,28 +61,58 @@ export default Ember.Component.extend({
       return this.get('clientPaging') || this.get('serverPaging');
     }),
 
-  visibleContent: Ember.computed('content.[]', 'currentPage', 'pageSize', 'clientPaging',
-    function fixtableGrid$visibleContent() {
+  filteredContent: Ember.computed('content.[]', 'filterToApply', 'serverPaging',
+    function fixtableGrid$filteredContent() {
       var content = this.get('content') || [];
 
+      if (this.get('serverPaging')) {
+        return content; // don't filter on the client if server pagination is on
+      }
+
+      var columnsByKey = this.get('columnsByKey');
+
+      // client filtering
+      var filters = this.get('filterToApply') || {};
+      var filteredContent = content.filter(function(row) {
+        return Object.keys(filters).every(function(columnKey) {
+          if (!filters[columnKey]) { return true; } // no filter
+          var cellData = (row[columnKey] || '').toLowerCase();
+          var filterValue = filters[columnKey].toLowerCase();
+
+          if (columnsByKey[columnKey].filter.type === 'select') {
+            return cellData === filterValue;
+          }
+          else {
+            return cellData.includes(filterValue);
+          }
+        });
+      });
+
+      return filteredContent;
+    }),
+
+  visibleContent: Ember.computed('filteredContent', 'currentPage', 'pageSize', 'clientPaging', 'serverPaging',
+    function fixtableGrid$visibleContent() {
+      var filteredContent = this.get('filteredContent') || [];
+
       if (!this.get('clientPaging')) {
-        return content; // render everything if no pagination or server pagination
+        return filteredContent; // don't paginate on the client unless client pagination is on
       }
 
       var currentPage = this.get('currentPage');
       var pageSize = this.get('pageSize');
-      return content.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+      return filteredContent.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     }),
 
-  totalRows: Ember.computed('content.[]', 'serverPaging', 'totalRowsOnServer',
+  totalRows: Ember.computed('filteredContent.[]', 'serverPaging', 'totalRowsOnServer',
     function fixtableGrid$totalRows() {
       if (this.get('serverPaging'))
       {
         return this.get('totalRowsOnServer');
       }
       else {
-        var content = this.get('content');
-        return content ? content.length : 0;
+        var filteredContent = this.get('filteredContent');
+        return filteredContent ? filteredContent.length : 0;
       }
     }),
 
@@ -84,6 +129,36 @@ export default Ember.Component.extend({
     goToNextPage() {
       this.set('currentPage', Math.min(this.get('totalPages'), this.get('currentPage') + 1));
     }
+  },
+
+  init() {
+    this._super(...arguments);
+    this.updateFilterObservers();
+
+    var columnsByKey = {};
+    this.get('columns').forEach(column => {
+      columnsByKey[column.key] = column;
+    });
+    this.set('columnsByKey', columnsByKey);
+  },
+
+  updateFilterObservers() {
+    var filters = Ember.Object.create();
+    this.set('filters', filters);
+
+    this.get('columns').forEach(colDef => {
+      if (colDef.filter && typeof filters[colDef.key] === 'undefined') {
+        filters[colDef.key] = "";
+      }
+    });
+
+    var filterKeys = Object.keys(filters);
+    var self = this;
+    filterKeys.forEach(function(key) {
+      if (!filters.hasObserverFor(key)) {
+        filters.addObserver(key, self, 'onFilterChanged');
+      }
+    });
   },
 
   didInsertElement() {
