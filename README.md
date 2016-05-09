@@ -319,6 +319,53 @@ To disable real-time filtering, simply set the `realtimeFiltering` property to `
 
 Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
 
+### Sorting
+
+Fixtable has built-in support for column sorting.
+
+To enable sorting for a given column, just add `sortable: true` to the column definition.
+
+For example, in the column definitions below, the name column is sortable:
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    sortable: true
+  },
+  {
+    key: 'address',
+    header: 'Street Address'
+  }
+]
+```
+
+Clicking on the header of a sortable column will sort it in ascending order. Clicking on the column header again will toggle ascending/descending. Clicking on another column header will switch to sorting by the new column in ascending order.
+
+#### Client-Side Sorting
+
+This is not yet implemented. Stay tuned!
+
+#### Server-Side Sorting
+
+When server paging is turned on, the Fixtable cannot implement sorting on the client because it doesn't have enough information. Instead, the same `onReloadContent` action used for filtering and pagination will be invoked. The fourth parameter of the passed-in function will be a `sortInfo` object that contains `key` and `ascending` properties. `key` corresponds to the key of the column that should be sorted, and `ascending` is a boolean that indicates whether the sort should be ascending or descending. The `sortInfo` parameter will be null if no sort column is specified.
+
+For example, `sortInfo` would look like this if we wanted to sort by ID, ascending:
+```javascript
+{
+  key: 'id',
+  ascending: true
+}
+```
+
+Similarly to server-side pagination and filtering, the Fixtable will take care of notifying its consumer whenever the table needs to be sorted, but actually sorting the table's bound data is the responsibility of the consumer.
+
+#### Sorting Caveats
+
+Currently, you can only sort by a single column at a time. (In other words, there is no concept of primary/secondary sort column.)
+
+Also, just like with filtering, sorting is based on what's defined in `content`, not on the actual markup rendered in the cell. Keep this in mind when using sorting with custom cell components.
+
 ## Development / Contributing
 
 ### Installation

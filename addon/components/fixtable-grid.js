@@ -7,15 +7,23 @@ const defaultPageSize = 25;
 export default Ember.Component.extend({
   fixtable: null,
   columnsByKey: null,
+
+  // paging
   clientPaging: false,
   serverPaging: false,
   totalRowsOnServer: 0, // only used for server paging
+
+  // filters
   filters: null,
   filterToApply: null,
   filterDebounce: 500,
   realtimeFiltering: true,
   filtersAreActive: false,
   filtersAreDirty: false,
+
+  // sorting
+  sortBy: null,
+  sortAscending: true,
 
   showManualFilterButtons: Ember.computed('realtimeFiltering', 'filters',
     function fixtableGrid$showManualFilterButtons() {
@@ -65,9 +73,16 @@ export default Ember.Component.extend({
 
   notifyReloadContent: function fixtableGrid$notifyReloadContent() {
     var handler = this.get('onReloadContent');
-    if (typeof handler === 'function') {
-      handler(this.get('currentPage'), this.get('pageSize'), this.get('filterToApply') || {});
-    }
+    if (typeof handler !== 'function') { return; }
+
+    var sortBy = this.get('sortBy');
+    var sortInfo = sortBy ? { key: sortBy, ascending: this.get('sortAscending') } : null;
+
+    handler(
+      this.get('currentPage'),
+      this.get('pageSize'),
+      this.get('filterToApply') || {},
+      sortInfo);
   },
 
   pageSizeOptions: Ember.computed('totalRows',
@@ -116,7 +131,7 @@ export default Ember.Component.extend({
       return filteredContent;
     }),
 
-  visibleContent: Ember.computed('filteredContent', 'currentPage', 'pageSize', 'clientPaging', 'serverPaging',
+  visibleContent: Ember.computed('filteredContent', 'currentPage', 'pageSize', 'clientPaging', 'serverPaging', 'sortBy',
     function fixtableGrid$visibleContent() {
       var filteredContent = this.get('filteredContent') || [];
 
@@ -150,11 +165,15 @@ export default Ember.Component.extend({
     return Math.min(Math.max(1, unvalidated), this.get('totalPages'));
   },
 
+  sortDataRows: Ember.observer('sortBy', 'sortAscending', function fixtableGrid$sortDataRows() {
+      this.set('currentPage', defaultPage);
+      Ember.run.once(this, this.notifyReloadContent);
+  }),
+
   actions: {
     goToPreviousPage() {
       this.set('currentPage', this.validatePageNumberRange(this.get('currentPage') - 1));
     },
-
     goToNextPage() {
       this.set('currentPage', this.validatePageNumberRange(this.get('currentPage') + 1));
     },
@@ -162,9 +181,18 @@ export default Ember.Component.extend({
     applyManualFilter() {
       this.applyFilter();
     },
-
     clearManualFilter() {
       this.clearFilter();
+    },
+
+    sortColumn(columnKey) {
+      if (this.get('sortBy') === columnKey) {
+        this.set('sortAscending', !this.get('sortAscending'));
+      }
+      else {
+        this.set('sortBy', columnKey);
+        this.set('sortAscending', true);
+      }
     }
   },
 

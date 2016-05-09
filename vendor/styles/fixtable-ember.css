@@ -1,3 +1,11 @@
+.fixtable .clickable {
+  cursor: pointer;
+}
+
+.fixtable .caret.caret-up {
+  transform: rotate(180deg);
+}
+
 .fixtable .fixtable-filters .btn {
   margin-bottom: 5px;
 }
@@ -34,7 +42,7 @@
 }
 
 .fixtable .fixtable-footer input[type=number]::-webkit-inner-spin-button,
-.fixtable .fixtable-footer input[type=number]::-webkit-outer-spin-button { 
+.fixtable .fixtable-footer input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
