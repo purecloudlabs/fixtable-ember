@@ -6,7 +6,7 @@
 }
 
 .fixtable .fixtable-column-filters th .form-group .form-control {
-  border-right-width: 0;
+  border-right: none;
 }
 
 .fixtable .fixtable-column-filters th .form-group .input-group-addon {
