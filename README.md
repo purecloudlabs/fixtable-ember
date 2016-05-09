@@ -344,11 +344,25 @@ Clicking on the header of a sortable column will sort it in ascending order. Cli
 
 #### Client-Side Sorting
 
-This is not yet implemented. Stay tuned!
+As long as `serverPaging` is not turned on, Fixtable can handle the sorting logic on its own, under the assumption that all of the table data is already loaded on the client. Specifying the `sortable` key in the column definition is enough to enable client-side sorting.
+
+There are also some additional features that can be used to customize sorting on the client. **By default, sorting is done in lexicographical order, using JavaScript's [String.prototype.localeCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare) function.** If you want to sort using some other means, you can specify a custom sort function using the `sortFunction` key of the column definition.
+
+For example, this column definition represents an ID column that is sorted numerically.
+```javascript
+{
+  key: 'id',
+  header: 'ID',
+  sortable: true,
+  sortFunction: (x, y) => x - y
+}
+```
+
+When specifying a custom sort function, note that the intended sort direction is assumed to be ascending. When the column is sorted in descending order, the same function will be invoked, but the parameter order will be reversed. The sort function should expect to receive two parameters, corresponding to two cell values for the rows being compared. (In the example above, `x` and `y` would be ID values.) In your sort function, don't forget to consider the possibility of null or undefined cell values.
 
 #### Server-Side Sorting
 
-When server paging is turned on, the Fixtable cannot implement sorting on the client because it doesn't have enough information. Instead, the same `onReloadContent` action used for filtering and pagination will be invoked. The fourth parameter of the passed-in function will be a `sortInfo` object that contains `key` and `ascending` properties. `key` corresponds to the key of the column that should be sorted, and `ascending` is a boolean that indicates whether the sort should be ascending or descending. The `sortInfo` parameter will be null if no sort column is specified.
+When server paging is turned on, Fixtable cannot implement sorting on the client because it doesn't have enough information. Instead, the same `onReloadContent` action used for filtering and pagination will be invoked. The fourth parameter of the passed-in function will be a `sortInfo` object that contains `key` and `ascending` properties. `key` corresponds to the key of the column that should be sorted, and `ascending` is a boolean that indicates whether the sort should be ascending or descending. The `sortInfo` parameter will be null if no sort column is specified.
 
 For example, `sortInfo` would look like this if we wanted to sort by ID, ascending:
 ```javascript

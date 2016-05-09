@@ -112,6 +112,11 @@ export default Ember.Route.extend({
       ]
     };
 
+    // add a custom ID sorting function to both versions of the column defs
+    var sortFunc = (x, y) => x - y;
+    model.columnDefs[0].sortFunction = sortFunc;
+    model.filteredColumnDefs[0].sortFunction = sortFunc;
+
     return model;
   },
 });
