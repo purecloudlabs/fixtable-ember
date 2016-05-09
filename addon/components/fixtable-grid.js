@@ -13,9 +13,18 @@ export default Ember.Component.extend({
   filters: null,
   filterToApply: null,
   filterDebounce: 500,
+  realtimeFiltering: true,
+
+  showManualFilterButtons: Ember.computed('realtimeFiltering', 'filters',
+    function fixtableGrid$showManualFilterButtons() {
+      return !this.get('realtimeFiltering') && Object.keys(this.get('filters')).length;
+    }),
 
   onFilterChanged: function fixtableGrid$onFilterChanged(/*filters, columnKey*/) {
-    Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
+    if (this.get('realtimeFiltering'))
+    {
+      Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
+    }
   },
 
   applyFilter: function fixtableGrid$applyFilter() {
@@ -23,6 +32,13 @@ export default Ember.Component.extend({
     this.set('filterToApply', JSON.parse(JSON.stringify(this.get('filters'))));
     this.set('currentPage', 1);
     Ember.run.once(this, this.notifyReloadContent);
+  },
+
+  clearFilter: function fixtableGrid$clearFilter() {
+    // clear all the bound filter values and re-apply
+    var filters = this.get('filters');
+    Object.keys(filters).forEach(key => filters.set(key, ''));
+    this.applyFilter();
   },
 
   currentPage: defaultPage,
@@ -128,6 +144,14 @@ export default Ember.Component.extend({
 
     goToNextPage() {
       this.set('currentPage', Math.min(this.get('totalPages'), this.get('currentPage') + 1));
+    },
+
+    applyManualFilter() {
+      this.applyFilter();
+    },
+
+    clearManualFilter() {
+      this.clearFilter();
     }
   },
 

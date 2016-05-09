@@ -4,18 +4,19 @@ export default Ember.Controller.extend({
   noPageIsLoading: false,
   clientPageIsLoading: false,
   serverPageIsLoading: false,
+  manualFilterPageIsLoading: false,
 
   actions: {
     toggle(propertyName) {
       this.set(propertyName, !this.get(propertyName));
     },
 
-    updatePage(page, pageSize, filters) {
-      this.set('serverPageIsLoading', true);
+    updatePage(page, pageSize, filters, loadingProp, filteredContent, pagedContent) {
+      this.set(loadingProp, true);
 
       // simulate server-side filtering and pagination
       Ember.run.later(this, () => {
-        this.set('serverPageIsLoading', false);
+        this.set(loadingProp, false);
 
         // apply filters
         var columnsByKey = {};
@@ -39,11 +40,21 @@ export default Ember.Controller.extend({
         });
 
         // paginate
-        this.set('model.filteredDataRows', filteredRows);
+        this.set(filteredContent, filteredRows);
         filteredRows = filteredRows.slice((page - 1) * pageSize, page * pageSize);
 
-        this.set('model.pagedDataRows', filteredRows);
+        this.set(pagedContent, filteredRows);
       }, 500);
     },
+
+    updateManualFilterPage(page, pageSize, filters) {
+      this.actions.updatePage.call(this, page, pageSize, filters,
+        'manualFilterPageIsLoading', 'model.manualFilterDataRows', 'model.manualFilterVisibleRows');
+    },
+
+    updateServerPage(page, pageSize, filters) {
+      this.actions.updatePage.call(this, page, pageSize, filters,
+        'serverPageIsLoading', 'model.filteredDataRows', 'model.pagedDataRows');
+    }
   }
 });

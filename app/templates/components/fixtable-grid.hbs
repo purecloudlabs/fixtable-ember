@@ -1,6 +1,11 @@
 <div class={{if fixtableClass (concat 'fixtable ' fixtableClass) 'fixtable'}}>
   <div class="fixtable-header"></div>
-  <div class="fixtable-filters"></div>
+  <div class="fixtable-filters">
+    {{#if showManualFilterButtons}}
+      <button type="button" class="btn btn-primary btn-sm" {{action 'applyManualFilter'}}>Apply</button>
+      <button type="button" class="btn btn-primary btn-sm" {{action 'clearManualFilter'}}>Clear</button>
+    {{/if}}
+  </div>
   <div class="fixtable-inner">
     <table class={{if tableClass (concat 'table ' tableClass) 'table'}}>
       <thead>
@@ -24,7 +29,7 @@
                         <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
                           <option value=""></option>
                           {{#each column.filter.selectOptions as |choice|}}
-                            <option value={{choice.value}} selected={{equals (get filters column.key) choice}}>{{choice.value}}</option>
+                            <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>{{choice.value}}</option>
                           {{/each}}
                         </select>
                       {{else}}
@@ -53,7 +58,7 @@
                     {{component column.component dataRow=row columnDef=column}}
                   {{else}}
                     {{!-- directly render the cell --}}
-                    {{get-prop row column.key}}
+                    {{get row column.key}}
                   {{/if}}
                 </td>
               {{/each}}
