@@ -1,3 +1,7 @@
+.fixtable .fixtable-filters .btn {
+  margin-bottom: 5px;
+}
+
 .fixtable .fixtable-column-filters th .form-group {
   margin-top: 5px;
   margin-bottom: 5px;

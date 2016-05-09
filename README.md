@@ -302,12 +302,18 @@ There are two types of filters: search filters and select filters. Search-type f
 
 #### Filter Debouncing
 
-To avoid rapid and unnecessary filtering as the user types, the Fixtable automatically debounces the filtering by 500ms. In other words, the filter will not be applied until 500ms after the user stops typing into a filter field. This can be configured by setting the component's `filterDebounce` property, if desired. (The property should be set to a number representing the debounce time in milliseconds.)
+To avoid rapid and unnecessary filtering as the user types, especially in the case where filtering happens on the server and requires AJAX calls, the Fixtable automatically debounces filtering by 500ms. In other words, the filter will not be applied until 500ms after the user stops typing into a filter field. This can be configured by setting the component's `filterDebounce` property, if desired. (The property should be set to a number representing the debounce time in milliseconds.)
 
 For example, this lengthens the debounce time to a full second.
 ```handlebars
 {{fixtable-grid columns=model.columnDefs content=model.dataRows filterDebounce=1000}}
 ```
+
+#### Manual Filter Application
+
+By default, the Fixtable will automatically filter itself as the user types into filter fields -- with a short debounce interval, as described above. However, real-time filtering can be disabled entirely. This may be useful in workflows where you want to reduce traffic to the server, or where the user wants to enter filters in multiple fields before seeing the filtered results.
+
+To disable real-time filtering, simply set the `realtimeFiltering` property to `false`. The Fixtable will automatically show Apply and Clear buttons that apply or clear the entered filters, respectively.
 
 #### Filter Caveats
 

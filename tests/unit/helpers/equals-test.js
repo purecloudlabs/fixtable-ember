@@ -8,6 +8,17 @@ test('it returns true if two primitives are equal', function(assert) {
   assert.ok(result);
 });
 
+test('it returns true if both values are null/undefined/empty', function(assert) {
+  let result = equals([null, undefined]);
+  assert.ok(result);
+
+  result = equals([null, '']);
+  assert.ok(result);
+
+  result = equals(['', undefined]);
+  assert.ok(result);
+});
+
 test('it returns true if two objects are reference equal', function(assert) {
   var foo = {};
   var bar = foo;
