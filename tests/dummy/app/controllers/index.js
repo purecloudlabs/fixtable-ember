@@ -6,6 +6,11 @@ export default Ember.Controller.extend({
   serverPageIsLoading: false,
   manualFilterPageIsLoading: false,
 
+  noPageSortKey: 'id',
+  clientPageSortKey: 'id',
+  serverPageSortKey: 'id',
+  manualFilterPageSortKey: 'id',
+
   actions: {
     toggle(propertyName) {
       this.set(propertyName, !this.get(propertyName));

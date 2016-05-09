@@ -342,6 +342,21 @@ For example, in the column definitions below, the name column is sortable:
 
 Clicking on the header of a sortable column will sort it in ascending order. Clicking on the column header again will toggle ascending/descending. Clicking on another column header will switch to sorting by the new column in ascending order.
 
+To specify a default sort column or sort order, you can bind to the `sortBy` and `sortAscending` properties of the `fixtable-grid` component, respectively. (`sortAscending` defaults to true, so you can omit this property if that's what you want.) `sortBy` should be a column key, and `sortAscending` should be a boolean.
+
+For example, this is how we might sort by ID in descending order:
+```handlebars
+{{fixtable-grid columns=model.columnDefs content=model.dataRows sortBy=(mut sortKey) sortAscending=(mut ascending)}}
+```
+
+In the owning component or controller:
+```javascript
+sortKey: 'id',
+ascending: false,
+```
+
+Note that you should use the `mut` helper to indicate that the `fixtable-grid` is allowed to mutate the value. Because the Fixtable needs to change these values depending on user actions, you should not use literal string and boolean values for these properties.
+
 #### Client-Side Sorting
 
 As long as `serverPaging` is not turned on, Fixtable can handle the sorting logic on its own, under the assumption that all of the table data is already loaded on the client. Specifying the `sortable` key in the column definition is enough to enable client-side sorting.

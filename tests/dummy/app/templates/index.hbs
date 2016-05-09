@@ -4,7 +4,7 @@
 <p>This Fixtable loads and renders all of its content without any pagination or filtering.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.columnDefs content=model.dataRows
+    {{fixtable-grid columns=model.columnDefs content=model.dataRows sortBy=(mut noPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=noPageIsLoading}}
     <button type="button" class="btn btn-primary" {{action 'toggle' 'noPageIsLoading'}}>
@@ -19,7 +19,7 @@
 <p>The rows can be filtered by column, and the filtering is handled entirely by the Fixtable on the client. The filters are applied 500ms after the user stops typing into a filter field.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnDefs content=model.dataRows
+    {{fixtable-grid columns=model.filteredColumnDefs content=model.dataRows sortBy=(mut clientPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=clientPageIsLoading clientPaging=true}}
     <button type="button" class="btn btn-primary" {{action 'toggle' 'clientPageIsLoading'}}>
@@ -34,7 +34,7 @@
 <p>The rows can be filtered by column, but the filtering must be implemented by the consuming component or controller, since the Fixtable does not have enough information to perform filtering on the client. The filters are applied 500ms after the user stops typing into a filter field.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnDefs content=model.pagedDataRows
+    {{fixtable-grid columns=model.filteredColumnDefs content=model.pagedDataRows sortBy=(mut serverPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=serverPageIsLoading serverPaging=true totalRowsOnServer=model.filteredDataRows.length
       onReloadContent=(action 'updateServerPage') }}
@@ -48,7 +48,7 @@
 <p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters are not applied until the user presses a button.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnDefs content=model.manualFilterVisibleRows
+    {{fixtable-grid columns=model.filteredColumnDefs content=model.manualFilterVisibleRows sortBy=(mut manualFilterPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover' realtimeFiltering=false
       isLoading=manualFilterPageIsLoading serverPaging=true totalRowsOnServer=model.manualFilterDataRows.length
       onReloadContent=(action 'updateManualFilterPage') }}
