@@ -3,19 +3,28 @@ import Ember from 'ember';
 const possiblePageSizes = [ 25, 50, 100, 250, 500 ];
 const defaultPage = 1;
 const defaultPageSize = 25;
+const toCompareString = x => x === null || typeof x === 'undefined' ? '' : x + '';
 
 export default Ember.Component.extend({
   fixtable: null,
   columnsByKey: null,
+
+  // paging
   clientPaging: false,
   serverPaging: false,
   totalRowsOnServer: 0, // only used for server paging
+
+  // filters
   filters: null,
   filterToApply: null,
   filterDebounce: 500,
   realtimeFiltering: true,
   filtersAreActive: false,
   filtersAreDirty: false,
+
+  // sorting
+  sortBy: null,
+  sortAscending: true,
 
   showManualFilterButtons: Ember.computed('realtimeFiltering', 'filters',
     function fixtableGrid$showManualFilterButtons() {
@@ -65,9 +74,16 @@ export default Ember.Component.extend({
 
   notifyReloadContent: function fixtableGrid$notifyReloadContent() {
     var handler = this.get('onReloadContent');
-    if (typeof handler === 'function') {
-      handler(this.get('currentPage'), this.get('pageSize'), this.get('filterToApply') || {});
-    }
+    if (typeof handler !== 'function') { return; }
+
+    var sortBy = this.get('sortBy');
+    var sortInfo = sortBy ? { key: sortBy, ascending: this.get('sortAscending') } : null;
+
+    handler(
+      this.get('currentPage'),
+      this.get('pageSize'),
+      this.get('filterToApply') || {},
+      sortInfo);
   },
 
   pageSizeOptions: Ember.computed('totalRows',
@@ -86,19 +102,52 @@ export default Ember.Component.extend({
       return this.get('clientPaging') || this.get('serverPaging');
     }),
 
-  filteredContent: Ember.computed('content.[]', 'filterToApply', 'serverPaging',
-    function fixtableGrid$filteredContent() {
+  sortedContent: Ember.computed('content.[]', 'serverPaging', 'sortBy', 'sortAscending',
+    function fixtableGrid$sortedContent() {
       var content = this.get('content') || [];
+      var sortBy = this.get('sortBy');
+
+      // don't sort on the client if server pagination is on, or if no sort specified
+      if (this.get('serverPaging') || !sortBy) {
+        return content;
+      }
+
+      var customSort = this.get('columnsByKey')[sortBy].sortFunction;
+      var sortFunction;
+      if (typeof customSort === 'function') {
+        sortFunction = (leftRow, rightRow) => {
+          var leftVal = leftRow[sortBy];
+          var rightVal = rightRow[sortBy];
+          return this.get('sortAscending') ? customSort(leftVal, rightVal) : customSort(rightVal, leftVal);
+        };
+      }
+      else {
+        sortFunction = (leftRow, rightRow) => {
+          var leftVal = toCompareString(leftRow[sortBy]);
+          var rightVal = toCompareString(rightRow[sortBy]);
+          return this.get('sortAscending') ? leftVal.localeCompare(rightVal) : rightVal.localeCompare(leftVal);
+        };
+      }
+
+      var sortedContent = content.slice(); // don't mutate the original collection
+      sortedContent.sort(sortFunction);
+
+      return sortedContent;
+    }),
+
+  sortedFilteredContent: Ember.computed('sortedContent', 'filterToApply', 'serverPaging',
+    function fixtableGrid$sortedFilteredContent() {
+      var sortedContent = this.get('sortedContent') || [];
 
       if (this.get('serverPaging')) {
-        return content; // don't filter on the client if server pagination is on
+        return sortedContent; // don't filter on the client if server pagination is on
       }
 
       var columnsByKey = this.get('columnsByKey');
 
       // client filtering
       var filters = this.get('filterToApply') || {};
-      var filteredContent = content.filter(function(row) {
+      var sortedFilteredContent = sortedContent.filter(function(row) {
         return Object.keys(filters).every(function(columnKey) {
           if (!filters[columnKey]) { return true; } // no filter
           var cellData = (row[columnKey] || '').toLowerCase();
@@ -113,20 +162,20 @@ export default Ember.Component.extend({
         });
       });
 
-      return filteredContent;
+      return sortedFilteredContent;
     }),
 
-  visibleContent: Ember.computed('filteredContent', 'currentPage', 'pageSize', 'clientPaging', 'serverPaging',
+  visibleContent: Ember.computed('sortedFilteredContent', 'currentPage', 'pageSize', 'clientPaging',
     function fixtableGrid$visibleContent() {
-      var filteredContent = this.get('filteredContent') || [];
+      var sortedFilteredContent = this.get('sortedFilteredContent') || [];
 
       if (!this.get('clientPaging')) {
-        return filteredContent; // don't paginate on the client unless client pagination is on
+        return sortedFilteredContent; // don't paginate on the client unless client pagination is on
       }
 
       var currentPage = this.get('currentPage');
       var pageSize = this.get('pageSize');
-      return filteredContent.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+      return sortedFilteredContent.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     }),
 
   totalRows: Ember.computed('filteredContent.[]', 'serverPaging', 'totalRowsOnServer',
@@ -150,11 +199,15 @@ export default Ember.Component.extend({
     return Math.min(Math.max(1, unvalidated), this.get('totalPages'));
   },
 
+  sortDataRows: Ember.observer('sortBy', 'sortAscending', function fixtableGrid$sortDataRows() {
+      this.set('currentPage', defaultPage);
+      Ember.run.once(this, this.notifyReloadContent);
+  }),
+
   actions: {
     goToPreviousPage() {
       this.set('currentPage', this.validatePageNumberRange(this.get('currentPage') - 1));
     },
-
     goToNextPage() {
       this.set('currentPage', this.validatePageNumberRange(this.get('currentPage') + 1));
     },
@@ -162,9 +215,18 @@ export default Ember.Component.extend({
     applyManualFilter() {
       this.applyFilter();
     },
-
     clearManualFilter() {
       this.clearFilter();
+    },
+
+    sortColumn(columnKey) {
+      if (this.get('sortBy') === columnKey) {
+        this.set('sortAscending', !this.get('sortAscending'));
+      }
+      else {
+        this.set('sortBy', columnKey);
+        this.set('sortAscending', true);
+      }
     }
   },
 

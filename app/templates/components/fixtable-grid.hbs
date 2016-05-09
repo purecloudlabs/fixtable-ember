@@ -16,9 +16,22 @@
         <tr class="fixtable-column-headers">
           {{#each columns as |column|}}
             <th>
-              <div>
-                {{if column.header column.header column.key}}
-              </div>
+              {{#if column.sortable}}
+                <div class="clickable" {{action 'sortColumn' column.key}}>
+                  {{if column.header column.header column.key}}
+                  {{#if (equals column.key sortBy)}}
+                    {{#if sortAscending}}
+                      <span class="caret caret-up"></span>
+                    {{else}}
+                      <span class="caret"></span>
+                    {{/if}}
+                  {{/if}}
+                </div>
+              {{else}}
+                <div>
+                  {{if column.header column.header column.key}}
+                </div>
+              {{/if}}
             </th>
           {{/each}}
         </tr>

@@ -7,21 +7,25 @@ export default Ember.Route.extend({
         {
           key: 'id',
           header: 'ID',
-          width: 50
+          width: 50,
+          sortable: true
         },
         {
           key: 'name',
           header: 'Name',
           width: 200,
-          cellClass: 'name'
+          cellClass: 'name',
+          sortable: true
         },
         {
           key: 'address',
-          header: 'Address'
+          header: 'Address',
+          sortable: true
         },
         {
           key: 'alignment',
-          header: 'Alignment'
+          header: 'Alignment',
+          sortable: true
         },
         {
           key: 'username',
@@ -107,6 +111,11 @@ export default Ember.Route.extend({
         { value: 'Neutral' }
       ]
     };
+
+    // add a custom ID sorting function to both versions of the column defs
+    var sortFunc = (x, y) => x - y;
+    model.columnDefs[0].sortFunction = sortFunc;
+    model.filteredColumnDefs[0].sortFunction = sortFunc;
 
     return model;
   },

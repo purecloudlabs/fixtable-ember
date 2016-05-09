@@ -319,6 +319,82 @@ To disable real-time filtering, simply set the `realtimeFiltering` property to `
 
 Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
 
+### Sorting
+
+Fixtable has built-in support for column sorting.
+
+To enable sorting for a given column, just add `sortable: true` to the column definition.
+
+For example, in the column definitions below, the name column is sortable:
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    sortable: true
+  },
+  {
+    key: 'address',
+    header: 'Street Address'
+  }
+]
+```
+
+Clicking on the header of a sortable column will sort it in ascending order. Clicking on the column header again will toggle ascending/descending. Clicking on another column header will switch to sorting by the new column in ascending order.
+
+To specify a default sort column or sort order, you can bind to the `sortBy` and `sortAscending` properties of the `fixtable-grid` component, respectively. (`sortAscending` defaults to true, so you can omit this property if that's what you want.) `sortBy` should be a column key, and `sortAscending` should be a boolean.
+
+For example, this is how we might sort by ID in descending order:
+```handlebars
+{{fixtable-grid columns=model.columnDefs content=model.dataRows sortBy=(mut sortKey) sortAscending=(mut ascending)}}
+```
+
+In the owning component or controller:
+```javascript
+sortKey: 'id',
+ascending: false,
+```
+
+Note that you should use the `mut` helper to indicate that the `fixtable-grid` is allowed to mutate the value. Because the Fixtable needs to change these values depending on user actions, you should not use literal string and boolean values for these properties.
+
+#### Client-Side Sorting
+
+As long as `serverPaging` is not turned on, Fixtable can handle the sorting logic on its own, under the assumption that all of the table data is already loaded on the client. Specifying the `sortable` key in the column definition is enough to enable client-side sorting.
+
+There are also some additional features that can be used to customize sorting on the client. **By default, sorting is done in lexicographical order, using JavaScript's [String.prototype.localeCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare) function.** If you want to sort using some other means, you can specify a custom sort function using the `sortFunction` key of the column definition.
+
+For example, this column definition represents an ID column that is sorted numerically.
+```javascript
+{
+  key: 'id',
+  header: 'ID',
+  sortable: true,
+  sortFunction: (x, y) => x - y
+}
+```
+
+When specifying a custom sort function, note that the intended sort direction is assumed to be ascending. When the column is sorted in descending order, the same function will be invoked, but the parameter order will be reversed. The sort function should expect to receive two parameters, corresponding to two cell values for the rows being compared. (In the example above, `x` and `y` would be ID values.) In your sort function, don't forget to consider the possibility of null or undefined cell values.
+
+#### Server-Side Sorting
+
+When server paging is turned on, Fixtable cannot implement sorting on the client because it doesn't have enough information. Instead, the same `onReloadContent` action used for filtering and pagination will be invoked. The fourth parameter of the passed-in function will be a `sortInfo` object that contains `key` and `ascending` properties. `key` corresponds to the key of the column that should be sorted, and `ascending` is a boolean that indicates whether the sort should be ascending or descending. The `sortInfo` parameter will be null if no sort column is specified.
+
+For example, `sortInfo` would look like this if we wanted to sort by ID, ascending:
+```javascript
+{
+  key: 'id',
+  ascending: true
+}
+```
+
+Similarly to server-side pagination and filtering, the Fixtable will take care of notifying its consumer whenever the table needs to be sorted, but actually sorting the table's bound data is the responsibility of the consumer.
+
+#### Sorting Caveats
+
+Currently, you can only sort by a single column at a time. (In other words, there is no concept of primary/secondary sort column.)
+
+Also, just like with filtering, sorting is based on what's defined in `content`, not on the actual markup rendered in the cell. Keep this in mind when using sorting with custom cell components.
+
 ## Development / Contributing
 
 ### Installation
