@@ -2,8 +2,12 @@
   <div class="fixtable-header"></div>
   <div class="fixtable-filters">
     {{#if showManualFilterButtons}}
-      <button type="button" class="btn btn-primary btn-sm" {{action 'applyManualFilter'}}>Apply</button>
-      <button type="button" class="btn btn-primary btn-sm" {{action 'clearManualFilter'}}>Clear</button>
+      {{#if filtersAreDirty}}
+        <button type="button" class="btn btn-primary" {{action 'applyManualFilter'}}>Apply</button>
+      {{/if}}
+      {{#if filtersAreActive}}
+        <button type="button" class="btn btn-primary" {{action 'clearManualFilter'}}>Clear</button>
+      {{/if}}
     {{/if}}
   </div>
   <div class="fixtable-inner">

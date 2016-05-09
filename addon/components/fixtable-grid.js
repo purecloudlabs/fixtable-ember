@@ -14,6 +14,8 @@ export default Ember.Component.extend({
   filterToApply: null,
   filterDebounce: 500,
   realtimeFiltering: true,
+  filtersAreActive: false,
+  filtersAreDirty: false,
 
   showManualFilterButtons: Ember.computed('realtimeFiltering', 'filters',
     function fixtableGrid$showManualFilterButtons() {
@@ -21,6 +23,7 @@ export default Ember.Component.extend({
     }),
 
   onFilterChanged: function fixtableGrid$onFilterChanged(/*filters, columnKey*/) {
+    this.set('filtersAreDirty', true);
     if (this.get('realtimeFiltering'))
     {
       Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
@@ -29,8 +32,14 @@ export default Ember.Component.extend({
 
   applyFilter: function fixtableGrid$applyFilter() {
     // update the filterToApply property to trigger a change in filteredContent
-    this.set('filterToApply', JSON.parse(JSON.stringify(this.get('filters'))));
+    var filters = this.get('filters');
+    this.set('filterToApply', JSON.parse(JSON.stringify(filters)));
     this.set('currentPage', 1);
+    this.set('filtersAreDirty', false);
+
+    var filtersAreActive = Object.keys(filters).some(key => !!filters[key]);
+    this.set('filtersAreActive', filtersAreActive);
+
     Ember.run.once(this, this.notifyReloadContent);
   },
 
