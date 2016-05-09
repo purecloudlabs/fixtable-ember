@@ -146,13 +146,17 @@ export default Ember.Component.extend({
       return Math.ceil(this.get('totalRows') / this.get('pageSize'));
     }),
 
+  validatePageNumberRange(unvalidated) {
+    return Math.min(Math.max(1, unvalidated), this.get('totalPages'));
+  },
+
   actions: {
     goToPreviousPage() {
-      this.set('currentPage', Math.max(1, this.get('currentPage') - 1));
+      this.set('currentPage', this.validatePageNumberRange(this.get('currentPage') - 1));
     },
 
     goToNextPage() {
-      this.set('currentPage', Math.min(this.get('totalPages'), this.get('currentPage') + 1));
+      this.set('currentPage', this.validatePageNumberRange(this.get('currentPage') + 1));
     },
 
     applyManualFilter() {

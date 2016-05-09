@@ -85,11 +85,11 @@
   {{#if showPaging}}
     <div class="fixtable-footer">
       <span>Page</span>
-      <button type="button" class="btn btn-default" aria-label="Previous Page" {{action 'goToPreviousPage'}}>
+      <button type="button" class="btn btn-default" aria-label="Previous Page" {{action 'goToPreviousPage'}} disabled={{equals currentPage 1}}>
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
       </button>
-      {{input class="form-control" value=currentPage}}
-      <button type="button" class="btn btn-default" aria-label="Next Page" {{action 'goToNextPage'}}>
+      {{input type="number" class="form-control" value=currentPage}}
+      <button type="button" class="btn btn-default" aria-label="Next Page" {{action 'goToNextPage'}} disabled={{equals currentPage totalPages}}>
         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
       </button>
       <span>of {{totalPages}}</span>
