@@ -2,6 +2,10 @@
   cursor: pointer;
 }
 
+.fixtable .fixtable-checkbox {
+  text-align: center;
+}
+
 .fixtable .caret.caret-up {
   transform: rotate(180deg);
 }

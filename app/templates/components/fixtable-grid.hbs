@@ -14,6 +14,13 @@
     <table class={{if tableClass (concat 'table ' tableClass) 'table'}}>
       <thead>
         <tr class="fixtable-column-headers">
+          {{#if rowSelection}}
+            <th>
+              <div class="fixtable-checkbox">
+                {{input type="checkbox" checked=selectAllToggle}}
+              </div>
+            </th>
+          {{/if}}
           {{#each columns as |column|}}
             <th>
               {{#if column.sortable}}
@@ -66,8 +73,16 @@
       </thead>
       <tbody>
         {{#unless isLoading}}
-          {{#each visibleContent as |row|}}
+          {{#each visibleContent as |row rowIndex|}}
             <tr>
+              {{#if rowSelection}}
+                <td>
+                  <div class="fixtable-checkbox">
+                    {{!-- we need concat here to convert rowIndex into a string for the get helper --}}
+                    {{input type="checkbox" checked=(mut (get selectedRows (concat '' rowIndex)))}}
+                  </div>
+                </td>
+              {{/if}}
               {{#each columns as |column|}}
                 <td class={{column.cellClass}}>
                   {{#if column.component}}
