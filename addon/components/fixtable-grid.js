@@ -40,7 +40,7 @@ export default Ember.Component.extend({
   },
 
   applyFilter: function fixtableGrid$applyFilter() {
-    // update the filterToApply property to trigger a change in filteredContent
+    // update the filterToApply property to trigger a change in sortedFilteredContent
     var filters = this.get('filters');
     this.set('filterToApply', JSON.parse(JSON.stringify(filters)));
     this.set('currentPage', 1);
@@ -178,15 +178,15 @@ export default Ember.Component.extend({
       return sortedFilteredContent.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     }),
 
-  totalRows: Ember.computed('filteredContent.[]', 'serverPaging', 'totalRowsOnServer',
+  totalRows: Ember.computed('sortedFilteredContent.[]', 'serverPaging', 'totalRowsOnServer',
     function fixtableGrid$totalRows() {
       if (this.get('serverPaging'))
       {
         return this.get('totalRowsOnServer');
       }
       else {
-        var filteredContent = this.get('filteredContent');
-        return filteredContent ? filteredContent.length : 0;
+        var sortedFilteredContent = this.get('sortedFilteredContent');
+        return sortedFilteredContent ? sortedFilteredContent.length : 0;
       }
     }),
 
