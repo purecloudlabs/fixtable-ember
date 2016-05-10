@@ -28,7 +28,6 @@ export default Ember.Component.extend({
 
   // row selection
   rowSelection: false,
-  rowSelectionColumnWidth: 40,
   selectedRows: null, // maps row indices to selected state
   suppressSelectToggle: false,
 
@@ -239,7 +238,7 @@ export default Ember.Component.extend({
     }
   },
 
-  onSelectionChanged(selectedRows, rowIndex) {
+  onSelectionChanged(selectedRows/*, rowIndex*/) {
     var selectedRowKeys = Object.keys(selectedRows);
     var numSelected = selectedRowKeys.filter(key => selectedRows[key]).length;
 
