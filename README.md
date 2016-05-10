@@ -395,6 +395,30 @@ Currently, you can only sort by a single column at a time. (In other words, ther
 
 Also, just like with filtering, sorting is based on what's defined in `content`, not on the actual markup rendered in the cell. Keep this in mind when using sorting with custom cell components.
 
+### onReloadContent
+
+Let's recap `onReloadContent`, since it can be triggered by several different kinds of content updates. This property of the `fixtable-grid` should be set to an action on the owning controller or component. The bound action will be called whenever the table is paged, sorted, or filtered. (This is true regardless of whether client paging or server paging is active, but obviously it's more important for server paging.) The action will be invoked with the following parameters:
+
+* `page` (Number) - The current 1-indexed page number.
+* `pageSize` (Number) - The maximum number of rows shown on a single page.
+* `filters` (Object) - Object where the key/value pairs map column keys to filter text.
+* `sortInfo` (Object) - Object with a string `key` property representing the column to sort by, and a boolean `ascending` property indicating the sort direction. If the table is unsorted, `sortInfo` will be null.
+
+### Row Selection
+
+Fixtable has built-in support for selecting rows. If you set the `rowSelection` property to true, the `fixtable-grid` will render a leftmost column of checkboxes that can be used to select individual rows. In the header for the checkbox column, there will also be a checkbox that can be used to toggle selection for all of the visible rows.
+
+Selected rows will automatically have the `active` CSS class applied to them. This will give them a default selected style if you have Bootstrap pulled in, but you can also override those styles as desired.
+
+When rows are selected, any kind of content reload (i.e., anything that would trigger `onReloadContent` -- sorting, paging, or filtering) will clear the selected rows. (This is true regardless of whether the Fixtable is using client paging, server paging, or no paging at all.)
+
+Consumers should keep track of which rows are selected by subscribing to `onSelectionChanged` and `onReloadContent`. No selection-related parameters are passed to `onReloadContent`, but a consumer who cares about selection **must** listen to this because any content reload will automatically clear the selection -- and when content is reloaded, `onSelectionChanged` is not called in addition to `onReloadContent`.
+
+`onSelectionChanged` should be bound to an action on the owning controller or component. The bound action will be called whenever a row is selected or deselected. It receives the following two parameters:
+
+* `selectedRows` (Object) - Object where the key/value pairs map row indices to a boolean indicating whether the row is selected.
+* `rowIndex` (String) - The index of the selected row. Note that this is the index relative to the rows loaded into the page, *not* relative to the entire dataset. So, the indices will always fall into the range [0, pageSize).
+
 ## Development / Contributing
 
 ### Installation

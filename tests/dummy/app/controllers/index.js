@@ -13,6 +13,8 @@ export default Ember.Controller.extend({
   manualFilterPageSortKey: 'id',
   rowSelectionSortKey: 'id',
 
+  selectedNames: null,
+
   actions: {
     toggle(propertyName) {
       this.set(propertyName, !this.get(propertyName));
@@ -88,6 +90,18 @@ export default Ember.Controller.extend({
     updateServerPage(page, pageSize, filters, sortInfo) {
       this.actions.updatePage.call(this, page, pageSize, filters, sortInfo,
         'serverPageIsLoading', 'model.filteredDataRows', 'model.pagedDataRows');
+    },
+
+    rowSelectionReloadContent(/*page, pageSize, filters, sortInfo*/) {
+      this.set('selectedNames', '');
+    },
+
+    updateSelection(selectedRows/*, rowIndex*/) {
+      var selectedNames = [];
+      Object.keys(selectedRows)
+        .filter(key => selectedRows[key])
+        .forEach(key => selectedNames.push(this.get('model.dataRows')[key].name));
+      this.set('selectedNames', selectedNames.join(', '));
     }
   }
 });

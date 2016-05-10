@@ -205,6 +205,8 @@ export default Ember.Component.extend({
   },
 
   resetSelection: Ember.observer('visibleContent.[]', function fixtableGrid$resetSelection() {
+    if (!this.get('rowSelection')) { return; }
+
     var selectedRows = Ember.Object.create();
     this.set('selectedRows', selectedRows);
     this.get('visibleContent').forEach((row, rowIndex) => {
@@ -215,7 +217,7 @@ export default Ember.Component.extend({
     var self = this;
     selectionKeys.forEach(function(key) {
       if (!selectedRows.hasObserverFor(key)) {
-        selectedRows.addObserver(key, self, 'onSelectionChanged');
+        selectedRows.addObserver(key, self, 'onRowSelectedOrDeselected');
       }
     });
 
@@ -230,6 +232,8 @@ export default Ember.Component.extend({
   },
 
   setSelectAllToggleIndeterminate(indeterminate) {
+    if (!this.get('rowSelection')) { return; }
+
     var selector = '.fixtable-column-headers th .fixtable-checkbox input[type=checkbox]';
     var element = this.get('element');
     if (element) {
@@ -238,7 +242,9 @@ export default Ember.Component.extend({
     }
   },
 
-  onSelectionChanged(selectedRows/*, rowIndex*/) {
+  onRowSelectedOrDeselected(selectedRows, rowIndex) {
+    if (!this.get('rowSelection')) { return; }
+
     var selectedRowKeys = Object.keys(selectedRows);
     var numSelected = selectedRowKeys.filter(key => selectedRows[key]).length;
 
@@ -257,11 +263,16 @@ export default Ember.Component.extend({
       this.setSelectAllToggleChecked(false);
       this.setSelectAllToggleIndeterminate(false);
     }
+
+    var handler = this.get('onSelectionChanged');
+    if (typeof handler === 'function') {
+      handler(selectedRows, rowIndex)
+    }
   },
 
   toggleSelectAll: Ember.observer('selectAllToggle', function fixtableGrid$toggleSelectAll() {
-    if (this.get('suppressSelectToggle')) {
-      return; // this indicates that we're programmatically setting the property, not responding to user input
+    if (this.get('suppressSelectToggle') || !this.get('rowSelection')) {
+      return; // quit if we're programmatically setting the property, not responding to user input
     }
 
     var selectedRows = this.get('selectedRows');
