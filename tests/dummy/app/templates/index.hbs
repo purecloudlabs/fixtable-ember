@@ -57,3 +57,23 @@
     </button>
   </div>
 </div>
+
+<h3>Row Selection</h3>
+<p>This Fixtable lets you select rows.</p>
+<h4>Selected:</h4>
+{{#if selectedNames.length}}
+  <p>{{selectedNames}}</p>
+{{else}}
+  <p>(none)</p>
+{{/if}}
+<div class="row">
+  <div class="col-md-8">
+    {{fixtable-grid columns=model.filteredColumnDefs content=model.dataRows sortBy=(mut rowSelectionSortKey)
+      fixtableClass='restrict-height' tableClass='table-hover'
+      isLoading=rowSelectionPageIsLoading clientPaging=true rowSelection=true
+      onSelectionChanged=(action 'updateSelection') onReloadContent=(action 'rowSelectionReloadContent')}}
+    <button type="button" class="btn btn-primary" {{action 'toggle' 'rowSelectionPageIsLoading'}}>
+      Toggle Loading
+    </button>
+  </div>
+</div>

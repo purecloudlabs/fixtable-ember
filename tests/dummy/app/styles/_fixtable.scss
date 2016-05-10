@@ -34,15 +34,23 @@
       tbody {
         tr {
           background-color: $table-body-color;
+
+          &.active {
+            th, td {
+              background-color: $table-active-color;
+            }
+          }
         }
       }
 
       &.table-hover {
         tbody {
           tr:hover {
-            background-color: $table-hover-color;
+            th, td {
+              background-color: $table-hover-color;
+            }
 
-            td:first-child, th:first-child {
+            th:first-child, td:first-child {
               -webkit-box-shadow:inset 3px 0 0 0 $pure-blue;
               box-shadow:inset 3px 0 0 0 $pure-blue;
             }
