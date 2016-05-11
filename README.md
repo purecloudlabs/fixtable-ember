@@ -2,6 +2,11 @@
 
 This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer.
 
+See a live demo here:
+[http://mypurecloud.github.io/fixtable-ember/](http://mypurecloud.github.io/fixtable-ember/)
+
+(Note: The source for the gh-pages site can be found in this repo's tests/dummy/app directory in the master branch. The code in the actual gh-pages branch is less helpful as a reference, since the files have been minified and concatenated.)
+
 ## Basic Usage
 
 ### Getting Started
@@ -430,7 +435,7 @@ Consumers should keep track of which rows are selected by subscribing to `onSele
 ### Running
 
 * `ember server`
-* Visit the dummy test app at http://localhost:4200.
+* Visit the dummy test app at http://localhost:4200/fixtable-ember/. The trailing slash seems to be required.
 
 ### Running Tests
 
