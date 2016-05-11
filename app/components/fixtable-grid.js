@@ -1,1 +1,0 @@
-export { default } from 'fixtable-ember/components/fixtable-grid';
