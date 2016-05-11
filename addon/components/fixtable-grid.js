@@ -266,7 +266,7 @@ export default Ember.Component.extend({
 
     var handler = this.get('onSelectionChanged');
     if (typeof handler === 'function') {
-      handler(selectedRows, rowIndex)
+      handler(selectedRows, rowIndex);
     }
   },
 

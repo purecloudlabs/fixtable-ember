@@ -6,6 +6,12 @@ body {
   background-color: $body-background-color;
 }
 
+.ember-img {
+  height: 35px;
+  position: relative;
+  top: -3px;
+}
+
 .restrict-height {
   height: 400px;
 }
