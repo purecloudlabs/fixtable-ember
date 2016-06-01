@@ -5,15 +5,13 @@ This addon provides an Ember-specific wrapper around the the [Fixtable](https://
 See a live demo here:
 [http://mypurecloud.github.io/fixtable-ember/](http://mypurecloud.github.io/fixtable-ember/)
 
-(Note: The source for the gh-pages site can be found in this repo's tests/dummy/app directory in the master branch. The code in the actual gh-pages branch is less helpful as a reference, since the files have been minified and concatenated.)
+(Note: The source for the gh-pages site can be found in this repo's tests/dummy/app directory in the master branch. If you're curious for code examples, the master branch is a better source, since the code in the actual gh-pages branch has been minified and concatenated.)
 
 ## Basic Usage
 
 ### Getting Started
 
 Install this addon in your app using `npm install --save fixtable-ember`.
-
-*Disclaimer: The command above actually won't work yet because this addon is currently still under development and hasn't yet been published to NPM. If you'd like to test this addon while it's still being developed, you can point directly to the Git repository in your package.json. To do that, use the command `npm install --save git://github.com/MyPureCloud/fixtable-ember.git#master`. This will install the addon at the current state of the master branch.*
 
 This addon creates a new component that you can use in your templates: `fixtable-grid`
 
