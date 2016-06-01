@@ -43,6 +43,6 @@ module.exports = {
     importFontAwesome(parentApp);
     importFixtable(parentApp);
 
-    app.import('vendor/styles/fixtable-ember.css');
+    parentApp.import('vendor/styles/fixtable-ember.css');
   }
 };
