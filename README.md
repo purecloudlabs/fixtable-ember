@@ -11,11 +11,15 @@ See a live demo here:
 
 ### Getting Started
 
-Install this addon in your app using `npm install --save fixtable-ember`.
+Navigate to the root directory of the project where you want to install this addon. Then, install this addon in your app using the following commands:
+```
+npm install --save fixtable-ember
+ember install fixtable-ember
+```
 
 This addon creates a new component that you can use in your templates: `fixtable-grid`
 
-Although it isn't strictly required, you should also include [Bootstrap 3](http://getbootstrap.com/getting-started/) in your project for optimal display.
+Although it isn't strictly required, we recommend including [Bootstrap 3](http://getbootstrap.com/getting-started/) in your project for optimal display.
 
 ### Defining Columns
 
@@ -446,3 +450,23 @@ Consumers should keep track of which rows are selected by subscribing to `onSele
 * `ember build`
 
 For more information on using ember-cli, visit [http://ember-cli.com/](http://ember-cli.com/).
+
+### Nesting Addons
+
+If you want to nest this addon within another addon, you need to make sure that Bower dependencies from the `fixtable-ember` addon (namely, `font-awesome` and `fixtable`) are pulled into the top level consuming application. To do that, you should create a blueprint in your addon that will add the necessary Bower dependencies after install:
+
+Create a file at the following location, with the following contents:
+
+your-addon-folder/blueprints/your-addon-name/index.js
+```javascript
+module.exports = {
+  normalizeEntityName: function() {},
+
+  afterInstall() {
+    return this.addBowerPackageToProject('font-awesome')
+      .then(() => this.addBowerPackageToProject('fixtable'));
+  }
+};
+```
+
+Then, the consuming app will need to run the blueprint/generator for your addon (using `ember install`) to complete the installation, in addition to doing an `npm install`.
