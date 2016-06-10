@@ -36,9 +36,13 @@ module.exports = {
 
   included(app) {
     this._super.included(app);
-    importFontAwesome(app);
-    importFixtable(app);
 
-    app.import('vendor/styles/fixtable-ember.css');
+    // works around dependency issues if this is nested within another addon
+    let parentApp = (typeof app.import !== 'function' && app.app) ? app.app : app;
+
+    importFontAwesome(parentApp);
+    importFixtable(parentApp);
+
+    parentApp.import('vendor/styles/fixtable-ember.css');
   }
 };
