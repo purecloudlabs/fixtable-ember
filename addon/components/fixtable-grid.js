@@ -353,9 +353,7 @@ export default Ember.Component.extend({
     this._super(...arguments);
 
     // initialize the Fixtable script
-    var ele = this.$('.fixtable')[0];
-    console.log('FIXTABLE-EMBER : didInsertElement initing fixtable --> ', ele);
-    var fixtable = new Fixtable(ele);
+    var fixtable = new Fixtable(this.$('.fixtable')[0]);
 
     // set fixtable column widths
     var columns = this.get('columns');
