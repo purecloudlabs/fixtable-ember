@@ -13,7 +13,6 @@ See a live demo here:
 
 Navigate to the root directory of the project where you want to install this addon. Then, install this addon in your app using the following commands:
 ```
-npm install --save fixtable-ember
 ember install fixtable-ember
 ```
 
@@ -469,4 +468,4 @@ module.exports = {
 };
 ```
 
-Then, the consuming app will need to run the blueprint/generator for your addon (using `ember install`) to complete the installation, in addition to doing an `npm install`.
+Then, the consuming app will need to run the blueprint/generator for your addon (using `ember install`) to complete the installation.
