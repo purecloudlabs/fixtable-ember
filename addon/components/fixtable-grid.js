@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import layout from '../templates/components/fixtable-grid';
 
 const possiblePageSizes = [ 25, 50, 100, 250, 500 ];
 const defaultPage = 1;
@@ -6,6 +7,7 @@ const defaultPageSize = 25;
 const toCompareString = x => x === null || typeof x === 'undefined' ? '' : x + '';
 
 export default Ember.Component.extend({
+  layout: layout,
   fixtable: null,
   columnsByKey: null,
 
@@ -351,7 +353,9 @@ export default Ember.Component.extend({
     this._super(...arguments);
 
     // initialize the Fixtable script
-    var fixtable = new Fixtable(this.$('.fixtable')[0]);
+    var ele = this.$('.fixtable')[0];
+    console.log('FIXTABLE-EMBER : didInsertElement initing fixtable --> ', ele);
+    var fixtable = new Fixtable(ele);
 
     // set fixtable column widths
     var columns = this.get('columns');
