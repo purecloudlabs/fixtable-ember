@@ -330,7 +330,7 @@ If you prefer not to specify the possible select options in the column definitio
 ]
 ```
 
-Automatic filtering should not be used if server-side pagination is turned on, because Fixtable will not be able to determine all of the possible filter options without all of the data loaded onto the client.
+Automatic filtering should not be used if server-side pagination is turned on, because Fixtable will not be able to determine all of the possible filter options without all of the data loaded onto the client. Note that the generated options will be unique and case-insensitive.
 
 #### Filter Debouncing
 
