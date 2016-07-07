@@ -10,16 +10,19 @@ export function getSelectOptions([column, dataRows, serverPaging]/*, hash*/) {
       throw `Cannot use automaticOptions for select-type filter on column ${column.key} while serverPaging is turned on`;
     }
 
-    let optionSet = new Set();
+    let optionSet = {};
     dataRows.forEach(row => {
-      optionSet.add(row[column.key]);
+      let val = row[column.key];
+      if (typeof val === 'undefined' || val === null || val === '') { return; }
+
+      let lower = (val + '').toLowerCase();
+      if (typeof optionSet[lower] !== 'undefined') { return; } // we already have this option
+      optionSet[lower] = val;
     });
 
-    let selectOptions = [];
-    for (let opt of optionSet) {
-      selectOptions.push({ value: opt });
-    }
-    return selectOptions;
+    return Object.keys(optionSet).map(opt => {
+      return { value: optionSet[opt] };
+    });
   }
 
   if (!column.filter.selectOptions) {
