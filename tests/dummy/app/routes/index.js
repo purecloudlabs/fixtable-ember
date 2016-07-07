@@ -112,10 +112,18 @@ export default Ember.Route.extend({
       ]
     };
 
+    // create a version of the filtered column defs that includes automaticOptions
+    model.clientColumnDefs = JSON.parse(JSON.stringify(model.filteredColumnDefs));
+    model.clientColumnDefs[3].filter = { // alignment
+      type: 'select',
+      automaticOptions: true,
+    };
+
     // add a custom ID sorting function to both versions of the column defs
     var sortFunc = (x, y) => x - y;
     model.columnDefs[0].sortFunction = sortFunc;
     model.filteredColumnDefs[0].sortFunction = sortFunc;
+    model.clientColumnDefs[0].sortFunction = sortFunc;
 
     return model;
   },
