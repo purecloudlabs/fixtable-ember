@@ -19,7 +19,7 @@
 <p>The rows can be filtered by column, and the filtering is handled entirely by the Fixtable on the client. The filters are applied 500ms after the user stops typing into a filter field.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnDefs content=model.dataRows sortBy=(mut clientPageSortKey)
+    {{fixtable-grid columns=model.clientColumnDefs content=model.dataRows sortBy=(mut clientPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=clientPageIsLoading clientPaging=true}}
     <button type="button" class="btn btn-primary" {{action 'toggle' 'clientPageIsLoading'}}>

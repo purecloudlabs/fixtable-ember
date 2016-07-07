@@ -278,7 +278,9 @@ Do note that it's possible for changing the filters to simultaneously change the
 
 #### Types of Filters
 
-There are two types of filters: search filters and select filters. Search-type filters discriminate rows based on the text typed into the filter field, excluding any row that does not include the searched-for text as a substring (case-insensitive). Select-type filters discriminate rows based on a discretely selected option, where the row's value for that column must be equal to the selected filter option (again, case-insensitive).
+There are two types of filters: search filters and select filters. Search-type filters discriminate rows based on the text typed into the filter field, excluding any row that does not include the searched-for text as a substring (case-insensitive).
+
+You can specify a search-type filter in the column definitions as follows:
 
 ```javascript
 [
@@ -288,7 +290,14 @@ There are two types of filters: search filters and select filters. Search-type f
     filter: {
       type: 'search'
     }
-  },
+  }
+]
+```
+
+Select-type filters discriminate rows based on a discretely selected option, where the row's value for that column must be equal to the selected filter option (again, case-insensitive). The options for a select-type filter may be specified as follows:
+
+```javascript
+[
   {
     key: 'grade',
     header: 'Letter Grade',
@@ -305,6 +314,23 @@ There are two types of filters: search filters and select filters. Search-type f
   }
 ]
 ```
+
+If you prefer not to specify the possible select options in the column definitions, you can simply set the `automaticOptions` flag to true in the `filter` object of the column definition. This will cause the select options to be automatically generated from the values that are present in the data.
+
+```javascript
+[
+  {
+    key: 'grade',
+    header: 'Letter Grade',
+    filter: {
+      type: 'select',
+      automaticOptions: true
+    }
+  }
+]
+```
+
+Automatic filtering should not be used if server-side pagination is turned on, because Fixtable will not be able to determine all of the possible filter options without all of the data loaded onto the client. (Automatic filtering can be used with client-side pagination, however.) Note that the generated options will be unique and case-insensitive.
 
 #### Filter Debouncing
 
