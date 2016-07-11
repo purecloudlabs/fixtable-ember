@@ -43,6 +43,11 @@
           {{/each}}
         </tr>
         <tr class="fixtable-column-filters">
+          {{#if rowSelection}}
+            <th>
+              {{!-- empty cell in filter row to account for checkbox column --}}
+            </th>
+          {{/if}}
           {{#each columns as |column|}}
             <th>
               {{#if column.filter}}

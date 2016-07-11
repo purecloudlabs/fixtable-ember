@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import layout from '../templates/components/fixtable-grid';
 
+const checkboxColumnWidth = 40; // in pixels
 const possiblePageSizes = [ 25, 50, 100, 250, 500 ];
 const defaultPage = 1;
 const defaultPageSize = 25;
@@ -355,11 +356,18 @@ export default Ember.Component.extend({
     // initialize the Fixtable script
     var fixtable = new Fixtable(this.$('.fixtable')[0]);
 
+    // account for the row selection checkbox column, if present
+    var indexOffset = 1;
+    if (this.get('rowSelection')) {
+      indexOffset = 2;
+      fixtable.setColumnWidth(1, checkboxColumnWidth);
+    }
+
     // set fixtable column widths
     var columns = this.get('columns');
     columns.forEach((col, index) => {
       if (col.width) {
-        fixtable.setColumnWidth(index + 1, col.width);
+        fixtable.setColumnWidth(index + indexOffset, col.width);
       }
     });
 
