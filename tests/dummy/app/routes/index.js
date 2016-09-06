@@ -126,5 +126,5 @@ export default Ember.Route.extend({
     model.clientColumnDefs[0].sortFunction = sortFunc;
 
     return model;
-  },
+  }
 });
