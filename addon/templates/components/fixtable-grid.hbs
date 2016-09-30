@@ -58,7 +58,13 @@
                         <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
                           <option value=""></option>
                           {{#each (getSelectOptions column content serverPaging) as |choice|}}
-                            <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>{{choice.value}}</option>
+                            <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
+                              {{#if choice.label}}
+                                {{choice.label}}
+                              {{else}}
+                                {{choice.value}}
+                              {{/if}}
+                            </option>
                           {{/each}}
                         </select>
                       {{else}}
