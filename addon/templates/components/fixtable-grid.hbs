@@ -59,11 +59,7 @@
                           <option value=""></option>
                           {{#each (getSelectOptions column content serverPaging) as |choice|}}
                             <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
-                              {{#if choice.label}}
-                                {{choice.label}}
-                              {{else}}
-                                {{choice.value}}
-                              {{/if}}
+                              {{if choice.label choice.label choice.value}}
                             </option>
                           {{/each}}
                         </select>
