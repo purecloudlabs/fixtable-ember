@@ -106,8 +106,8 @@ export default Ember.Route.extend({
     model.filteredColumnDefs[3].filter = { // alignment
       type: 'select',
       selectOptions: [
-        { value: 'Good' },
-        { value: 'Evil' },
+        { value: 'Good', label: 'Positive' },
+        { value: 'Evil', label: 'Negative' },
         { value: 'Neutral' }
       ]
     };

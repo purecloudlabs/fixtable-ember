@@ -294,7 +294,7 @@ You can specify a search-type filter in the column definitions as follows:
 ]
 ```
 
-Select-type filters discriminate rows based on a discretely selected option, where the row's value for that column must be equal to the selected filter option (again, case-insensitive). The options for a select-type filter may be specified as follows:
+Select-type filters discriminate rows based on a discretely selected option, where the row's value for that column must be equal to the selected filter option (again, case-insensitive). A label may be optionally provided for each option to have control over the text shown in the select-type filter dialog. The options for a select-type filter may be specified as follows:
 
 ```javascript
 [
@@ -304,9 +304,9 @@ Select-type filters discriminate rows based on a discretely selected option, whe
     filter: {
       type: 'select',
       selectOptions: [
-        { value: 'A' },
+        { value: 'A', label: 'The letter A' },
         { value: 'B' },
-        { value: 'C' },
+        { value: 'C', label: 'The letter C' },
         { value: 'D' },
         { value: 'F' },
       ]
