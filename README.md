@@ -113,7 +113,11 @@ For example, this is an example of content corresponding to the name and address
 
 ### Adding Custom CSS Classes / Setting a Height
 
-The primary feature of the Fixtable library is its ability to allow scrollable content with a fixed header and footer. To enable this feature, all you need to do is pass in a CSS class with a defined height through the `fixtableClass` property. The class (or classes, if you pass in a space-delimited class name string) specified in `fixtableClass` will be added to the Fixtable container element.
+The primary feature of the Fixtable library is its ability to allow scrollable content with a fixed header and footer. To enable this feature, all you need to do is pass in a CSS class with a defined height through the `fixtableClass` property.
+
+The class (or classes, if you pass in a space-delimited class name string) specified in `fixtableClass` will be added to the Fixtable container element.
+
+**Specifying a height for the Fixtable is required for optimal display.** If you do not specify a height, the table may appear to "collapse" when there are no data rows. (Note that height does not need to be specified as a fixed number of pixels; percentage-height is also fine as long as the parent element has a size.)
 
 For example:
 ```handlebars
