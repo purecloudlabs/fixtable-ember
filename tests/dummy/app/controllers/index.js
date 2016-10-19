@@ -45,7 +45,7 @@ export default Ember.Controller.extend({
         var filteredRows = dataRows.filter(function(row) {
           return Object.keys(filters).every(function(columnKey) {
             if (!filters[columnKey]) { return true; } // no filter
-            var cellData = (row[columnKey] || '').toLowerCase();
+            var cellData = (((row.get) ? row.get(columnKey) : row[columnKey]) || '').toLowerCase();
             var filterValue = filters[columnKey].toLowerCase();
 
             if (columnsByKey[columnKey].filter.type === 'select') {
