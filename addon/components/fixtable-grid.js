@@ -372,6 +372,8 @@ export default Ember.Component.extend({
     });
 
     this.set('fixtable', fixtable);
+    
+    this.notifyReloadContent();
   },
 
   didRender() {
