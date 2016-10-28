@@ -1,26 +1,13 @@
 /* jshint node: true */
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-
-function importFontAwesome(app) {
-  var fontAwesomePath = path.join(app.bowerDirectory, 'font-awesome');
-
-  var fontAwesomeCssPath = path.join(fontAwesomePath, 'css');
-  app.import({
-    development: path.join(fontAwesomeCssPath, 'font-awesome.css'),
-    production: path.join(fontAwesomeCssPath, 'font-awesome.min.css')
-  });
-
-  var fontAwesomeFontPath = path.join(fontAwesomePath, 'fonts');
-  fs.readdirSync(fontAwesomeFontPath)
-    .forEach(fileName =>
-      app.import(path.join(fontAwesomeFontPath, fileName), { destDir: '/fonts' }));
-}
+const fs = require('fs');
+const Funnel = require('broccoli-funnel');
+const mergeTrees = require('broccoli-merge-trees');
+const path = require('path');
 
 function importFixtable(app) {
-  var fixtablePath = path.join(app.bowerDirectory, 'fixtable/dist/');
+  let fixtablePath = path.join(app.bowerDirectory, 'fixtable/dist/');
   app.import({
     development: path.join(fixtablePath, 'fixtable.css'),
     production: path.join(fixtablePath, 'fixtable.min.css')
@@ -42,9 +29,38 @@ module.exports = {
       parent = parent.app;
     }
 
-    importFontAwesome(parent);
+    let fontAwesomeToImport = fs.readdirSync(`${this.nodeModulesPath}/font-awesome/fonts`);
+    fontAwesomeToImport.forEach((fontFileName) => {
+      parent.import(path.join('vendor', 'fonts', fontFileName));
+    });
+
     importFixtable(parent);
 
     parent.import('vendor/styles/fixtable-ember.css');
+    parent.import('vendor/styles/font-awesome.css');
+  },
+
+  treeForVendor(tree) {
+    let treesToMerge = [];
+    if (tree) {
+      treesToMerge.push(tree);
+    }
+
+    let fontAwesomeFunnel = new Funnel(`${this.nodeModulesPath}/font-awesome`, {
+      srcDir: 'fonts',
+      destDir: 'fonts'
+    });
+    treesToMerge.push(fontAwesomeFunnel);
+
+    let fontAwesomeCssFunnel = new Funnel(`${this.nodeModulesPath}/font-awesome`, {
+      srcDir: 'css',
+      files:['font-awesome.css'],
+      destDir: 'styles'
+    });
+
+    treesToMerge.push(fontAwesomeCssFunnel);
+
+    return mergeTrees(treesToMerge, { overwrite: true });
   }
+
 };
