@@ -44,7 +44,6 @@
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
     "ember-try": "^0.2.2",
-    "font-awesome": "^4.7.0",
     "loader.js": "^4.0.1"
   },
   "keywords": [
@@ -56,7 +55,8 @@
   "dependencies": {
     "ember-cli-babel": "^5.1.6",
     "ember-cli-htmlbars": "^1.0.3",
-    "ember-cli-htmlbars-inline-precompile": "^0.3.1"
+    "ember-cli-htmlbars-inline-precompile": "^0.3.1",
+    "font-awesome": "^4.7.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
