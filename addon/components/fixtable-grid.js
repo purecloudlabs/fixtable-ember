@@ -352,7 +352,10 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
+    Ember.run.later(this, this.initializeFixtable, 0);
+  },
 
+  initializeFixtable() {
     // initialize the Fixtable script
     var fixtable = new Fixtable(this.$('.fixtable')[0]);
 
@@ -371,14 +374,17 @@ export default Ember.Component.extend({
       }
     });
 
+    fixtable.setDimensions();
     this.set('fixtable', fixtable);
-    
     this.notifyReloadContent();
   },
 
   didRender() {
     // force the Fixtable to resize itself when rendered
     this._super(...arguments);
-    this.get('fixtable').setDimensions();
+    let fixtable = this.get('fixtable');
+    if (fixtable) {
+      fixtable.setDimensions();
+    }
   }
 });
