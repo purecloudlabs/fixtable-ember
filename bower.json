@@ -1,6 +1,6 @@
 {
   "name": "fixtable-ember",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/MyPureCloud/fixtable-ember",
   "authors": [
     "Interactive Intelligence"
@@ -15,7 +15,6 @@
   "dependencies": {
     "ember": "~2.9.0",
     "ember-cli-shims": "^0.1.3",
-    "ember-qunit-notifications": "0.1.0",
     "fixtable": "^1.3.11"
   }
 }

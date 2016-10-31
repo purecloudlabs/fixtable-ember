@@ -1,5 +1,8 @@
 # Fixtable-Ember
 
+[![npm](https://img.shields.io/npm/v/fixtable-ember.svg)]()
+[![Build Status](https://travis-ci.org/MyPureCloud/fixtable-ember.svg?branch=master)](https://travis-ci.org/MyPureCloud/fixtable-ember)
+
 This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer.
 
 See a live demo here:
@@ -24,7 +27,7 @@ Although it isn't strictly required, we recommend including [Bootstrap 3](http:/
 
 #### Bower Dependencies and Blueprints
 
-If you want to nest this addon within another addon (ember-engines count too), you need to make sure that Bower dependencies from the `fixtable-ember` addon (namely, `font-awesome` and `fixtable`) are pulled into the top level consuming application. To do that, you should create a blueprint in your addon that will add the necessary Bower dependencies after install:
+If you want to nest this addon within another addon (ember-engines count too), you need to make sure that Bower dependencies from the `fixtable-ember` addon (namely, `fixtable`) are pulled into the top level consuming application. To do that, you should create a blueprint in your addon that will add the necessary Bower dependencies after install:
 
 Create a file at the following location, with the following contents:
 
@@ -34,10 +37,7 @@ module.exports = {
   normalizeEntityName: function() {},
 
   afterInstall() {
-    return this.addBowerPackagesToProject([
-      { name: 'font-awesome' },
-      { name: 'fixtable' }
-    ]);
+    return this.addBowerPackageToProject('fixtable');
   }
 };
 ```
