@@ -315,6 +315,13 @@ export default Ember.Component.extend({
         this.set('sortBy', columnKey);
         this.set('sortAscending', true);
       }
+    },
+
+    onRowClick(row) {
+      var handler = this.get('onRowClick');
+      if (typeof handler === 'function') {
+        handler(row);
+      }
     }
   },
 
