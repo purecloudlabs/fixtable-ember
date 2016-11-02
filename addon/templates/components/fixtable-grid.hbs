@@ -22,24 +22,7 @@
             </th>
           {{/if}}
           {{#each columns as |column|}}
-            <th>
-              {{#if column.sortable}}
-                <div class="clickable" {{action 'sortColumn' column.key}}>
-                  {{if column.header column.header column.key}}
-                  {{#if (equals column.key sortBy)}}
-                    {{#if sortAscending}}
-                      <span class="caret caret-up"></span>
-                    {{else}}
-                      <span class="caret"></span>
-                    {{/if}}
-                  {{/if}}
-                </div>
-              {{else}}
-                <div>
-                  {{if column.header column.header column.key}}
-                </div>
-              {{/if}}
-            </th>
+            {{fixtable-column-header column=column sortBy=sortBy sortAscending=sortAscending sortColumn="sortColumn"}}
           {{/each}}
         </tr>
         <tr class="fixtable-column-filters">

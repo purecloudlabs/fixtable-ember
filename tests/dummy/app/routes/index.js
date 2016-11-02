@@ -8,7 +8,8 @@ export default Ember.Route.extend({
           key: 'id',
           header: 'ID',
           width: 50,
-          sortable: true
+          sortable: true,
+          hideLabel: true
         },
         {
           key: 'name',

@@ -56,6 +56,7 @@ The `fixtable-grid` component expects to be passed a `columns` property, which s
 * `key` (required) - Unique string identifier for the column.
 * `header` (optional) - Text to show in the column header. If this isn't passed in, `key` will be shown in the header.
 * `width` (optional) - Width of the column. Can be either a number (interpreted as pixels) or a string percentage (formatted like "50%"). If no width is passed in, the column will be sized automatically. Using a combination of pixel and percentage widths is not recommended.
+* `hideLabel` (optional) - If true, no column header will be shown for this column (even if the header property is specified).
 
 Here's a simple example using just the key:
 ```javascript
