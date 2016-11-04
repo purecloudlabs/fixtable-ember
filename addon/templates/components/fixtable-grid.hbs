@@ -95,7 +95,11 @@
         <span class="sr-only">Loading...</span>
       {{else}}
         {{#unless visibleContent.length}}
-          <h4>No data available</h4>
+            {{#if nullMessage}}
+                <h4>{{nullMessage}}</h4>
+            {{else}}
+                <h4>No data available</h4>
+            {{/if}}
         {{/unless}}
       {{/if}}
     </div>
