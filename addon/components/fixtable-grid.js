@@ -33,6 +33,7 @@ export default Ember.Component.extend({
   rowSelection: false,
   selectedRows: null, // maps row indices to selected state
   suppressSelectToggle: false,
+  nullMessage: "No data available",
 
   showManualFilterButtons: Ember.computed('realtimeFiltering', 'filters',
     function fixtableGrid$showManualFilterButtons() {
