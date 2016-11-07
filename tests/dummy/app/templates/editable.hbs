@@ -1,0 +1,38 @@
+<h2>Editable Grid Test</h2>
+
+{{fixtable-grid columns=columnDefs content=model.dataRows
+  fixtableClass='restrict-height' tableClass='table-hover' rowSelection=true
+  onReloadContent=(action 'onReloadContent') onSelectionChanged=(action 'updateSelection')}}
+
+<h3>Delete Selected Rows</h3>
+<button type="button" class="btn btn-primary" {{action 'deleteSelectedRows'}}>
+  Delete
+</button>
+
+<h3>Add Row</h3>
+{{input placeholder='Name' value=newRowName}}
+{{input placeholder='Address' value=newRowAddress}}
+{{input placeholder='Alignment' value=newRowAlignment}}
+<button type="button" class="btn btn-primary" {{action 'addRow'}}>
+  Add
+</button>
+
+<h3>Edit Row</h3>
+{{#if editing}}
+  {{input placeholder='Name' value=editRowName}}
+  {{input placeholder='Address' value=editRowAddress}}
+  {{input placeholder='Alignment' value=editRowAlignment}}
+  <button type="button" class="btn btn-primary" {{action 'saveEditedRow'}}>
+    Save
+  </button>
+{{else}}
+  {{input placeholder='ID of row to edit' value=idToEdit}}
+  <button type="button" class="btn btn-primary" {{action 'editRow'}}>
+    Edit
+  </button>
+{{/if}}
+
+<h3>Reset Data</h3>
+<button type="button" class="btn btn-primary" {{action 'resetData'}}>
+  Reset
+</button>
