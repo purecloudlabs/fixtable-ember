@@ -21,6 +21,10 @@ function importFixtable(app) {
 module.exports = {
   name: 'fixtable-ember',
 
+  isDevelopingAddon() {
+      return true;
+  },
+
   included(parent) {
     this._super.included.apply(this, arguments);
 
