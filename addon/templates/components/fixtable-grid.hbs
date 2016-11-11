@@ -76,8 +76,8 @@
               {{#each columns as |column|}}
                 <td class={{column.cellClass}}>
                   {{#if column.component}}
-                        {{#if (equals column.key 'delete')}}
-                            {{component column.component dataRow=row column=column click=(action "deleteRow" row)}}
+                        {{#if column.clickable}}
+                            {{component column.component dataRow=row column=column click=(action "clickCell" column.key row)}}
                         {{else}}
                             {{!-- render the passed-in component --}}
                             {{component column.component dataRow=row columnDef=column}}

@@ -317,14 +317,8 @@ export default Ember.Component.extend({
         this.set('sortAscending', true);
       }
     },
-    deleteRow(dataRow){
-        console.error("damn");
-        console.error(dataRow);
-        let deleteAction = this.get('deleteAction');
-        console.error(deleteAction);
-        if(deleteAction){
-            deleteAction(dataRow);
-        }
+    clickCell(key, dataRow){
+        this.sendAction('clickCell', key ,dataRow);
     }
   },
 
