@@ -318,8 +318,8 @@ export default Ember.Component.extend({
       }
     },
     clickCell(column, dataRow){
-        if(column.clickable){
-            this.sendAction('clickCell', column.key, dataRow);
+        if(column.action){
+            this.sendAction(column.action, column.key, dataRow);
         }
     }
   },
