@@ -317,8 +317,10 @@ export default Ember.Component.extend({
         this.set('sortAscending', true);
       }
     },
-    clickCell(key, dataRow){
-        this.sendAction('clickCell', key ,dataRow);
+    clickCell(column, dataRow){
+        if(column.clickable){
+            this.sendAction('clickCell', column.key, dataRow);
+        }
     }
   },
 
