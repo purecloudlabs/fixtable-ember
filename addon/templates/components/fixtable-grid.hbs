@@ -76,11 +76,11 @@
               {{#each columns as |column|}}
                 <td class={{column.cellClass}}>
                   {{#if column.component}}
-                        {{!-- render the passed-in component --}}
-                        {{component column.component dataRow=row columnDef=column click=(action "clickCell" column row)}}
-                    {{else}}
-                        {{!-- directly render the cell --}}
-                        {{get row column.key}}
+                    {{!-- render the passed-in component --}}
+                    {{component column.component dataRow=row columnDef=column bubbleAction=(action sendAction)}}
+                  {{else}}
+                    {{!-- directly render the cell --}}
+                    {{get row column.key}}
                   {{/if}}
                 </td>
               {{/each}}

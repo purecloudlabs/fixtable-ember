@@ -267,6 +267,32 @@ For example, the Handlebars markup for the example `link-to-profile` component c
 
 This would render a link to the "profile" route in each row, passing the "name" property as a parameter.
 
+#### Bubbling Actions from Custom Cell components
+
+If you have a custom cell component defined, you may want to allow the consumer of the fixtable-grid to handle actions raised by that cell component. To facilitate that, a `bubbleAction` function is set on the custom component, which can be called like this from the cell component's JavaScript:
+
+```javascript
+this.bubbleAction(myActionName[, args]);
+```
+
+The action with name `myActionName` will bubble up to the consumer of the `fixtable-grid` component. That consumer should set an action handler on the `fixtable-grid`:
+
+```handlebars
+{{fixtable-grid columns=columnDefs content=dataRows myActionName=(action 'myActionHandler')}}
+```
+
+Where `myActionName` is replaced with the actual name of the action bubbling up, and `myActionHandler` is some action defined on the parent of the `fixtable-grid`.
+
+Alternatively, you skip calling `this.bubbleAction` in the cell component's JavaScript by directly using `bubbleAction` as an action in the markup of the component:
+
+```handlebars
+<button type="button" {{action bubbleAction 'myActionName' optionalArg1 optionalArg2}}>
+  Do My Action
+</button>
+```
+
+This will directly bubble the action with name `myActionName` to the parent of the `fixtable-grid` component, passing along any additional arguments that follow the action name.
+
 ### Filtering
 
 Fixtable supports filtering the displayed rows, either by search text or by selected option. To set this up, add a filter property to the column definition.
