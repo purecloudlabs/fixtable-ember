@@ -39,7 +39,7 @@
                     <div class='input-group'>
                       {{#if (equals column.filter.type 'select')}}
                         <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
-                          <option value=""></option>
+                          <option value="">{{column.filter.placeholder}}</option>
                           {{#each (getSelectOptions column content serverPaging) as |choice|}}
                             <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
                               {{if choice.label choice.label choice.value}}
@@ -47,7 +47,7 @@
                           {{/each}}
                         </select>
                       {{else}}
-                        {{input class='form-control' type='search' aria-label="Filter by column"
+                        {{input class='form-control' type='search' aria-label="Filter by column" placeholder=column.filter.placeholder
                           value=(mut (get filters column.key))}}
                         <span class="input-group-addon">
                           <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
