@@ -21,15 +21,6 @@ export default Ember.Controller.extend({
     },
 
     updatePage(page, pageSize, filters, sortInfo, loadingProp, filteredContent, pagedContent) {
-      console.log('Reloading content:');
-      console.log(`\tPage: ${page}`);
-      console.log(`\tPage Size: ${pageSize}`);
-      console.log('Sort Info:');
-      console.dir(sortInfo);
-      console.log('Filters:');
-      console.dir(filters);
-      console.log('\n');
-
       this.set(loadingProp, true);
 
       // simulate server-side filtering and pagination
