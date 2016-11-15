@@ -5,7 +5,8 @@
 
 {{fixtable-grid columns=columnDefs content=model.dataRows
   fixtableClass='restrict-height' tableClass='table-hover' rowSelection=true
-  onReloadContent=(action 'onReloadContent') onSelectionChanged=(action 'updateSelection')}}
+  onReloadContent=(action 'onReloadContent') onSelectionChanged=(action 'updateSelection')
+  purifyRow=(action 'purifyRow') condemnRow=(action 'condemnRow')}}
 
 <h3>Delete Selected Rows</h3>
 <button type="button" class="btn btn-primary" {{action 'deleteSelectedRows'}}>

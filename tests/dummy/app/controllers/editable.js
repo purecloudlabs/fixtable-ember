@@ -36,6 +36,18 @@ export default Ember.Controller.extend({
     {
       key: 'alignment',
       header: 'Alignment'
+    },
+    {
+      key: 'purify',
+      header: 'Purify',
+      component: 'purify-button',
+      width: 100
+    },
+    {
+      key: 'condemn',
+      header: 'Condemn',
+      component: 'condemn-button',
+      width: 100
     }
   ],
 
@@ -123,6 +135,18 @@ export default Ember.Controller.extend({
           selected[id] = true;
         });
       this.set('selected', selected);
+    },
+
+    purifyRow(dataRow) {
+      if (dataRow) {
+        dataRow.set('alignment', 'Good');
+      }
+    },
+
+    condemnRow(dataRow) {
+      if (dataRow) {
+        dataRow.set('alignment', 'Evil');
+      }
     }
   }
 });

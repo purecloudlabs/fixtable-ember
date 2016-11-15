@@ -77,7 +77,7 @@
                 <td class={{column.cellClass}}>
                   {{#if column.component}}
                     {{!-- render the passed-in component --}}
-                    {{component column.component dataRow=row columnDef=column}}
+                    {{component column.component dataRow=row columnDef=column bubbleAction=(action sendAction)}}
                   {{else}}
                     {{!-- directly render the cell --}}
                     {{get row column.key}}
