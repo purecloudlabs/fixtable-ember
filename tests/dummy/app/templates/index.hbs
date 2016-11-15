@@ -63,6 +63,20 @@
   </div>
 </div>
 
+<h3>Server Paging with Filter Placeholders</h3>
+<p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters fields contain placeholder text.</p>
+<div class="row">
+  <div class="col-md-8">
+    {{fixtable-grid columns=model.filteredColumnWithPlaceholderDefs content=model.manualFilterVisibleRows sortBy=(mut manualFilterPageSortKey)
+      fixtableClass='restrict-height' tableClass='table-hover'
+      isLoading=manualFilterPageIsLoading serverPaging=true totalRowsOnServer=model.manualFilterDataRows.length
+      onReloadContent=(action 'updateManualFilterPage') }}
+    <button type="button" class="btn btn-primary" {{action 'toggle' 'manualFilterPageIsLoading'}}>
+      Toggle Loading
+    </button>
+  </div>
+</div>
+
 <h3>Row Selection</h3>
 <p>This Fixtable lets you select rows.</p>
 <h4>Selected:</h4>
