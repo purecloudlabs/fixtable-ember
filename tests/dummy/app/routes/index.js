@@ -50,8 +50,12 @@ export default Ember.Route.extend({
 
     // create a version of the column defs that includes filters
     model.filteredColumnDefs = JSON.parse(JSON.stringify(model.columnDefs));
-    model.filteredColumnDefs[1].filter = { type: 'search' }; // name
-    model.filteredColumnDefs[2].filter = { type: 'search' }; // address
+    model.filteredColumnDefs[1].filter = { // name
+      type: 'search'
+    };
+    model.filteredColumnDefs[2].filter = { // address
+      type: 'search'
+    };
     model.filteredColumnDefs[3].filter = { // alignment
       type: 'select',
       selectOptions: [
@@ -65,8 +69,13 @@ export default Ember.Route.extend({
     model.clientColumnDefs = JSON.parse(JSON.stringify(model.filteredColumnDefs));
     model.clientColumnDefs[3].filter = { // alignment
       type: 'select',
-      automaticOptions: true,
+      automaticOptions: true
     };
+
+    model.filteredColumnWithPlaceholderDefs = JSON.parse(JSON.stringify(model.filteredColumnDefs));
+    model.filteredColumnWithPlaceholderDefs[1].filter.placeholder = 'name';
+    model.filteredColumnWithPlaceholderDefs[2].filter.placeholder = 'address';
+    model.filteredColumnWithPlaceholderDefs[3].filter.placeholder = 'All';
 
     // add a custom ID sorting function to both versions of the column defs
     var sortFunc = (x, y) => x - y;

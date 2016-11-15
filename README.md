@@ -408,6 +408,25 @@ By default, the Fixtable will automatically filter itself as the user types into
 
 To disable real-time filtering, simply set the `realtimeFiltering` property to `false`. The Fixtable will automatically show Apply and Clear buttons that apply or clear the entered filters, respectively.
 
+#### Filter Placeholder Text
+
+Placeholder text set to the value of the `placeholder` property of the `filter` object of the column definition.
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      type: 'search',
+      placeholder: 'name search'
+    }
+  }
+]
+```
+
+If the filter is a "search" type, the `placeholder` attribute of the `<input>` element is set to the placeholder value. If the filter is a "select" type, the text of the first `<option>` of the `<select>` element is set to the placeholder value.
+
 #### Filter Caveats
 
 Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
