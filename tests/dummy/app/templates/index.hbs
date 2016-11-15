@@ -49,26 +49,13 @@
   </div>
 </div>
 
-<h3>Server Paging with Manual Filter Application</h3>
+<h3>Server Paging with Manual Filter Application and Placeholder Text</h3>
 <p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters are not applied until the user presses a button.</p>
-<div class="row">
-  <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnDefs content=model.manualFilterVisibleRows sortBy=(mut manualFilterPageSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover' realtimeFiltering=false
-      isLoading=manualFilterPageIsLoading serverPaging=true totalRowsOnServer=model.manualFilterDataRows.length
-      onReloadContent=(action 'updateManualFilterPage') }}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'manualFilterPageIsLoading'}}>
-      Toggle Loading
-    </button>
-  </div>
-</div>
-
-<h3>Server Paging with Filter Placeholders</h3>
-<p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters fields contain placeholder text.</p>
+<p>The filter fields for this table also have placeholder text defined in the column definitions.</p>
 <div class="row">
   <div class="col-md-8">
     {{fixtable-grid columns=model.filteredColumnWithPlaceholderDefs content=model.manualFilterVisibleRows sortBy=(mut manualFilterPageSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover'
+      fixtableClass='restrict-height' tableClass='table-hover' realtimeFiltering=false
       isLoading=manualFilterPageIsLoading serverPaging=true totalRowsOnServer=model.manualFilterDataRows.length
       onReloadContent=(action 'updateManualFilterPage') }}
     <button type="button" class="btn btn-primary" {{action 'toggle' 'manualFilterPageIsLoading'}}>

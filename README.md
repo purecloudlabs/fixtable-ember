@@ -410,7 +410,7 @@ To disable real-time filtering, simply set the `realtimeFiltering` property to `
 
 #### Filter Placeholder Text
 
-Placeholder text set to the value of the `placeholder` property of the `filter` object of the column definition.
+You can specify placeholder text for search- and select-type filters by setting the value of the `placeholder` property within the `filter` object of the column definition.
 
 ```javascript
 [
@@ -425,7 +425,7 @@ Placeholder text set to the value of the `placeholder` property of the `filter` 
 ]
 ```
 
-If the filter is a "search" type, the `placeholder` attribute of the `<input>` element is set to the placeholder value. If the filter is a "select" type, the text of the first `<option>` of the `<select>` element is set to the placeholder value.
+If the filter is search-type, the `placeholder` attribute of the `<input>` element will be set to the placeholder value. If the filter is select-type, the text of the first `<option>` of the `<select>` element will be set to the placeholder value.
 
 #### Filter Caveats
 
