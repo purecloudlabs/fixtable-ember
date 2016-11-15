@@ -16,7 +16,7 @@
     "url": "https://github.com/MyPureCloud/fixtable-ember.git"
   },
   "engines": {
-    "node": ">= 4.6.2"
+    "node": ">= 6.9.1"
   },
   "author": "Interactive Intelligence",
   "contributors": [
