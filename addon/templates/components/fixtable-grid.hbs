@@ -36,24 +36,28 @@
               {{#if column.filter}}
                 <div>
                   <div class='form-group'>
-                    <div class='input-group'>
-                      {{#if (equals column.filter.type 'select')}}
-                        <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
-                          <option value="">{{column.filter.placeholder}}</option>
-                          {{#each (getSelectOptions column content serverPaging) as |choice|}}
-                            <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
-                              {{if choice.label choice.label choice.value}}
-                            </option>
-                          {{/each}}
-                        </select>
-                      {{else}}
-                        {{input class='form-control' type='search' aria-label="Filter by column" placeholder=column.filter.placeholder
-                          value=(mut (get filters column.key))}}
-                        <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </span>
-                      {{/if}}
-                    </div>
+                    {{#if column.filter.component}}
+                      {{component column.filter.component columnDef=column filter=(mut (get filters column.key))}}
+                    {{else}}
+                      <div class='input-group'>
+                        {{#if (equals column.filter.type 'select')}}
+                          <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
+                            <option value="">{{column.filter.placeholder}}</option>
+                            {{#each (getSelectOptions column content serverPaging) as |choice|}}
+                              <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
+                                {{if choice.label choice.label choice.value}}
+                              </option>
+                            {{/each}}
+                          </select>
+                        {{else}}
+                          {{input class='form-control' type='search' aria-label="Filter by column" placeholder=column.filter.placeholder
+                            value=(mut (get filters column.key))}}
+                          <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                          </span>
+                        {{/if}}
+                      </div>
+                    {{/if}}
                   </div>
                 </div>
               {{/if}}

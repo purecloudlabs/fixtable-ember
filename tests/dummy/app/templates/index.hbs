@@ -63,15 +63,27 @@
   </div>
 </div>
 
-<h3>Server Paging with Filter Placeholders</h3>
+<h3>Filter Placeholders</h3>
 <p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters fields contain placeholder text.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnWithPlaceholderDefs content=model.manualFilterVisibleRows sortBy=(mut manualFilterPageSortKey)
+    {{fixtable-grid columns=model.filteredColumnWithPlaceholderDefs content=model.dataRows sortBy=(mut clientPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
-      isLoading=manualFilterPageIsLoading serverPaging=true totalRowsOnServer=model.manualFilterDataRows.length
-      onReloadContent=(action 'updateManualFilterPage') }}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'manualFilterPageIsLoading'}}>
+      isLoading=clientPageIsLoading clientPaging=true}}
+    <button type="button" class="btn btn-primary" {{action 'toggle' 'serverPageIsLoading'}}>
+      Toggle Loading
+    </button>
+  </div>
+</div>
+
+<h3>Custom Filter</h3>
+<!--<p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters fields contain placeholder text.</p>-->
+<div class="row">
+  <div class="col-md-8">
+    {{fixtable-grid columns=model.filteredColumnWithCustomDefs content=model.dataRows sortBy=(mut clientPageSortKey)
+      fixtableClass='restrict-height' tableClass='table-hover'
+      isLoading=clientPageIsLoading clientPaging=true}}
+    <button type="button" class="btn btn-primary" {{action 'toggle' 'serverPageIsLoading'}}>
       Toggle Loading
     </button>
   </div>

@@ -77,6 +77,18 @@ export default Ember.Route.extend({
     model.filteredColumnWithPlaceholderDefs[2].filter.placeholder = 'address';
     model.filteredColumnWithPlaceholderDefs[3].filter.placeholder = 'All';
 
+    model.filteredColumnWithCustomDefs = JSON.parse(JSON.stringify(model.filteredColumnWithPlaceholderDefs));
+    model.filteredColumnWithCustomDefs[2].filter = {
+      component: 'address-filter',
+      debounce: false,
+      function: function(rowData, filter) {
+        if (filter) {
+          return rowData.name === 'Roland Deschain';
+        }
+        return true;
+      }
+    };
+
     // add a custom ID sorting function to both versions of the column defs
     var sortFunc = (x, y) => x - y;
     model.columnDefs[0].sortFunction = sortFunc;
