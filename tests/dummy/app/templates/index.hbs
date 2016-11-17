@@ -70,7 +70,7 @@
     {{fixtable-grid columns=model.filteredColumnWithPlaceholderDefs content=model.dataRows sortBy=(mut clientPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=clientPageIsLoading clientPaging=true}}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'serverPageIsLoading'}}>
+    <button type="button" class="btn btn-primary" {{action 'toggle' 'clientPageIsLoading'}}>
       Toggle Loading
     </button>
   </div>
@@ -83,7 +83,7 @@
     {{fixtable-grid columns=model.filteredColumnWithCustomDefs content=model.dataRows sortBy=(mut clientPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=clientPageIsLoading clientPaging=true}}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'serverPageIsLoading'}}>
+    <button type="button" class="btn btn-primary" {{action 'toggle' 'clientPageIsLoading'}}>
       Toggle Loading
     </button>
   </div>
