@@ -81,7 +81,7 @@ export default Ember.Route.extend({
     model.filteredColumnWithCustomDefs[2].filter = {
       component: 'address-filter',
       debounce: false,
-      function: function(rowData, filter) {
+      function(rowData, filter) {
         if (filter) {
           return rowData.name === 'Roland Deschain';
         }
