@@ -446,7 +446,7 @@ For example, given that a component named "checkbox-filter" exists:
 ]
 ```
 
-Note that the `component` and `type` properties are mutually exclusive.
+Note that if `component` is specified, then `type` will be ignored. If both are specified, `component` will take precedence.
 
 The components will have access to the `columnDef` and `filter` properites. They contain the column definition and the filter value for
 that column, respectively. Setting the `filter` property in the component will invoke the `onReloadContent` action or cause the manual
