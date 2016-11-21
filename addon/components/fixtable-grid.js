@@ -11,6 +11,7 @@ export default Ember.Component.extend({
   layout: layout,
   fixtable: null,
   columnsByKey: null,
+  classNames: ['fixtable-grid'],
 
   // paging
   clientPaging: false,
