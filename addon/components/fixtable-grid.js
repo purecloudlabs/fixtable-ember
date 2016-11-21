@@ -42,8 +42,7 @@ export default Ember.Component.extend({
 
   onFilterChanged: function fixtableGrid$onFilterChanged(/*filters, columnKey*/) {
     this.set('filtersAreDirty', true);
-    if (this.get('realtimeFiltering'))
-    {
+    if (this.get('realtimeFiltering')) {
       Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
     }
   },
@@ -159,15 +158,24 @@ export default Ember.Component.extend({
       var filters = this.get('filterToApply') || {};
       var sortedFilteredContent = sortedContent.filter(function(row) {
         return Object.keys(filters).every(function(columnKey) {
-          if (!filters[columnKey]) { return true; } // no filter
-          var cellData = (((row.get) ? row.get(columnKey) : row[columnKey]) || '').toLowerCase();
-          var filterValue = filters[columnKey].toLowerCase();
+          var filterDef = columnsByKey[columnKey].filter;
+          var filterFunction = filterDef.filterFunction;
+          var filterValue = filters[columnKey];
 
-          if (columnsByKey[columnKey].filter.type === 'select') {
-            return cellData === filterValue;
+          if (typeof filterFunction === 'function') {
+            return filterFunction(row, filterValue);
           }
           else {
-            return cellData.includes(filterValue);
+            if (!filters[columnKey]) { return true; } // no filter
+            var cellData = (((row.get) ? row.get(columnKey) : row[columnKey]) || '').toLowerCase();
+            filterValue = filterValue.toLowerCase();
+
+            if (columnsByKey[columnKey].filter.type === 'select') {
+              return cellData === filterValue;
+            }
+            else {
+              return cellData.includes(filterValue);
+            }
           }
         });
       });

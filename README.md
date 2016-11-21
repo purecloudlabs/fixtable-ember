@@ -427,6 +427,59 @@ You can specify placeholder text for search- and select-type filters by setting 
 
 If the filter is search-type, the `placeholder` attribute of the `<input>` element will be set to the placeholder value. If the filter is select-type, the text of the first `<option>` of the `<select>` element will be set to the placeholder value.
 
+#### Custom Filter Components
+
+You may want to render something other than a text box or select list for the filter. To do so, specify the component to render by providing
+the name in the `component` property of the `filter` object.
+
+For example, given that a component named "checkbox-filter" exists:
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      component: 'checkbox-filter'
+    }
+  }
+]
+```
+
+Note that if `component` is specified, then `type` will be ignored. If both are specified, `component` will take precedence.
+
+The components will have access to the `columnDef` and `filter` properites. They contain the column definition and the filter value for
+that column, respectively. Setting the `filter` property in the component will invoke the `onReloadContent` action or cause the manual
+filter buttons to display based on the value of the `realtimeFiltering`.
+
+```handlebars
+{{!-- checkbox-filter.hbs --}}
+<div class="checkbox">
+  <label>
+    {{input type="checkbox" checked=filter}} Check if awesome
+  <label>
+</div>
+```
+
+You can provide a function for custom client-side filtering. Provide the function by setting the `filterFunction` property of the `filter` object.
+The `filterFunction` function will be passed the row data and filter value and returns a truthy value to indicate that fixtable should emit the row.
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      component: 'checkbox-filter',
+      filterFunction(rowData, filterValue) {
+        return rowData.name === 'Roland Deschain';        
+      }
+    }
+  }
+]
+```
+
+
 #### Filter Caveats
 
 Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
