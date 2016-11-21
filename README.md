@@ -476,8 +476,8 @@ Debouncing will be applied when the filter is set. If you don't want the delay, 
 ]
 ```
 
-You can provide a function for custom client-side filtering. Provide the function by setting the `function` property of the `filter` object.
-The `function` function will be passed the row data and filter value and returns a truthy value to indicate that fixtable should emit the row.
+You can provide a function for custom client-side filtering. Provide the function by setting the `filterFunction` property of the `filter` object.
+The `filterFunction` function will be passed the row data and filter value and returns a truthy value to indicate that fixtable should emit the row.
 
 ```javascript
 [
@@ -486,7 +486,7 @@ The `function` function will be passed the row data and filter value and returns
     header: 'Name',
     filter: {
       component: 'checkbox-filter',
-      function(rowData, filterValue) {
+      filterFunction(rowData, filterValue) {
         return rowData.name === 'Roland Deschain';        
       }
     }

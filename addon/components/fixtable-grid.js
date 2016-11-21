@@ -164,7 +164,7 @@ export default Ember.Component.extend({
       var sortedFilteredContent = sortedContent.filter(function(row) {
         return Object.keys(filters).every(function(columnKey) {
           var filterDef = columnsByKey[columnKey].filter;
-          var filterFunction = filterDef.function;
+          var filterFunction = filterDef.filterFunction;
           var filterValue = filters[columnKey];
 
           if (typeof filterFunction === 'function') {
