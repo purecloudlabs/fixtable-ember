@@ -40,15 +40,10 @@ export default Ember.Component.extend({
       return !this.get('realtimeFiltering') && Object.keys(this.get('filters')).length;
     }),
 
-  onFilterChanged: function fixtableGrid$onFilterChanged(filters, columnKey) {
+  onFilterChanged: function fixtableGrid$onFilterChanged(/*filters, columnKey*/) {
     this.set('filtersAreDirty', true);
     if (this.get('realtimeFiltering')) {
-      if (this.get(`columnsByKey.${columnKey}.filter.debounce`) === false) {
-        this.applyFilter();
-      }
-      else {
-        Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
-      }
+      Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
     }
   },
 

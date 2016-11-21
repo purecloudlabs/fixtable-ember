@@ -461,21 +461,6 @@ filter buttons to display based on the value of the `realtimeFiltering`.
 </div>
 ```
 
-Debouncing will be applied when the filter is set. If you don't want the delay, set the `debounce` property of the `filter` object to false. 
-
-```javascript
-[
-  {
-    key: 'name',
-    header: 'Name',
-    filter: {
-      component: 'checkbox-filter',
-      debounce: false
-    }
-  }
-]
-```
-
 You can provide a function for custom client-side filtering. Provide the function by setting the `filterFunction` property of the `filter` object.
 The `filterFunction` function will be passed the row data and filter value and returns a truthy value to indicate that fixtable should emit the row.
 
