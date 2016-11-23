@@ -59,8 +59,8 @@ export default Ember.Route.extend({
     model.filteredColumnDefs[3].filter = { // alignment
       type: 'select',
       selectOptions: [
-        { value: 'Good', label: 'Positive' },
-        { value: 'Evil', label: 'Negative' },
+        { value: 'Good' },
+        { value: 'Evil' },
         { value: 'Neutral' }
       ]
     };
@@ -72,27 +72,27 @@ export default Ember.Route.extend({
       automaticOptions: true
     };
 
+    // create a version of the filtered column defs that includes placeholders
     model.filteredColumnWithPlaceholderDefs = JSON.parse(JSON.stringify(model.filteredColumnDefs));
     model.filteredColumnWithPlaceholderDefs[1].filter.placeholder = 'name';
     model.filteredColumnWithPlaceholderDefs[2].filter.placeholder = 'address';
     model.filteredColumnWithPlaceholderDefs[3].filter.placeholder = 'All';
 
-    model.filteredColumnWithCustomDefs = JSON.parse(JSON.stringify(model.filteredColumnWithPlaceholderDefs));
+    // create a version of the filtered column defs that includes a custom filter component
+    model.filteredColumnWithCustomDefs = JSON.parse(JSON.stringify(model.filteredColumnDefs));
     model.filteredColumnWithCustomDefs[2].filter = {
       component: 'address-filter',
-      filterFunction(rowData, filter) {
-        if (filter) {
-          return rowData.name === 'Roland Deschain';
-        }
-        return true;
+      filterFunction(rowData, filterChecked) {
+        return filterChecked ? rowData.name === 'Roland Deschain' : true;
       }
     };
 
-    // add a custom ID sorting function to all versions of the column defs
+    // add a custom ID sorting function to all versions of the column defs that use client sorting
     var sortFunc = (x, y) => x - y;
     model.columnDefs[0].sortFunction = sortFunc;
     model.filteredColumnDefs[0].sortFunction = sortFunc;
     model.clientColumnDefs[0].sortFunction = sortFunc;
+    model.filteredColumnWithCustomDefs[0].sortFunction = sortFunc;
 
     return model;
   }

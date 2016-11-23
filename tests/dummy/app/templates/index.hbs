@@ -10,11 +10,7 @@
 <div class="row">
   <div class="col-md-8">
     {{fixtable-grid columns=model.columnDefs content=model.dataRows sortBy=(mut noPageSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover'
-      isLoading=noPageIsLoading}}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'noPageIsLoading'}}>
-      Toggle Loading
-    </button>
+      fixtableClass='restrict-height' tableClass='table-hover'}}
   </div>
 </div>
 
@@ -25,67 +21,41 @@
 <div class="row">
   <div class="col-md-8">
     {{fixtable-grid columns=model.clientColumnDefs content=model.dataRows sortBy=(mut clientPageSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover'
-      isLoading=clientPageIsLoading clientPaging=true}}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'clientPageIsLoading'}}>
-      Toggle Loading
-    </button>
+      fixtableClass='restrict-height' tableClass='table-hover' clientPaging=true}}
   </div>
 </div>
 
 <h3>Server Paging and Filtering</h3>
 <p>This Fixtable only loads a page at the time and relies on its owning component or controller to provide more data. (This example is actually still implemented on the client, but it simulates server pagination.)</p>
 <p>Because loading data from the server is asynchronous, we show the loading indicator while we wait to let the user know that something is happening.</p>
-<p>The rows can be filtered by column, but the filtering must be implemented by the consuming component or controller, since the Fixtable does not have enough information to perform filtering on the client. The filters are applied 500ms after the user stops typing into a filter field. For select-type filters, a label may be optionally provided for each option to have control over the text shown in the select-type filter dialog. In the next few tables, we are using the labels "Positive" and "Negative" for the filter options "Good" and "Evil" respectively, while keeping "Neutral" the same.</p>
+<p>The rows can be filtered by column, but the filtering must be implemented by the consuming component or controller, since the Fixtable does not have enough information to perform filtering on the client. The filters are applied 500ms after the user stops typing into a filter field.</p>
 <div class="row">
   <div class="col-md-8">
     {{fixtable-grid columns=model.filteredColumnDefs content=model.pagedDataRows sortBy=(mut serverPageSortKey)
       fixtableClass='restrict-height' tableClass='table-hover'
       isLoading=serverPageIsLoading serverPaging=true totalRowsOnServer=model.filteredDataRows.length
       onReloadContent=(action 'updateServerPage') }}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'serverPageIsLoading'}}>
-      Toggle Loading
-    </button>
   </div>
 </div>
 
-<h3>Server Paging with Manual Filter Application</h3>
+<h3>Server Paging with Manual Filter Application and Placeholder Text</h3>
 <p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters are not applied until the user presses a button.</p>
-<div class="row">
-  <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnDefs content=model.manualFilterVisibleRows sortBy=(mut manualFilterPageSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover' realtimeFiltering=false
-      isLoading=manualFilterPageIsLoading serverPaging=true totalRowsOnServer=model.manualFilterDataRows.length
-      onReloadContent=(action 'updateManualFilterPage') }}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'manualFilterPageIsLoading'}}>
-      Toggle Loading
-    </button>
-  </div>
-</div>
-
-<h3>Filter Placeholders</h3>
 <p>The filter fields for this table also have placeholder text defined in the column definitions.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnWithPlaceholderDefs content=model.dataRows sortBy=(mut clientPageSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover'
-      isLoading=clientPageIsLoading clientPaging=true}}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'clientPageIsLoading'}}>
-      Toggle Loading
-    </button>
+    {{fixtable-grid columns=model.filteredColumnWithPlaceholderDefs content=model.manualFilterVisibleRows sortBy=(mut manualFilterPageSortKey)
+      fixtableClass='restrict-height' tableClass='table-hover' realtimeFiltering=false
+      isLoading=manualFilterPageIsLoading serverPaging=true totalRowsOnServer=model.manualFilterDataRows.length
+      onReloadContent=(action 'updateManualFilterPage') }}
   </div>
 </div>
 
 <h3>Custom Filter Components</h3>
-<!--<p>Like the previous example, this Fixtable has server pagination and filtering enabled. Unlike the previous example, the filters fields contain placeholder text.</p>-->
+<p>This Fixtable demonstrates the use of a custom filter component. In this case, the custom filter is rendered as a checkbox.</p>
 <div class="row">
   <div class="col-md-8">
-    {{fixtable-grid columns=model.filteredColumnWithCustomDefs content=model.dataRows sortBy=(mut clientPageSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover'
-      isLoading=clientPageIsLoading clientPaging=true}}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'clientPageIsLoading'}}>
-      Toggle Loading
-    </button>
+    {{fixtable-grid columns=model.filteredColumnWithCustomDefs content=model.dataRows sortBy=(mut customFilterSortKey)
+      fixtableClass='restrict-height' tableClass='table-hover' clientPaging=true}}
   </div>
 </div>
 
@@ -100,11 +70,7 @@
 <div class="row">
   <div class="col-md-8">
     {{fixtable-grid columns=model.filteredColumnDefs content=model.dataRows sortBy=(mut rowSelectionSortKey)
-      fixtableClass='restrict-height' tableClass='table-hover'
-      isLoading=rowSelectionPageIsLoading clientPaging=true rowSelection=true
+      fixtableClass='restrict-height' tableClass='table-hover' clientPaging=true rowSelection=true
       onSelectionChanged=(action 'updateSelection') onReloadContent=(action 'rowSelectionReloadContent')}}
-    <button type="button" class="btn btn-primary" {{action 'toggle' 'rowSelectionPageIsLoading'}}>
-      Toggle Loading
-    </button>
   </div>
 </div>
