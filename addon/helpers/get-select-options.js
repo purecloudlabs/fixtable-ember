@@ -12,7 +12,7 @@ export function getSelectOptions([column, dataRows, serverPaging]/*, hash*/) {
 
     let optionSet = {};
     dataRows.forEach(row => {
-      let val = (row.get) ? row.get(column.key) : row[column.key];
+      let val = row.get ? row.get(column.key) : row[column.key];
       if (typeof val === 'undefined' || val === null || val === '') { return; }
 
       let lower = (val + '').toLowerCase();
