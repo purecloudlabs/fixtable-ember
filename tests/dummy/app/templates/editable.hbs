@@ -3,8 +3,8 @@
   Test Basic Grid
 {{/link-to}}
 
-{{fixtable-grid columns=columnDefs content=model.dataRows
-  fixtableClass='restrict-height' tableClass='table-hover' rowSelection=true
+{{fixtable-grid columns=columnDefs content=model.dataRows clientPaging=true
+  fixtableClass='editable-fixtable' tableClass='table-hover' rowSelection=true sortBy=(mut sortKey)
   onReloadContent=(action 'onReloadContent') onSelectionChanged=(action 'updateSelection')
   purifyRow=(action 'purifyRow') condemnRow=(action 'condemnRow')}}
 

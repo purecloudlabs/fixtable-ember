@@ -4,6 +4,9 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   data: Ember.inject.service(),
 
+  sortKey: 'id',
+  selected: null, // object where keys are IDs of selected rows
+
   // properties for adding a new row
   newRowName: null,
   newRowAddress: null,
@@ -16,26 +19,32 @@ export default Ember.Controller.extend({
   editRowAddress: null,
   editRowAlignment: null,
 
-  selected: null, // object where keys are IDs of selected rows
-
   columnDefs: [
     {
       key: 'id',
       header: 'ID',
-      width: 50
+      width: 50,
+      sortable: true,
+      sortFunction: (x, y) => x - y
     },
     {
       key: 'name',
       header: 'Name',
-      cellClass: 'name'
+      cellClass: 'name',
+      sortable: true,
+      filter: { type: 'search' }
     },
     {
       key: 'address',
-      header: 'Address'
+      header: 'Address',
+      sortable: true,
+      filter: { type: 'search' }
     },
     {
       key: 'alignment',
-      header: 'Alignment'
+      header: 'Alignment',
+      sortable: true,
+      filter: { type: 'select', automaticOptions: true }
     },
     {
       key: 'purify',

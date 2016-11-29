@@ -1,16 +1,14 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  noPageIsLoading: false,
-  clientPageIsLoading: false,
   serverPageIsLoading: false,
   manualFilterPageIsLoading: false,
-  rowSelectionPageIsLoading: false,
 
   noPageSortKey: 'id',
   clientPageSortKey: 'id',
   serverPageSortKey: 'id',
   manualFilterPageSortKey: 'id',
+  customFilterSortKey: 'id',
   rowSelectionSortKey: 'id',
 
   selectedNames: null,

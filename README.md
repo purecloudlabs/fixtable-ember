@@ -1,14 +1,14 @@
 # Fixtable-Ember
 
-[![npm](https://img.shields.io/npm/v/fixtable-ember.svg)]()
+[![npm](https://img.shields.io/npm/v/fixtable-ember.svg)](https://www.npmjs.com/package/fixtable-ember)
 [![Build Status](https://travis-ci.org/MyPureCloud/fixtable-ember.svg?branch=master)](https://travis-ci.org/MyPureCloud/fixtable-ember)
 
-This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer.
+This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer. In addition, Fixtable-Ember provides enhanced functionality such as sorting, filtering, and pagination.
 
 See a live demo here:
 [http://mypurecloud.github.io/fixtable-ember/](http://mypurecloud.github.io/fixtable-ember/)
 
-(Note: The source for the gh-pages site can be found in this repo's tests/dummy/app directory in the master branch. If you're curious for code examples, the master branch is a better source, since the code in the actual gh-pages branch has been minified and concatenated.)
+(Note: The source for the demo site linked above can be found in this repo's tests/dummy/app directory in the master branch.)
 
 ## Installation
 
@@ -429,7 +429,7 @@ If the filter is search-type, the `placeholder` attribute of the `<input>` eleme
 
 #### Custom Filter Components
 
-You may want to render something other than a text box or select list for the filter. To do so, specify the component to render by providing
+You may want to render something other than a search field or select list for the filter. To do so, specify the component to render by providing
 the name in the `component` property of the `filter` object.
 
 For example, given that a component named "checkbox-filter" exists:
@@ -446,9 +446,9 @@ For example, given that a component named "checkbox-filter" exists:
 ]
 ```
 
-Note that if `component` is specified, then `type` will be ignored. If both are specified, `component` will take precedence.
+If both `component` and `type` are specified, `component` will take precedence and `type` will be ignored.
 
-The components will have access to the `columnDef` and `filter` properites. They contain the column definition and the filter value for
+The components will have access to two properties: `columnDef` and `filter`. These properties represent the column definition and the filter value for
 that column, respectively. Setting the `filter` property in the component will invoke the `onReloadContent` action or cause the manual
 filter buttons to display based on the value of the `realtimeFiltering`.
 
@@ -461,8 +461,9 @@ filter buttons to display based on the value of the `realtimeFiltering`.
 </div>
 ```
 
-You can provide a function for custom client-side filtering. Provide the function by setting the `filterFunction` property of the `filter` object.
-The `filterFunction` function will be passed the row data and filter value and returns a truthy value to indicate that fixtable should emit the row.
+If you are using client-side filtering, then you should also provide a custom filter function along with your custom component. Set the custom filter function as the `filterFunction` property of your column definition's `filter` object.
+
+When invoked, `filterFunction` will be passed a data row and the current filter value for that column. It should return true if the given row passes the filter, and false otherwise.
 
 ```javascript
 [
@@ -478,7 +479,6 @@ The `filterFunction` function will be passed the row data and filter value and r
   }
 ]
 ```
-
 
 #### Filter Caveats
 
