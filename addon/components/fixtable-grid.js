@@ -2,7 +2,7 @@ import Ember from 'ember';
 import layout from '../templates/components/fixtable-grid';
 
 const checkboxColumnWidth = 40; // in pixels
-const possiblePageSizes = [ 25, 50, 100, 250, 500 ];
+const possiblePageSizes = [ 5, 15, 25, 50, 100, 250, 500 ];
 const defaultPage = 1;
 const defaultPageSize = 25;
 const toComparableString = x => x === null || typeof x === 'undefined' ? '' : x + '';

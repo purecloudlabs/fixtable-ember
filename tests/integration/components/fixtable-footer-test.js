@@ -12,7 +12,7 @@ test('it renders', function(assert) {
   this.set('currentPage', 2);
   this.set('totalPages', 3);
   this.set('pageSize', 25);
-  this.set('pageSizeOptions', [25, 50, 100]);
+  this.set('pageSizeOptions', [5, 15, 25, 50, 100]);
 
   this.render(hbs`{{fixtable-footer currentPage=currentPage totalPages=totalPages pageSize=pageSize pageSizeOptions=pageSizeOptions}}`);
 
