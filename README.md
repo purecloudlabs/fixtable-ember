@@ -195,7 +195,7 @@ To enable client paging, all you have to do is set the `clientPaging` property t
 
 With client paging turned on, the Fixtable will now limit the number of rows that are shown in the table at a time. Beneath the table, there will be a pagination footer that shows the current page and the total number of pages. The footer also lets users go back or forward a page, jump to a specific page, and configure the page size.
 
-The possible options for page size are 25, 50, 100, 250, and 500 -- however, this will be limited based on the number of rows. For example, if there are only 55 rows total, then the possible page sizes will be 25, 50, and 100. There's no need to show the 250 and 500 page size options since they will be functionally identical to a page size of 100.
+The possible options for page size are 5, 15, 25, 50, 100, 250, and 500 -- however, this will be limited based on the number of rows. For example, if there are only 55 rows total, then the possible page sizes will be 5, 15, 25, 50, and 100. There's no need to show the 250 and 500 page size options since they will be functionally identical to a page size of 100.
 
 #### Server-Side Pagination
 
