@@ -232,6 +232,17 @@ actions: {
 
 In this example, first we are showing the loading indicator to let the user know that data is loading. Next, we request additional data from the server based on the updated `page` and `pageSize`. When we receive the data, we hide the loading indicator and set the new rows into the model property bound to the `fixtable-grid` component.
 
+#### Custom Page Size
+
+These are the default possible page sizes for the paginated table:
+```
+[ 25, 50, 100, 250, 500 ]
+```
+
+The user can switch between page sizes using the pagination footer at the bottom of the table. The page size options shown to the user will be restricted based on the number of data rows (e.g., if there are 53 rows, then the possible page sizes will be 25, 50, or 100) -- the goal is to only show as many page size options as necessary to display all of the data.
+
+If you want to pass in different page size options, you can override the component's `possiblePageSizes` property with an array containing different numbers. The possible page sizes must be listed in ascending order.
+
 ### Custom Cell Components
 
 You may want to render something more complicated into a cell than just a simple string value. For example, you might want to make each cell link out to another route, or you might want to embed a Handlebars template into a cell. You can do that by creating a custom cell component.
