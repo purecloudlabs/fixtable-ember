@@ -5,8 +5,7 @@
 
 {{fixtable-grid columns=columnDefs content=model.dataRows clientPaging=true
   fixtableClass='editable-fixtable' tableClass='table-hover' rowSelection=true sortBy=(mut sortKey)
-  onReloadContent=(action 'onReloadContent') onSelectionChanged=(action 'updateSelection')
-  purifyRow=(action 'purifyRow') condemnRow=(action 'condemnRow')}}
+  onSelectionChanged=(action 'updateSelection') purifyRow=(action 'purifyRow') condemnRow=(action 'condemnRow')}}
 
 <h3>Delete Selected Rows</h3>
 <button type="button" class="btn btn-primary" {{action 'deleteSelectedRows'}}>

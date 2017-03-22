@@ -130,19 +130,11 @@ export default Ember.Controller.extend({
       this.set('model.dataRows.content', this.get('data').getObservableData());
     },
 
-    onReloadContent() {
-      this.set('selected', {});
-    },
-
-    updateSelection(selectedRows/*, rowIndex*/) {
-      let dataRows = this.get('model.dataRows');
+    updateSelection(selectedDataRows) {
       let selected = {};
-      Object.keys(selectedRows)
-        .filter(key => selectedRows[key])
-        .forEach(key => {
-          let id = dataRows.objectAt(parseInt(key, 10)).get('id');
-          selected[id] = true;
-        });
+      selectedDataRows.forEach(row => {
+        selected[row.id] = true;
+      });
       this.set('selected', selected);
     },
 

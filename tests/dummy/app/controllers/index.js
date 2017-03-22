@@ -81,15 +81,8 @@ export default Ember.Controller.extend({
         'serverPageIsLoading', 'model.filteredDataRows', 'model.pagedDataRows');
     },
 
-    rowSelectionReloadContent(/*page, pageSize, filters, sortInfo*/) {
-      this.set('selectedNames', '');
-    },
-
-    updateSelection(selectedRows/*, rowIndex*/) {
-      var selectedNames = [];
-      Object.keys(selectedRows)
-        .filter(key => selectedRows[key])
-        .forEach(key => selectedNames.push(this.get('model.dataRows')[key].name));
+    updateSelection(selectedDataRows) {
+      var selectedNames = selectedDataRows.map(row => row.name);
       this.set('selectedNames', selectedNames.join(', '));
     }
   }
