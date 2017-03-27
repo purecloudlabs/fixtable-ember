@@ -6,18 +6,6 @@ const Funnel = require('broccoli-funnel');
 const mergeTrees = require('broccoli-merge-trees');
 const path = require('path');
 
-function importFixtable(app) {
-  let fixtablePath = path.join(app.nodeModulesPath, 'fixtable/dist/');
-  app.import({
-    development: path.join(fixtablePath, 'fixtable.css'),
-    production: path.join(fixtablePath, 'fixtable.min.css')
-  });
-  app.import({
-    development: path.join(fixtablePath, 'fixtable.js'),
-    production: path.join(fixtablePath, 'fixtable.min.js')
-  });
-}
-
 module.exports = {
   name: 'fixtable-ember',
 
@@ -34,10 +22,16 @@ module.exports = {
       parent.import(path.join('vendor', 'fonts', fontFileName));
     });
 
-    importFixtable(parent);
+    let fixtablePath = path.join(this.nodeModulesPath, 'fixtable/dist/');
+
+    parent.import({
+      development: path.join(fixtablePath, 'fixtable.js'),
+      production: path.join(fixtablePath, 'fixtable.min.js')
+    });
 
     parent.import('vendor/styles/fixtable-ember.css');
     parent.import('vendor/styles/font-awesome.css');
+    parent.import('vendor/styles/fixtable.css');
   },
 
   treeForVendor(tree) {
@@ -57,8 +51,14 @@ module.exports = {
       files:['font-awesome.css'],
       destDir: 'styles'
     });
-
     treesToMerge.push(fontAwesomeCssFunnel);
+
+    let fixtableCssFunnel = new Funnel(`${this.nodeModulesPath}/fixtable`, {
+      srcDir: 'dist',
+      files: ['fixtable.css'],
+      destDir: 'styles'
+    });
+    treesToMerge.push(fixtableCssFunnel);
 
     return mergeTrees(treesToMerge, { overwrite: true });
   }
