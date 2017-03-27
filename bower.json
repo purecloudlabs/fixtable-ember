@@ -1,6 +1,3 @@
 {
-  "name": "fixtable-ember",
-  "dependencies": {
-    "fixtable": "^2.0.1"
-  }
+  "name": "fixtable-ember"
 }

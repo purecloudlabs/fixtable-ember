@@ -7,7 +7,7 @@ const mergeTrees = require('broccoli-merge-trees');
 const path = require('path');
 
 function importFixtable(app) {
-  let fixtablePath = path.join(app.bowerDirectory, 'fixtable/dist/');
+  let fixtablePath = path.join(app.nodeModulesPath, 'fixtable/dist/');
   app.import({
     development: path.join(fixtablePath, 'fixtable.css'),
     production: path.join(fixtablePath, 'fixtable.min.css')
