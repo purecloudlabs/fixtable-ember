@@ -68,12 +68,12 @@
       <tbody>
         {{#unless isLoading}}
           {{#each visibleContent as |row rowIndex|}}
-            <tr class={{if (get selectedRows (concat '' rowIndex)) 'active'}}>
+            <tr class={{if (get selectedRowMap (concat '' rowIndex)) 'active'}}>
               {{#if rowSelection}}
                 <td>
                   <div class="fixtable-checkbox">
                     {{!-- we need concat here to convert rowIndex into a string for the get helper --}}
-                    {{input type="checkbox" checked=(mut (get selectedRows (concat '' rowIndex)))}}
+                    {{input type="checkbox" checked=(mut (get selectedRowMap (concat '' rowIndex)))}}
                   </div>
                 </td>
               {{/if}}

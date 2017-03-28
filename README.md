@@ -588,12 +588,11 @@ Selected rows will automatically have the `active` CSS class applied to them. Th
 
 When rows are selected, any kind of content reload (i.e., anything that would trigger `onReloadContent` -- sorting, paging, or filtering) will clear the selected rows. (This is true regardless of whether the Fixtable is using client paging, server paging, or no paging at all.)
 
-Consumers should keep track of which rows are selected by subscribing to `onSelectionChanged` and `onReloadContent`. No selection-related parameters are passed to `onReloadContent`, but a consumer who cares about selection **must** listen to this because any content reload will automatically clear the selection -- and when content is reloaded, `onSelectionChanged` is not called in addition to `onReloadContent`.
+Consumers should keep track of which rows are selected by subscribing to `onSelectionChanged`. Note that whenever the `onReloadContent` handler is called, the `onSelectionChanged` handler will also be invoked immediately afterwards, informing the listener that the selected rows have been cleared out.
 
-`onSelectionChanged` should be bound to an action on the owning controller or component. The bound action will be called whenever a row is selected or deselected. It receives the following two parameters:
+`onSelectionChanged` should be bound to an action on the owning controller or component. The bound action will be called whenever a row is selected or deselected. It receives the following parameter:
 
-* `selectedRows` (Object) - Object where the key/value pairs map row indices to a boolean indicating whether the row is selected.
-* `rowIndex` (String) - The index of the selected row. Note that this is the index relative to the rows loaded into the page, *not* relative to the entire dataset. So, the indices will always fall into the range [0, pageSize).
+* `selectedDataRows` (Object) - The selected data rows.
 
 ## Development / Contributing
 

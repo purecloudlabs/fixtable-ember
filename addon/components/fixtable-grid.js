@@ -34,7 +34,7 @@ export default Ember.Component.extend({
 
   // row selection
   rowSelection: false,
-  selectedRows: null, // maps row indices to selected state
+  selectedRowMap: null, // maps row indices to selected state
   suppressSelectToggle: false,
 
   currentPage: defaultPage,
@@ -51,16 +51,19 @@ export default Ember.Component.extend({
 
   notifyReloadContent() {
     let handler = this.get('onReloadContent');
-    if (typeof handler !== 'function') { return; }
+    if (typeof handler === 'function') {
+      let sortBy = this.get('sortBy');
+      let sortInfo = sortBy ? { key: sortBy, ascending: this.get('sortAscending') } : null;
 
-    let sortBy = this.get('sortBy');
-    let sortInfo = sortBy ? { key: sortBy, ascending: this.get('sortAscending') } : null;
+      handler(
+        this.get('currentPage'),
+        this.get('pageSize'),
+        this.get('filterToApply') || {},
+        sortInfo);
+    }
 
-    handler(
-      this.get('currentPage'),
-      this.get('pageSize'),
-      this.get('filterToApply') || {},
-      sortInfo);
+    // if we need to reload content, that also means the selection will be reset
+    this.notifyRowSelectionChanged([]);
   },
 
   pageSizeOptions: Ember.computed('totalRows', function fixtableGrid$pageSizeOptions() {
@@ -235,17 +238,17 @@ export default Ember.Component.extend({
   resetSelection: Ember.observer('visibleContent.[]', function fixtableGrid$resetSelection() {
     if (!this.get('rowSelection')) { return; }
 
-    let selectedRows = Ember.Object.create();
-    this.set('selectedRows', selectedRows);
+    let selectedRowMap = Ember.Object.create();
+    this.set('selectedRowMap', selectedRowMap);
     this.get('visibleContent').forEach((row, rowIndex) => {
-      selectedRows.set(rowIndex.toString(), false);
+      selectedRowMap.set(rowIndex.toString(), false);
     });
 
-    let selectionKeys = Object.keys(selectedRows);
+    let selectionKeys = Object.keys(selectedRowMap);
     let self = this;
     selectionKeys.forEach(key => {
-      if (!selectedRows.hasObserverFor(key)) {
-        selectedRows.addObserver(key, self, 'onRowSelectedOrDeselected');
+      if (!selectedRowMap.hasObserverFor(key)) {
+        selectedRowMap.addObserver(key, self, 'onRowSelectedOrDeselected');
       }
     });
 
@@ -270,12 +273,15 @@ export default Ember.Component.extend({
     }
   },
 
-  onRowSelectedOrDeselected(selectedRows, rowIndex) {
+  onRowSelectedOrDeselected(selectedRowMap/*, rowIndex*/) {
+    // selectedRowMap maps row indices in visibleContent to their selection status
     if (!this.get('rowSelection')) { return; }
 
-    let selectedRowKeys = Object.keys(selectedRows);
-    let numSelected = selectedRowKeys.filter(key => selectedRows[key]).length;
+    let selectedDataRows = Object.keys(selectedRowMap)
+      .filter(index => selectedRowMap[index])
+      .map(index => this.get('visibleContent')[index]);
 
+    let numSelected = selectedDataRows.length;
     let allRowsAreSelected = numSelected === this.get('visibleContent').length;
     let someRowsAreSelected = numSelected > 0;
 
@@ -292,9 +298,13 @@ export default Ember.Component.extend({
       this.setSelectAllToggleIndeterminate(false);
     }
 
+    this.notifyRowSelectionChanged(selectedDataRows);
+  },
+
+  notifyRowSelectionChanged(selectedDataRows) {
     let handler = this.get('onSelectionChanged');
     if (typeof handler === 'function') {
-      handler(selectedRows, rowIndex);
+      handler(selectedDataRows);
     }
   },
 
@@ -303,14 +313,14 @@ export default Ember.Component.extend({
       return; // quit if we're programmatically setting the property, not responding to user input
     }
 
-    let selectedRows = this.get('selectedRows');
-    let selectedRowKeys = Object.keys(selectedRows);
+    let selectedRowMap = this.get('selectedRowMap');
+    let selectedRowKeys = Object.keys(selectedRowMap);
 
-    let numSelected = selectedRowKeys.filter(rowIndex => selectedRows[rowIndex]).length;
+    let numSelected = selectedRowKeys.filter(rowIndex => selectedRowMap[rowIndex]).length;
     let allRowsAreSelected = numSelected === this.get('visibleContent').length;
 
     // If all rows already selected, deselect all. Otherwise, select all.
-    selectedRowKeys.forEach(rowIndex => selectedRows.set(rowIndex, !allRowsAreSelected));
+    selectedRowKeys.forEach(rowIndex => selectedRowMap.set(rowIndex, !allRowsAreSelected));
 
     this.setSelectAllToggleIndeterminate(false); // if the user clicked, it's not indeterminate
   }),
