@@ -56,7 +56,6 @@
     "ember-cli-babel": "^5.1.7",
     "ember-cli-htmlbars": "^1.0.10",
     "ember-cli-htmlbars-inline-precompile": "^0.3.3",
-    "ember-truth-helpers": "1.2.0",
     "font-awesome": "^4.7.0"
   },
   "ember-addon": {

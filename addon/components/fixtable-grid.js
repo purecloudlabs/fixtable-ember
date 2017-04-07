@@ -316,7 +316,6 @@ export default Ember.Component.extend({
         this.set('sortAscending', true);
       }
     },
-
     onRowClick(row) {
       var handler = this.get('onRowClick');
       if (typeof handler === 'function') {
