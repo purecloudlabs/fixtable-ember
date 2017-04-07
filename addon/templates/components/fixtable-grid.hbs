@@ -81,7 +81,7 @@
       <tbody>
         {{#unless isLoading}}
           {{#each visibleContent as |row rowIndex|}}
-            <tr class={{if (get selectedRows (concat '' rowIndex)) 'active'}} {{ action 'onRowClick' row preventDefault=false }}>
+            <tr class={{if (get selectedRows (concat '' rowIndex)) 'active'}} {{action 'onRowClick' row preventDefault=false}}>
               {{#if rowSelection}}
                 <td>
                   <div class="fixtable-checkbox">
@@ -117,7 +117,7 @@
       {{/if}}
     </div>
   </div>
-  {{#if (and showPaging visibleContent.length)}}
+  {{#if showPaging}}
     {{fixtable-footer
       currentPage=currentPage totalPages=totalPages pageSize=pageSize pageSizeOptions=pageSizeOptions
       goToNextPage="goToNextPage" goToPreviousPage="goToPreviousPage"}}
