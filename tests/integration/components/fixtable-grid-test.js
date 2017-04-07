@@ -17,7 +17,7 @@ test('it renders', function(assert) {
     { name: 'Sherlock Holmes ', address: '221B Baker Street' },
     { name: 'Dudley Dursley', address: '4 Privet Drive' },
     { name: 'Hank Hill', address: '84 Rainey Street' },
-    { name: 'Gandalf Stormcrow' },
+    { name: 'Gandalf Stormcrow' }
   ]);
 
   this.render(hbs`{{fixtable-grid columns=columnDefs content=dataRows}}`);
@@ -27,7 +27,6 @@ test('it renders', function(assert) {
 });
 
 test('it has clickable rows', function (assert) {
-  const done = assert.async();
   assert.expect(1);
 
   this.set('columnDefs', [
@@ -38,19 +37,15 @@ test('it has clickable rows', function (assert) {
     { name: 'Sherlock Holmes ', address: '221B Baker Street' },
     { name: 'Dudley Dursley', address: '4 Privet Drive' },
     { name: 'Hank Hill', address: '84 Rainey Street' },
-    { name: 'Gandalf Stormcrow' },
+    { name: 'Gandalf Stormcrow' }
   ]);
 
-  let rowClicked = null;
+  this.on('rowClick', a => {
+    assert.equal(a.name, 'Dudley Dursley');
+  });
 
-  this.rowClick = function (row) {
-    rowClicked = row;
-    done();
-  };
-
-  this.render(hbs`{{fixtable-grid columns=columnDefs content=dataRows onRowClick=rowClick}}`);
+  this.render(hbs`{{fixtable-grid columns=columnDefs content=dataRows onRowClick=(action 'rowClick')}}`);
 
   const $row = this.$('tbody tr')[1];
   $row.click();
-
 });
