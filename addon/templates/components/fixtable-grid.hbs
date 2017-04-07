@@ -68,7 +68,7 @@
       <tbody>
         {{#unless isLoading}}
           {{#each visibleContent as |row rowIndex|}}
-            <tr class={{if (get selectedRowMap (concat '' rowIndex)) 'active'}}>
+            <tr class={{if (get selectedRowMap (concat '' rowIndex)) 'active'}} {{action 'onRowClick' row preventDefault=false}}>
               {{#if rowSelection}}
                 <td>
                   <div class="fixtable-checkbox">

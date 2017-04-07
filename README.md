@@ -594,6 +594,10 @@ Consumers should keep track of which rows are selected by subscribing to `onSele
 
 * `selectedDataRows` (Object) - The selected data rows.
 
+### Row Clicking
+For simple row click interaction without showing the row checkbox `onRowClick` should be bound to an action on the owning controller or component.  The bound action will be called whenever the row is clicked.  It receives the following parameter:
+* `clickedRow` (Object) the data object for the row that was clicked. 
+
 ## Development / Contributing
 
 ### Installation

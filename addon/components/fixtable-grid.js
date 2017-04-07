@@ -347,6 +347,13 @@ export default Ember.Component.extend({
 
     sortColumn(columnKey) {
       this.sortByColumn(columnKey);
+    },
+
+    onRowClick(row) {
+      var handler = this.get('onRowClick');
+      if (typeof handler === 'function') {
+        handler(row);
+      }
     }
   },
 
