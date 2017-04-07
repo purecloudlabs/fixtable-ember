@@ -485,6 +485,10 @@ Consumers should keep track of which rows are selected by subscribing to `onSele
 * `selectedRows` (Object) - Object where the key/value pairs map row indices to a boolean indicating whether the row is selected.
 * `rowIndex` (String) - The index of the selected row. Note that this is the index relative to the rows loaded into the page, *not* relative to the entire dataset. So, the indices will always fall into the range [0, pageSize).
 
+### Row Clicking
+For simple row click interaction without showing the row checkbox `onRowClick` should be bound to an action on the owning controller or component.  THe bound action will be called whenever the row is clicked.  It receives the following parameter:
+* `selectedRow` (Object) the data object for the row that was selected. 
+
 ## Development / Contributing
 
 ### Installation
