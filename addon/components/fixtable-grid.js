@@ -102,8 +102,8 @@ export default Ember.Component.extend({
     return possiblePageSizes.slice(0, i + 1);
   }),
 
-  showPaging: Ember.computed('clientPaging', 'serverPaging', 'visibleContent.[]', function fixtableGrid$showPaging() {
-    return (this.get('clientPaging') || this.get('serverPaging')) && this.get ('visibleContent.length');
+  showPaging: Ember.computed('clientPaging', 'serverPaging', function fixtableGrid$showPaging() {
+    return this.get('clientPaging') || this.get('serverPaging');
   }),
 
   afterSortChanged: Ember.observer('sortBy', 'sortAscending', function fixtableGrid$afterSortChanged() {
@@ -316,6 +316,7 @@ export default Ember.Component.extend({
         this.set('sortAscending', true);
       }
     },
+
     onRowClick(row) {
       var handler = this.get('onRowClick');
       if (typeof handler === 'function') {
