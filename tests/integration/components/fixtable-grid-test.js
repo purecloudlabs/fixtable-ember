@@ -49,3 +49,48 @@ test('it has clickable rows', function (assert) {
   const $row = this.$('tbody tr')[1];
   $row.click();
 });
+
+test('it renders the specified filter component', function(assert) {
+  assert.expect(3);
+
+  this.set('columnDefs', [
+    {
+      key: 'test',
+      filter: {
+        component: 'test-filter'
+      }
+    }
+  ]);
+  this.set('dataRows', [
+    { test: 'test' }
+  ]);
+
+  this.render(hbs`{{fixtable-grid columns=columnDefs content=dataRows}}`);
+
+  assert.ok(this.$('table th .custom-filter').length, 'Renders the filter component');
+  assert.notOk(this.$('table th input.form-control').length, 'Does not renders the search text box');
+  assert.notOk(this.$('table th select.form-control').length, 'Does not renders the drop-down list');
+});
+
+test('it renders the specified filter component when a type is specified', function(assert) {
+  assert.expect(3);
+
+  this.set('columnDefs', [
+    {
+      key: 'test',
+      filter: {
+        component: 'test-filter',
+        type: 'search'
+      }
+    }
+  ]);
+  this.set('dataRows', [
+    { test: 'test' }
+  ]);
+
+  this.render(hbs`{{fixtable-grid columns=columnDefs content=dataRows}}`);
+
+  assert.ok(this.$('table th .custom-filter').length, 'Renders the filter component');
+  assert.notOk(this.$('table th input.form-control').length, 'Does not renders the search text box');
+  assert.notOk(this.$('table th select.form-control').length, 'Does not renders the drop-down list');
+});

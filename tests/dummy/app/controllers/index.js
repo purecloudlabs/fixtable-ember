@@ -1,16 +1,14 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  noPageIsLoading: false,
-  clientPageIsLoading: false,
   serverPageIsLoading: false,
   manualFilterPageIsLoading: false,
-  rowSelectionPageIsLoading: false,
 
   noPageSortKey: 'id',
   clientPageSortKey: 'id',
   serverPageSortKey: 'id',
   manualFilterPageSortKey: 'id',
+  customFilterSortKey: 'id',
   rowSelectionSortKey: 'id',
 
   selectedNames: null,
@@ -21,15 +19,6 @@ export default Ember.Controller.extend({
     },
 
     updatePage(page, pageSize, filters, sortInfo, loadingProp, filteredContent, pagedContent) {
-      console.log('Reloading content:');
-      console.log(`\tPage: ${page}`);
-      console.log(`\tPage Size: ${pageSize}`);
-      console.log('Sort Info:');
-      console.dir(sortInfo);
-      console.log('Filters:');
-      console.dir(filters);
-      console.log('\n');
-
       this.set(loadingProp, true);
 
       // simulate server-side filtering and pagination
@@ -92,15 +81,8 @@ export default Ember.Controller.extend({
         'serverPageIsLoading', 'model.filteredDataRows', 'model.pagedDataRows');
     },
 
-    rowSelectionReloadContent(/*page, pageSize, filters, sortInfo*/) {
-      this.set('selectedNames', '');
-    },
-
-    updateSelection(selectedRows/*, rowIndex*/) {
-      var selectedNames = [];
-      Object.keys(selectedRows)
-        .filter(key => selectedRows[key])
-        .forEach(key => selectedNames.push(this.get('model.dataRows')[key].name));
+    updateSelection(selectedDataRows) {
+      var selectedNames = selectedDataRows.map(row => row.name);
       this.set('selectedNames', selectedNames.join(', '));
     }
   }

@@ -1,14 +1,14 @@
 # Fixtable-Ember
 
-[![npm](https://img.shields.io/npm/v/fixtable-ember.svg)]()
+[![npm](https://img.shields.io/npm/v/fixtable-ember.svg)](https://www.npmjs.com/package/fixtable-ember)
 [![Build Status](https://travis-ci.org/MyPureCloud/fixtable-ember.svg?branch=master)](https://travis-ci.org/MyPureCloud/fixtable-ember)
 
-This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer.
+This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer. In addition, Fixtable-Ember provides enhanced functionality such as sorting, filtering, and pagination.
 
 See a live demo here:
 [http://mypurecloud.github.io/fixtable-ember/](http://mypurecloud.github.io/fixtable-ember/)
 
-(Note: The source for the gh-pages site can be found in this repo's tests/dummy/app directory in the master branch. If you're curious for code examples, the master branch is a better source, since the code in the actual gh-pages branch has been minified and concatenated.)
+(Note: The source for the demo site linked above can be found in this repo's tests/dummy/app directory in the master branch.)
 
 ## Installation
 
@@ -56,6 +56,7 @@ The `fixtable-grid` component expects to be passed a `columns` property, which s
 * `key` (required) - Unique string identifier for the column.
 * `header` (optional) - Text to show in the column header. If this isn't passed in, `key` will be shown in the header.
 * `width` (optional) - Width of the column. Can be either a number (interpreted as pixels) or a string percentage (formatted like "50%"). If no width is passed in, the column will be sized automatically. Using a combination of pixel and percentage widths is not recommended.
+* `hideLabel` (optional) - If true, no column header will be shown for this column (even if the header property is specified).
 
 Here's a simple example using just the key:
 ```javascript
@@ -231,6 +232,17 @@ actions: {
 
 In this example, first we are showing the loading indicator to let the user know that data is loading. Next, we request additional data from the server based on the updated `page` and `pageSize`. When we receive the data, we hide the loading indicator and set the new rows into the model property bound to the `fixtable-grid` component.
 
+#### Custom Page Size
+
+These are the default possible page sizes for the paginated table:
+```
+[ 25, 50, 100, 250, 500 ]
+```
+
+The user can switch between page sizes using the pagination footer at the bottom of the table. The page size options shown to the user will be restricted based on the number of data rows (e.g., if there are 53 rows, then the possible page sizes will be 25, 50, or 100) -- the goal is to only show as many page size options as necessary to display all of the data.
+
+If you want to pass in different page size options, you can override the component's `possiblePageSizes` property with an array containing different numbers. The possible page sizes must be listed in ascending order.
+
 ### Custom Cell Components
 
 You may want to render something more complicated into a cell than just a simple string value. For example, you might want to make each cell link out to another route, or you might want to embed a Handlebars template into a cell. You can do that by creating a custom cell component.
@@ -265,6 +277,32 @@ For example, the Handlebars markup for the example `link-to-profile` component c
 ```
 
 This would render a link to the "profile" route in each row, passing the "name" property as a parameter.
+
+#### Bubbling Actions from Custom Cell components
+
+If you have a custom cell component defined, you may want to allow the consumer of the fixtable-grid to handle actions raised by that cell component. To facilitate that, a `bubbleAction` function is set on the custom component, which can be called like this from the cell component's JavaScript:
+
+```javascript
+this.bubbleAction(myActionName[, args]);
+```
+
+The action with name `myActionName` will bubble up to the consumer of the `fixtable-grid` component. That consumer should set an action handler on the `fixtable-grid`:
+
+```handlebars
+{{fixtable-grid columns=columnDefs content=dataRows myActionName=(action 'myActionHandler')}}
+```
+
+Where `myActionName` is replaced with the actual name of the action bubbling up, and `myActionHandler` is some action defined on the parent of the `fixtable-grid`.
+
+Alternatively, you skip calling `this.bubbleAction` in the cell component's JavaScript by directly using `bubbleAction` as an action in the markup of the component:
+
+```handlebars
+<button type="button" {{action bubbleAction 'myActionName' optionalArg1 optionalArg2}}>
+  Do My Action
+</button>
+```
+
+This will directly bubble the action with name `myActionName` to the parent of the `fixtable-grid` component, passing along any additional arguments that follow the action name.
 
 ### Filtering
 
@@ -381,6 +419,78 @@ By default, the Fixtable will automatically filter itself as the user types into
 
 To disable real-time filtering, simply set the `realtimeFiltering` property to `false`. The Fixtable will automatically show Apply and Clear buttons that apply or clear the entered filters, respectively.
 
+#### Filter Placeholder Text
+
+You can specify placeholder text for search- and select-type filters by setting the value of the `placeholder` property within the `filter` object of the column definition.
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      type: 'search',
+      placeholder: 'name search'
+    }
+  }
+]
+```
+
+If the filter is search-type, the `placeholder` attribute of the `<input>` element will be set to the placeholder value. If the filter is select-type, the text of the first `<option>` of the `<select>` element will be set to the placeholder value.
+
+#### Custom Filter Components
+
+You may want to render something other than a search field or select list for the filter. To do so, specify the component to render by providing
+the name in the `component` property of the `filter` object.
+
+For example, given that a component named "checkbox-filter" exists:
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      component: 'checkbox-filter'
+    }
+  }
+]
+```
+
+If both `component` and `type` are specified, `component` will take precedence and `type` will be ignored.
+
+The components will have access to two properties: `columnDef` and `filter`. These properties represent the column definition and the filter value for
+that column, respectively. Setting the `filter` property in the component will invoke the `onReloadContent` action or cause the manual
+filter buttons to display based on the value of the `realtimeFiltering`.
+
+```handlebars
+{{!-- checkbox-filter.hbs --}}
+<div class="checkbox">
+  <label>
+    {{input type="checkbox" checked=filter}} Check if awesome
+  <label>
+</div>
+```
+
+If you are using client-side filtering, then you should also provide a custom filter function along with your custom component. Set the custom filter function as the `filterFunction` property of your column definition's `filter` object.
+
+When invoked, `filterFunction` will be passed a data row and the current filter value for that column. It should return true if the given row passes the filter, and false otherwise.
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      component: 'checkbox-filter',
+      filterFunction(rowData, filterValue) {
+        return rowData.name === 'Roland Deschain';        
+      }
+    }
+  }
+]
+```
+
 #### Filter Caveats
 
 Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
@@ -478,12 +588,11 @@ Selected rows will automatically have the `active` CSS class applied to them. Th
 
 When rows are selected, any kind of content reload (i.e., anything that would trigger `onReloadContent` -- sorting, paging, or filtering) will clear the selected rows. (This is true regardless of whether the Fixtable is using client paging, server paging, or no paging at all.)
 
-Consumers should keep track of which rows are selected by subscribing to `onSelectionChanged` and `onReloadContent`. No selection-related parameters are passed to `onReloadContent`, but a consumer who cares about selection **must** listen to this because any content reload will automatically clear the selection -- and when content is reloaded, `onSelectionChanged` is not called in addition to `onReloadContent`.
+Consumers should keep track of which rows are selected by subscribing to `onSelectionChanged`. Note that whenever the `onReloadContent` handler is called, the `onSelectionChanged` handler will also be invoked immediately afterwards, informing the listener that the selected rows have been cleared out.
 
-`onSelectionChanged` should be bound to an action on the owning controller or component. The bound action will be called whenever a row is selected or deselected. It receives the following two parameters:
+`onSelectionChanged` should be bound to an action on the owning controller or component. The bound action will be called whenever a row is selected or deselected. It receives the following parameter:
 
-* `selectedRows` (Object) - Object where the key/value pairs map row indices to a boolean indicating whether the row is selected.
-* `rowIndex` (String) - The index of the selected row. Note that this is the index relative to the rows loaded into the page, *not* relative to the entire dataset. So, the indices will always fall into the range [0, pageSize).
+* `selectedDataRows` (Object) - The selected data rows.
 
 ### Row Clicking
 For simple row click interaction without showing the row checkbox `onRowClick` should be bound to an action on the owning controller or component.  The bound action will be called whenever the row is clicked.  It receives the following parameter:

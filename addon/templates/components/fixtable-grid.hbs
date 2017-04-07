@@ -22,24 +22,7 @@
             </th>
           {{/if}}
           {{#each columns as |column|}}
-            <th>
-              {{#if column.sortable}}
-                <div class="clickable" {{action 'sortColumn' column.key}}>
-                  {{if column.header column.header column.key}}
-                  {{#if (equals column.key sortBy)}}
-                    {{#if sortAscending}}
-                      <span class="caret caret-up"></span>
-                    {{else}}
-                      <span class="caret"></span>
-                    {{/if}}
-                  {{/if}}
-                </div>
-              {{else}}
-                <div>
-                  {{if column.header column.header column.key}}
-                </div>
-              {{/if}}
-            </th>
+            {{fixtable-column-header column=column sortBy=sortBy sortAscending=sortAscending sortColumn="sortColumn"}}
           {{/each}}
         </tr>
         <tr class="fixtable-column-filters">
@@ -53,24 +36,28 @@
               {{#if column.filter}}
                 <div>
                   <div class='form-group'>
-                    <div class='input-group'>
-                      {{#if (equals column.filter.type 'select')}}
-                        <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
-                          <option value=""></option>
-                          {{#each (getSelectOptions column content serverPaging) as |choice|}}
-                            <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
-                              {{if choice.label choice.label choice.value}}
-                            </option>
-                          {{/each}}
-                        </select>
-                      {{else}}
-                        {{input class='form-control' type='search' aria-label="Filter by column"
-                          value=(mut (get filters column.key))}}
-                        <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </span>
-                      {{/if}}
-                    </div>
+                    {{#if column.filter.component}}
+                      {{component column.filter.component columnDef=column filter=(mut (get filters column.key))}}
+                    {{else}}
+                      <div class='input-group'>
+                        {{#if (equals column.filter.type 'select')}}
+                          <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
+                            <option value="">{{column.filter.placeholder}}</option>
+                            {{#each (get-select-options column content serverPaging) as |choice|}}
+                              <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
+                                {{if choice.label choice.label choice.value}}
+                              </option>
+                            {{/each}}
+                          </select>
+                        {{else}}
+                          {{input class='form-control' type='search' aria-label="Filter by column" placeholder=column.filter.placeholder
+                            value=(mut (get filters column.key))}}
+                          <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                          </span>
+                        {{/if}}
+                      </div>
+                    {{/if}}
                   </div>
                 </div>
               {{/if}}
@@ -81,12 +68,12 @@
       <tbody>
         {{#unless isLoading}}
           {{#each visibleContent as |row rowIndex|}}
-            <tr class={{if (get selectedRows (concat '' rowIndex)) 'active'}} {{action 'onRowClick' row preventDefault=false}}>
+            <tr class={{if (get selectedRowMap (concat '' rowIndex)) 'active'}} {{action 'onRowClick' row preventDefault=false}}>
               {{#if rowSelection}}
                 <td>
                   <div class="fixtable-checkbox">
                     {{!-- we need concat here to convert rowIndex into a string for the get helper --}}
-                    {{input type="checkbox" checked=(mut (get selectedRows (concat '' rowIndex)))}}
+                    {{input type="checkbox" checked=(mut (get selectedRowMap (concat '' rowIndex)))}}
                   </div>
                 </td>
               {{/if}}
@@ -94,7 +81,7 @@
                 <td class={{column.cellClass}}>
                   {{#if column.component}}
                     {{!-- render the passed-in component --}}
-                    {{component column.component dataRow=row columnDef=column}}
+                    {{component column.component dataRow=row columnDef=column bubbleAction=(action sendAction)}}
                   {{else}}
                     {{!-- directly render the cell --}}
                     {{get row column.key}}
@@ -112,7 +99,7 @@
         <span class="sr-only">Loading...</span>
       {{else}}
         {{#unless visibleContent.length}}
-          <h4>No data available</h4>
+            <h4>{{nullMessage}}</h4>
         {{/unless}}
       {{/if}}
     </div>

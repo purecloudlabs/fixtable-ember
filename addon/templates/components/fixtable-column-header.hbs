@@ -1,0 +1,16 @@
+{{#if column.sortable}}
+  <div class="clickable" {{action 'sortColumn' column.key}}>
+    {{fixtable-column-label column=column}}
+    {{#if (equals column.key sortBy)}}
+      {{#if sortAscending}}
+        <span class="caret caret-up"></span>
+      {{else}}
+        <span class="caret"></span>
+      {{/if}}
+    {{/if}}
+  </div>
+{{else}}
+  <div>
+    {{fixtable-column-label column=column}}
+  </div>
+{{/if}}
