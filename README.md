@@ -582,7 +582,6 @@ Consumers should keep track of which rows are selected by subscribing to `onSele
 
 * `git clone` this repository
 * `npm install`
-* `bower install`
 
 ### Running
 
