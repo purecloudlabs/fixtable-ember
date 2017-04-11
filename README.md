@@ -25,25 +25,6 @@ Although it isn't strictly required, we recommend including [Bootstrap 3](http:/
 
 ### Nesting Addons
 
-#### Bower Dependencies and Blueprints
-
-If you want to nest this addon within another addon (ember-engines count too), you need to make sure that Bower dependencies from the `fixtable-ember` addon (namely, `fixtable`) are pulled into the top level consuming application. To do that, you should create a blueprint in your addon that will add the necessary Bower dependencies after install:
-
-Create a file at the following location, with the following contents:
-
-your-addon-folder/blueprints/your-addon-name/index.js
-```javascript
-module.exports = {
-  normalizeEntityName: function() {},
-
-  afterInstall() {
-    return this.addBowerPackageToProject('fixtable');
-  }
-};
-```
-
-Then, the consuming app will need to run the blueprint/generator for your addon (using `ember install`) to complete the installation.
-
 #### Ember-Engines
 
 If you are using the `fixtable-ember` addon within an [Ember engine](https://github.com/dgeb/ember-engines), the `fixtable-ember` dependency must be under "dependencies" instead of "devDependencies" in the package.json file of your engine. Otherwise, the `fixtable-grid` component will fail to render.
