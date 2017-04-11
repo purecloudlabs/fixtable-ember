@@ -22,12 +22,7 @@ module.exports = {
       parent.import(path.join('vendor', 'fonts', fontFileName));
     });
 
-    let fixtablePath = path.join(this.nodeModulesPath, 'fixtable/dist/');
-
-    parent.import({
-      development: path.join(fixtablePath, 'fixtable.js'),
-      production: path.join(fixtablePath, 'fixtable.min.js')
-    });
+    parent.import(path.join(this.nodeModulesPath, 'fixtable/dist/fixtable.js'));
 
     parent.import('vendor/styles/fixtable-ember.css');
     parent.import('vendor/styles/font-awesome.css');
