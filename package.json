@@ -59,7 +59,7 @@
     "ember-cli-htmlbars": "^1.1.1",
     "ember-cli-htmlbars-inline-precompile": "^0.3.3",
     "ember-truth-helpers": "1.2.0",
-    "fixtable": "^2.0.1",
+    "fixtable": "^2.0.2",
     "font-awesome": "^4.7.0"
   },
   "ember-addon": {
