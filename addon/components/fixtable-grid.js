@@ -1,3 +1,5 @@
+/* global Fixtable */
+
 import Ember from 'ember';
 import layout from '../templates/components/fixtable-grid';
 
