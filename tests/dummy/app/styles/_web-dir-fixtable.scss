@@ -1,0 +1,157 @@
+@import 'web-dir-colors';
+
+.fixtable-toolbar {
+    background-color: $pc-lightgrey;
+    background-image: linear-gradient(to bottom, $pc-white 0%, $background-color 100%);
+    border: .1rem solid $pc-grey;
+    border-bottom: none;
+    margin: 0;
+    padding: 1rem 1.8rem;
+}
+
+.fixtable-header {
+    background-color: $pc-lightgrey;
+    background-image: linear-gradient(to bottom, $pc-white 0%, $background-color 100%);
+    border-top: solid .1rem $pc-grey;
+    border-right: solid .1rem $pc-grey;
+    border-bottom: solid .2rem $link-color;
+    border-left: solid .1rem $pc-grey;
+    flex-shrink: 0;
+}
+
+.fixtable-inner {
+    border: .1rem solid $pc-grey;
+    border-top: none;
+    width: 100%;
+}
+
+.fixtable-styles-circulated table {
+    margin-bottom: -1px !important;
+}
+
+.fixtable-filters {
+    background-color: $filter-background-color;
+}
+
+.fixtable table th {
+    color: $text-color;
+    font-weight: bold;
+    line-height: 1.4;
+    border-bottom: none !important;
+    padding: .8rem .8rem 1rem;
+    &:first-child {
+        padding-left: 2rem;
+    }
+    &:last-child {
+        padding-right: 2rem;
+    }
+}
+
+.fixtable table tbody tr {
+    border-bottom: .1rem solid $pc-grey;
+    background-color: white;
+    &:hover {
+        background-color: $fixtable-row-background-hover-color;
+        td:first-child {
+            position: relative;
+            &:before {
+                content: '';
+                background: $fixtable-row-indicator-hover-background-color;
+                display: block;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                position: absolute;
+                width: .4rem;
+            }
+        }
+    }
+}
+
+.fixtable table td {
+    padding: .8rem;
+    vertical-align: middle;
+    word-wrap: break-word;
+    &:first-child {
+        padding-left: 2rem;
+    }
+    &:last-child {
+        padding-right: 2rem;
+    }
+}
+
+.fixtable .fixtable-footer {
+    background-color: $pc-lightgrey;
+    background-image: linear-gradient(to bottom, $pc-white 0%, $background-color 100%);
+    border: .1rem solid $pc-grey;
+    border-top: none;
+    flex-shrink: 0;
+    padding: .8rem .8rem .8rem 1.4rem;
+}
+
+// temporary styles to prevent "flash" as fixtable renders itself
+
+.fixtable-header {
+    height: 4.4rem;
+}
+
+.fixtable .btn-group {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+// flexbox!
+.flex-height,
+.flex-height-parent > .ember-view {
+  display: -webkit-box;
+  display:     -ms-flexbox;
+  display:         flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+
+  .flex-height {
+    display: -webkit-box;
+    display:     -ms-flexbox;
+    display:         flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+  }
+}
+
+
+
+.flex-height-with-min {
+  height: 400px;
+  * {
+    min-height: auto;
+  }
+}
+
+.flex-width,
+.flex-width-parent > .ember-view {
+  display: -webkit-box;
+  display:     -ms-flexbox;
+  display:         flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.flex-no-shrink {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}

@@ -1,0 +1,102 @@
+$font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$heading-font-family: $font-family;
+$secondary-font-family: "Lato", $font-family;
+$font-color: #4c4c4c;
+
+$background-color: #F6F6F6;
+$modal-background-color: #FFF;
+
+$orgspan-green: #C1D82F;
+$orgspan-blue: #0e536f;
+$orgspan-blue-light: lighten($orgspan-blue, 5%);
+$orgspan-blue-xlight: lighten($orgspan-blue, 10%);
+$orgspan-blue-dark: #004466;
+
+$orgspan-blue-fade: #5CA4CA;
+$orgspan-blue-accent: #F5FCFF;
+$orgspan-blue-accent-border: #BAD7E0;
+
+$orgspan-grey: #777;
+$orgspan-grey-light: lighten($orgspan-grey, 20%);
+
+$orgspan-grey-xlight: #efefef;
+$orgspan-grey-xlight-border: #d8d9d8;
+
+$pc-blue: #56aac6;
+$pc-black: #252525;
+$pc-lightblack: #333333;
+$pc-devil-grey: #666666;
+$pc-darkblue: #195F7A;
+$pc-headerblue: #4498b4;
+$pc-darkgrey: #b8b8b8;
+$pc-lightgrey: $background-color;
+$pc-lightblue: #e5eff1;
+$pc-green: #4f9325;
+$pc-brightgreen: #79ed45;
+$pc-red: #D2322D;
+$pc-lightred: #EAC3C2;
+$pc-yellow: #FDFCE5;
+$pc-white: #ffffff;
+$pc-grey: #cccccc;
+$pc-alto: #dddddd;
+$pc-mercury: #e5e5e5;
+$pc-emperor: #555555;
+$pc-silver-chalice: #aeaeae;
+$pc-dusty-gray: #999999;
+$pc-galliano: #c7a90b;
+$pc-candlelight: #ffda17;
+$pc-web-orange: #FFAA00;
+$pc-boulder: #7b7b7b;
+$pc-galliano: #c7a90b;
+$pc-candlelight: #ffda17;
+$pc-boston-blue: #3497bb;
+$pc-smalt-blue: #567b85;
+$pc-regent-blue: #aad4e3;
+$pc-eden: #0F465D;
+$pc-lima: #77dd22;
+$pc-global-red: #ff0000;
+$pc-hippie-blue: #53A1BC;
+
+$border-color: #e0e0e0;
+$dropdown-border-color: $orgspan-grey-xlight-border;
+
+$link-color: #1997CA;
+
+$list-hover-color: #EEFFCC;
+
+$off-white: #f5f5f5;
+
+$nav-bar-height: 60px;
+$nav-bar-background-color: #55A9C6;
+$nav-bar-link-color: #B4E2F2;
+$nav-bar-link-active-color: #4598B1;
+$nav-bar-link-active-background-color: #3F8BA2;
+
+$nav-tabs-border-color: #cacaca;
+$nav-tabs-active-color: $pc-boston-blue;
+$nav-tabs-active-border-width: 2px;
+
+$nav-tabs-panel-sidenav-color: #F6F8F9;
+$nav-tabs-panel-border-color: $pc-grey;
+$nav-tabs-panel-unread-background-color: $pc-global-red;
+
+$navigation-menu-width: 55px;
+$navigation-menu-height: 65px;
+
+$action-bar-active-conversation-color: #77fe65;
+$action-bar-background: $pc-eden;
+$action-bar-offline-color: #f43f39;
+
+$action-color: #56a6c1;
+$action-hover-color: #fff;
+$action-height: $navigation-menu-height;
+$action-height-compact: 45px;
+$action-icon-size: 24px;
+$action-icon-size-compact: 20px;
+
+
+$fixtable-row-background-hover-color: #fdfceb;
+$fixtable-row-indicator-hover-background-color: #56aac6;
+$fixtable-row-background-danger-color: #f2dede;
+$fixtable-row-background-danger-hover-color: #ebcccc;
+$filter-background-color: hsl(196, 30%, 85%);
