@@ -42,7 +42,16 @@ export default Ember.Component.extend({
 
   currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage', function fixtableGrid$afterCurrentPageChanged() {
-    Ember.run.once(this, this.notifyReloadContent);
+    let currentPage = this.get('currentPage'),
+        totalPages = this.get('totalPages');
+
+    if (currentPage < 1) {
+      this.set('currentPage', 1);
+    } else if (currentPage > totalPages) {
+      this.set('currentPage', totalPages);
+    }
+    //Ember.run.once(this, this.notifyReloadContent);
+    Ember.run.debounce(this, this.notifyReloadContent, 300, false);
   }),
 
   pageSize: defaultPageSize,
