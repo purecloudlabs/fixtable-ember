@@ -17,12 +17,13 @@ module.exports = {
       parent = parent.app;
     }
 
-    let fontAwesomeToImport = fs.readdirSync(`${this.nodeModulesPath}/font-awesome/fonts`);
+    const nodeModulesPath = parent.project.nodeModulesPath;
+    let fontAwesomeToImport = fs.readdirSync(`${nodeModulesPath}/font-awesome/fonts`);
     fontAwesomeToImport.forEach((fontFileName) => {
       parent.import(path.join('vendor', 'fonts', fontFileName));
     });
 
-    parent.import(path.join(this.nodeModulesPath, 'fixtable/dist/fixtable.js'));
+    parent.import(path.join(nodeModulesPath, 'fixtable/dist/fixtable.js'));
 
     parent.import('vendor/styles/fixtable-ember.css');
     parent.import('vendor/styles/font-awesome.css');
