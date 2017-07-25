@@ -9,24 +9,19 @@ const path = require('path');
 module.exports = {
   name: 'fixtable-ember',
 
-  included(parent) {
+  included() {
     this._super.included.apply(this, arguments);
-
-    // Find the top-level app if this is nested within other addons
-    while (parent.app) {
-      parent = parent.app;
-    }
 
     let fontAwesomeToImport = fs.readdirSync(`${this.nodeModulesPath}/font-awesome/fonts`);
     fontAwesomeToImport.forEach((fontFileName) => {
-      parent.import(path.join('vendor', 'fonts', fontFileName));
+      this.import(path.join('vendor', 'fonts', fontFileName));
     });
 
-    parent.import(path.join(this.nodeModulesPath, 'fixtable/dist/fixtable.js'));
+    this.import(path.join(this.nodeModulesPath, 'fixtable/dist/fixtable.js'));
 
-    parent.import('vendor/styles/fixtable-ember.css');
-    parent.import('vendor/styles/font-awesome.css');
-    parent.import('vendor/styles/fixtable.css');
+    this.import('vendor/styles/fixtable-ember.css');
+    this.import('vendor/styles/font-awesome.css');
+    this.import('vendor/styles/fixtable.css');
   },
 
   treeForVendor(tree) {
