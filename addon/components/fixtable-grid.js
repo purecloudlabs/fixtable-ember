@@ -344,10 +344,12 @@ export default Ember.Component.extend({
 
   actions: {
     goToPreviousPage() {
-      this.safeSetCurrentPage(this.get('currentPage') - 1);
+      let currentPage = parseInt(this.get('currentPage'));
+      this.safeSetCurrentPage(currentPage - 1);
     },
     goToNextPage() {
-      this.safeSetCurrentPage(this.get('currentPage') + 1);
+      let currentPage = parseInt(this.get('currentPage'));
+      this.safeSetCurrentPage(currentPage + 1);
     },
 
     applyManualFilter() {
