@@ -11,14 +11,13 @@ module.exports = {
 
   included() {
     this._super.included.apply(this, arguments);
-
-    let fontAwesomeToImport = fs.readdirSync(`${this.nodeModulesPath}/font-awesome/fonts`);
+    let fa = path.dirname(require.resolve('font-awesome/fonts/FontAwesome.otf'));
+    let fontAwesomeToImport = fs.readdirSync(fa);
     fontAwesomeToImport.forEach((fontFileName) => {
       this.import(path.join('vendor', 'fonts', fontFileName));
     });
 
-    this.import(path.join(this.nodeModulesPath, 'fixtable/dist/fixtable.js'));
-
+    this.import(require.resolve('fixtable/dist/fixtable.js'));
     this.import('vendor/styles/fixtable-ember.css');
     this.import('vendor/styles/font-awesome.css');
     this.import('vendor/styles/fixtable.css');
@@ -30,21 +29,18 @@ module.exports = {
       treesToMerge.push(tree);
     }
 
-    let fontAwesomeFunnel = new Funnel(`${this.nodeModulesPath}/font-awesome`, {
-      srcDir: 'fonts',
+    let fontAwesomeFunnel = new Funnel(path.dirname(require.resolve('font-awesome/fonts/FontAwesome.otf')), {
       destDir: 'fonts'
     });
     treesToMerge.push(fontAwesomeFunnel);
 
-    let fontAwesomeCssFunnel = new Funnel(`${this.nodeModulesPath}/font-awesome`, {
-      srcDir: 'css',
+    let fontAwesomeCssFunnel = new Funnel(path.dirname(require.resolve('font-awesome/css/font-awesome.css')), {
       files:['font-awesome.css'],
       destDir: 'styles'
     });
     treesToMerge.push(fontAwesomeCssFunnel);
 
-    let fixtableCssFunnel = new Funnel(`${this.nodeModulesPath}/fixtable`, {
-      srcDir: 'dist',
+    let fixtableCssFunnel = new Funnel(path.dirname(require.resolve('fixtable/dist/fixtable.js')), {
       files: ['fixtable.css'],
       destDir: 'styles'
     });
