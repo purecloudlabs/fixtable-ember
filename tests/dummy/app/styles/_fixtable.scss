@@ -45,7 +45,8 @@
 
       &.table-hover {
         tbody {
-          tr:hover {
+          tr:hover,
+          tr.hover {
             th, td {
               background-color: $table-hover-color;
             }

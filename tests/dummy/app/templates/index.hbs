@@ -74,3 +74,14 @@
       onSelectionChanged=(action 'updateSelection')}}
   </div>
 </div>
+
+<h3>Expandable Rows</h3>
+<p>This Fixtable demonstrates rows that can expand to show more information.</p>
+<p>The row toggles are provided by the built-in <code>fixtable-row-toggle</code> component, wrapped in a custom component to show them only for rows with extended details in our model.</p>
+<p>A custom component is used to render the expanded details, and the character name is re-styled to look like a tab when the <code>expanded</code> CSS class is present on the table row.</p>
+<div class="row">
+  <div class="col-md-8">
+    {{fixtable-grid columns=model.filteredColumnWithRowToggles content=model.dataRows sortBy=(mut noPageSortKey)
+      fixtableClass='restrict-height' tableClass='table-hover' expandedRowComponent='character-details'}}
+  </div>
+</div>
