@@ -54,3 +54,23 @@
 .fixtable .fixtable-footer select.form-control {
   width: 55px;
 }
+
+.fixtable-row-toggle {
+  cursor: pointer;
+}
+
+.fixtable-row-primary.expanded {
+  border-bottom: 0;
+}
+
+.fixtable-row-primary.expanded td {
+  border-bottom: 0;
+}
+
+.fixtable-row-secondary.expanded {
+  border-top: 0;
+}
+
+.fixtable-row-secondary.expanded td {
+  border-top: 0;
+}

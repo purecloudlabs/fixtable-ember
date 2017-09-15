@@ -68,7 +68,7 @@
       <tbody>
         {{#unless isLoading}}
           {{#each visibleContent as |row rowIndex|}}
-            <tr class={{if (get selectedRowMap (concat '' rowIndex)) 'active'}} {{action 'onRowClick' row preventDefault=false}}>
+            {{#fixtable-row primary=true hover=row.hover expanded=row.expanded active=(get selectedRowMap (concat '' rowIndex)) onClick=(action 'onRowClick' row.object)}}
               {{#if rowSelection}}
                 <td>
                   <div class="fixtable-checkbox">
@@ -81,14 +81,23 @@
                 <td class={{column.cellClass}}>
                   {{#if column.component}}
                     {{!-- render the passed-in component --}}
-                    {{component column.component dataRow=row columnDef=column bubbleAction=(action sendAction)}}
+                    {{component column.component dataRow=row.object rowExpanded=row.expanded columnDef=column bubbleAction=(action sendAction)}}
                   {{else}}
                     {{!-- directly render the cell --}}
-                    {{get row column.key}}
+                    <span>{{get row.object column.key}}</span>
                   {{/if}}
                 </td>
               {{/each}}
-            </tr>
+            {{/fixtable-row}}
+            {{#if row.expanded}}
+              {{#if expandedRowComponent}}
+                {{#fixtable-row primary=false hover=row.hover expanded=row.expanded active=(get selectedRowMap (concat '' rowIndex))}}
+                  <td colspan="{{totalColumns}}">
+                    {{component expandedRowComponent dataRow=row.object}}
+                  </td>
+                {{/fixtable-row}}
+              {{/if}}
+            {{/if}}
           {{/each}}
         {{/unless}}
       </tbody>

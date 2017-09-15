@@ -230,8 +230,18 @@ export default Ember.Component.extend({
         sortedFilteredContent = sortedFilteredContent.slice((currentPage - 1) * pageSize, currentPage * pageSize);
       }
 
-      return sortedFilteredContent;
+      return sortedFilteredContent.map(function (rowObject) {
+          return {
+              object: rowObject,
+              hover: false,
+              expanded: false
+          };
+      });
     }),
+
+  totalColumns: Ember.computed('columns.[]', 'rowSelection', function fixtableGrid$totalColumns() {
+    return this.get('columns').length + (this.get('rowSelection') ? 1 : 0);
+  }),
 
   totalRows: Ember.computed('sortedFilteredContent.[]', 'serverPaging', 'totalRowsOnServer',
     function fixtableGrid$totalRows() {
@@ -316,7 +326,7 @@ export default Ember.Component.extend({
   notifyRowSelectionChanged(selectedDataRows) {
     let handler = this.get('onSelectionChanged');
     if (typeof handler === 'function') {
-      handler(selectedDataRows);
+      handler(selectedDataRows.map((row) => {return row.object;}));
     }
   },
 
