@@ -108,7 +108,7 @@ For example:
 
 ```css
 .restrict-height {
-  height: 400px;
+  height: 500px;
 }
 ```
 
@@ -250,7 +250,11 @@ For example, here we have two regular columns and a third "profile" column that 
 ]
 ```
 
-Custom cell components will automatically be provided with two properties: `columnDef` and `dataRow`. These properties are exactly what they sound like -- the column definition and data row for the cell, respectively.
+Custom cell components will automatically be provided with three properties:
+
+* `columnDef` - the column definition
+* `dataRow` - the object from the `content` array represented by this row
+* `rowExpanded` - a boolean value indicating whether or not the row is expanded (more on this in the [Row Expansion](#row-expansion) section below)
 
 For example, the Handlebars markup for the example `link-to-profile` component could look like this:
 ```handlebars
@@ -577,7 +581,21 @@ Consumers should keep track of which rows are selected by subscribing to `onSele
 
 ### Row Clicking
 For simple row click interaction without showing the row checkbox `onRowClick` should be bound to an action on the owning controller or component.  The bound action will be called whenever the row is clicked.  It receives the following parameter:
-* `clickedRow` (Object) the data object for the row that was clicked. 
+* `clickedRow` (Object) the data object for the row that was clicked.
+
+### Row Expansion
+
+Fixtable has built-in support for expandable rows, for cases where you may desire to show more information than can comfortably fit on a single row. When a row is "expanded," a second, full-width table row is displayed beneath the normal row. In this expanded space, Fixtable will render whatever custom component you specify in the `expandedRowComponent` property. This component will receive the same `dataRow` binding as any custom cell component in the main row (see [Custom Cell Components](#custom-cell-components) above).
+
+To allow for toggling rows between expanded and collapsed state, you should include a component in one of your column definitions that toggles the `rowExpanded` property. Fixtable includes a simple component, `fixtable-row-toggle`, that you can use for this purpose. You can also make a custom component if you need additional logic or prefer a different design. It's also noteworthy that any custom cell component can read and write the `rowExpanded` property, so you can toggle or react to this value in multiple columns if needed.
+
+Because "expanded" rows are actually rendered as two table rows, Fixtable takes some steps to ensure you can still style them as desired. For one thing, any border between the two rows will be removed by default to maintain the illusion of a single row (this can, naturally, be overridden in your own CSS). Fixtable also applies some helpful CSS classes to each row element:
+
+* `fixtable-row-primary` - the primary, multi-column row (rendered from your column definition)
+* `fixtable-row-secondary` - the second, full-width column that renders your `expandedRowComponent`
+* `expanded` - present on both row elements when the dataRow is expanded
+* `hover` - present on both row elements when the user's cursor is hovering over _either_ row element (you should use this class rather than relying on the `:hover` pseudo-class if you want to use hover styles with expanded rows)
+* `active` - present on both row elements if the row is selected (see [Row Selection](#row-selection) above)
 
 ## Development / Contributing
 

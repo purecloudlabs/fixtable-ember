@@ -13,7 +13,7 @@ body {
 }
 
 .restrict-height {
-  height: 400px;
+  height: 500px;
 }
 
 .editable-fixtable {
@@ -26,4 +26,45 @@ body {
 
 .name {
   font-weight: bold;
+  position: relative;
+}
+
+.fixtable-row.expanded .name spanzzz {
+  background-color: #ddd;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 5px 10px 15px 10px;
+  margin-left: -10px;
+  margin-bottom: -15px;
+}
+
+.fixtable-row.expanded .name span {
+  background-color: #ddd;
+  border-style: solid;
+  border-color: #ddd;
+  border-top-width: 5px;
+  border-left-width: 10px;
+  border-right-width: 10px;
+  position: absolute;
+  top: 3px;
+  left: -2px;
+  bottom: 0;
+}
+
+.fixtable-row-secondary.expanded td {
+  padding-top: 0;
+}
+
+.character-details {
+    background-color: #ddd;
+    padding: 10px;
+}
+
+.character-avatar {
+  margin-right: 10px;
+}
+
+.character-biography {
+  margin: 0;
+  overflow: auto;
 }

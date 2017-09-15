@@ -87,12 +87,21 @@ export default Ember.Route.extend({
       }
     };
 
+    // create a version of the filtered column defs that includes a column with toggles for expanded rows
+    model.filteredColumnWithRowToggles = JSON.parse(JSON.stringify(model.filteredColumnDefs));
+    model.filteredColumnWithRowToggles.unshift({
+      component: 'details-toggle',
+      hideLabel: true,
+      width: 25
+    });
+
     // add a custom ID sorting function to all versions of the column defs that use client sorting
     var sortFunc = (x, y) => x - y;
     model.columnDefs[0].sortFunction = sortFunc;
     model.filteredColumnDefs[0].sortFunction = sortFunc;
     model.clientColumnDefs[0].sortFunction = sortFunc;
     model.filteredColumnWithCustomDefs[0].sortFunction = sortFunc;
+    model.filteredColumnWithRowToggles[1].sortFunction = sortFunc;
 
     return model;
   }
