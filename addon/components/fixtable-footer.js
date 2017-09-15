@@ -8,6 +8,10 @@ export default Ember.Component.extend({
   totalPages: null,
   pageSize: null,
   pageSizeOptions: null,
+  nextDisabled: Ember.computed('currentPage', 'totalPages', function() {
+    let { currentPage, totalPages } = this.getProperties('currentPage', 'totalPages');
+    return currentPage >= totalPages;
+  }),
 
   actions: {
     goToPreviousPage() {

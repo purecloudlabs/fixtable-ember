@@ -21,7 +21,6 @@ export default Ember.Component.extend({
   serverPaging: false,
   showPaging: Ember.computed.or('clientPaging', 'serverPaging'),
   totalRowsOnServer: 0, // only used for server paging
-  showPaginationFooter: Ember.computed.and('showPaging', 'visibleContent.length'),
 
   // filters
   filters: null,
