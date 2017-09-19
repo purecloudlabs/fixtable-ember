@@ -227,10 +227,10 @@ export default Ember.Component.extend({
 
       // ensure sortedFilteredContent is a supported type
       let allowedTypes = [Array, Ember.ArrayProxy, DS.ManyArray];
-      let matchingTypes = allowedTypes.filter(function (type) {
+      let isAllowedType = allowedTypes.some(function (type) {
         return sortedFilteredContent instanceof type;
       });
-      if (!matchingTypes.length) {
+      if (!isAllowedType) {
         Ember.Logger.warn('Content supplied to Fixtable is not a supported type');
         return [];
       }
