@@ -1,5 +1,6 @@
 /* global Fixtable */
 
+import DS from 'ember-data';
 import Ember from 'ember';
 import layout from '../templates/components/fixtable-grid';
 
@@ -222,7 +223,17 @@ export default Ember.Component.extend({
 
   visibleContent: Ember.computed('sortedFilteredContent', 'currentPage', 'pageSize', 'clientPaging',
     function fixtableGrid$visibleContent() {
-      let sortedFilteredContent = this.get('sortedFilteredContent') || [];
+      let sortedFilteredContent = this.get('sortedFilteredContent');
+
+      // ensure sortedFilteredContent is a supported type
+      let allowedTypes = [Array, Ember.ArrayProxy, DS.ManyArray];
+      let isAllowedType = allowedTypes.some(function (type) {
+        return sortedFilteredContent instanceof type;
+      });
+      if (!isAllowedType) {
+        Ember.Logger.warn('Content supplied to Fixtable is not a supported type');
+        return [];
+      }
 
       if (this.get('clientPaging')) {
         let currentPage = this.get('currentPage');
