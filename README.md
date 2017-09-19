@@ -78,7 +78,7 @@ Here's an example using percentage width:
 
 ### Defining Content
 
-The component expects a `content` property to be passed in. This should be an array of objects.
+The component expects a `content` property to be passed in. This should be an array of objects, either a native `Array` or one of Ember's Array-like objects (`Ember.ArrayProxy`, `DS.ManyArray`, or their subclasses).
 * Each object element in the array represents a row of data.
 * Each key/value pair in a row object represents a single cell of data. The key should match a key defined in `columns`, and the value represents the content for the column/row intersection.
 * If there is no data for a given column, that key/value pair can be omitted from the row object.
