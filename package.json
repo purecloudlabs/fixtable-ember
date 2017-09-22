@@ -1,6 +1,6 @@
 {
   "name": "fixtable-ember",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Ember wrapper for the Fixtable table library",
   "directories": {
     "doc": "doc",
@@ -55,7 +55,7 @@
     "ember-cli-babel": "^5.1.7",
     "ember-cli-htmlbars": "^1.1.1",
     "ember-cli-htmlbars-inline-precompile": "^0.3.6",
-    "ember-data": "^2.15.0",
+    "ember-data": "^2.12.0",
     "fixtable": "^2.0.2",
     "font-awesome": "^4.7.0"
   },
