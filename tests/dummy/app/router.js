@@ -9,6 +9,7 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('index', { path: '/' });
   this.route('editable', { path: '/editable' });
+  this.route('ember-data', { path: '/ember-data' });
 });
 
 export default Router;

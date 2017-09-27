@@ -1,0 +1,23 @@
+<h2>Ember Data Test</h2>
+{{#link-to 'index'}}
+  Test Basic Grid
+{{/link-to}}
+
+<h3>Server Paging and Filtering + Row Selection</h3>
+<p>This Fixtable implements server-side paging and filtering, via a query to the Ember Data record store. Responses are mocked using <a href="http://www.ember-cli-mirage.com/">Mirage</a>. It also enables row selection with a callback that builds a string listing the names of the selected characters to display above the table.</p>
+<p>This example exists to help verify functionality and identify any issues when using Ember Data records rather than arrays of plain JavaScript objects.</p>
+<h4>Selected:</h4>
+{{#if selectedNames.length}}
+  <p>{{selectedNames}}</p>
+{{else}}
+  <p>(none)</p>
+{{/if}}
+<div class="row">
+  <div class="col-md-8">
+    {{fixtable-grid columns=columnDefs content=model
+      fixtableClass='restrict-height' tableClass='table-hover'
+      isLoading=isLoading serverPaging=true totalRowsOnServer=meta.total
+      onReloadContent=(action 'updatePage') possiblePageSizes=possiblePageSizes
+      rowSelection=true onSelectionChanged=(action 'updateSelection')}}
+  </div>
+</div>
