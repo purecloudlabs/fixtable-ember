@@ -475,7 +475,8 @@ export default Ember.Component.extend({
     let oldExternalFilters = this.get('_previousExternalFilters');
     let newExternalFilters = _.cloneDeep(this.get('externalFilters'));
     if (oldExternalFilters && !_.isEqual(oldExternalFilters, newExternalFilters)) {
-      Ember.run.once(this, this.notifyReloadContent);
+      this.set('currentPage', 1);
+      Ember.run.debounce(this, this.notifyReloadContent, 300, false);
     }
     this.set('_previousExternalFilters', newExternalFilters);
   }
