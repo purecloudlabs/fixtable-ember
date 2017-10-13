@@ -597,6 +597,10 @@ Because "expanded" rows are actually rendered as two table rows, Fixtable takes 
 * `hover` - present on both row elements when the user's cursor is hovering over _either_ row element (you should use this class rather than relying on the `:hover` pseudo-class if you want to use hover styles with expanded rows)
 * `active` - present on both row elements if the row is selected (see [Row Selection](#row-selection) above)
 
+### Debugging
+
+Fixtable-Ember utilizes the core [Fixtable](https://github.com/MyPureCloud/fixtable-core) library to handle the low-level DOM manipulation required for the fixed-header effect, ensuring Fixtable is styled to match your application's tables, etc. If you notice rendering issues, they're likely to originate in this core library and not Fixtable-Ember itself. If you set the `debugMode` property to `true` on your `fixtable-grid` component, it will enable debug logs on its internal `Fixtable` object which may be helpful in diagnosing issues.
+
 ## Development / Contributing
 
 ### Installation

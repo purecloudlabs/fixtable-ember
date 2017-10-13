@@ -16,6 +16,7 @@ export default Ember.Component.extend({
   fixtable: null,
   columnsByKey: null,
   nullMessage: "No data available",
+  debugMode: false,
 
   // paging
   clientPaging: false,
@@ -434,7 +435,7 @@ export default Ember.Component.extend({
 
   initializeFixtable() {
     // initialize the Fixtable script
-    let fixtable = new Fixtable(this.$('.fixtable')[0]);
+    let fixtable = new Fixtable(this.$('.fixtable')[0], this.get('debugMode'));
 
     // account for the row selection checkbox column, if present
     let indexOffset = 1;
