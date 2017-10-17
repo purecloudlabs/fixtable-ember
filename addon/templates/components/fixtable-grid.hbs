@@ -113,9 +113,9 @@
       {{/if}}
     </div>
   </div>
-  {{#if showPaginationFooter}}
+  <div class="fixtable-footer {{if showPaginationFooter '' 'fixtable-footer-hidden'}}">
     {{fixtable-footer
       currentPage=currentPage totalPages=totalPages pageSize=pageSize pageSizeOptions=pageSizeOptions
       goToNextPage="goToNextPage" goToPreviousPage="goToPreviousPage"}}
-  {{/if}}
+  </div>
 </div>

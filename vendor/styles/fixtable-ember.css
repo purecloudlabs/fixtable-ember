@@ -29,6 +29,10 @@
   background-color: white;
 }
 
+.fixtable .fixtable-footer-hidden {
+    display: none;
+}
+
 .fixtable .fixtable-footer {
   padding: 5px;
 }
