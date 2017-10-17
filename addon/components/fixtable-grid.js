@@ -15,7 +15,6 @@ export default Ember.Component.extend({
   layout: layout,
   fixtable: null,
   columnsByKey: null,
-  nullMessage: "No data available",
   debugMode: false,
 
   // paging
@@ -43,7 +42,15 @@ export default Ember.Component.extend({
   suppressSelectToggle: false,
 
   // custom components
+  emptyStateComponent: 'fixtable-empty-state',
+  emptyStateComponentValues: {nullMessage: 'No data available'},
   footerComponent: 'fixtable-footer',
+
+  // backwards-compatibility for old nullMessage option
+  nullMessageChanged: Ember.observer('nullMessage', function () {
+    Ember.Logger.warn('Deprecation warning: use emptyStateComponentValues instead of nullMessage. Support will be dropped in fixtable-ember v4.x. See TK for more info.'); // TODO: add link
+    this.set('emptyStateComponentValues.nullMessage', this.get('nullMessage'));
+  }),
 
   currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage', function fixtableGrid$afterCurrentPageChanged() {

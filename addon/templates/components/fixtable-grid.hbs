@@ -108,7 +108,7 @@
         <span class="sr-only">Loading...</span>
       {{else}}
         {{#unless visibleContent.length}}
-            <h4>{{nullMessage}}</h4>
+            {{component emptyStateComponent values=emptyStateComponentValues}}
         {{/unless}}
       {{/if}}
     </div>
