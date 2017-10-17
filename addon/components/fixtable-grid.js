@@ -42,6 +42,9 @@ export default Ember.Component.extend({
   selectedRowMap: null, // maps row indices to selected state
   suppressSelectToggle: false,
 
+  // custom components
+  footerComponent: 'fixtable-footer',
+
   currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage', function fixtableGrid$afterCurrentPageChanged() {
     let currentPage = this.get('currentPage'),
