@@ -480,6 +480,7 @@ When invoked, `filterFunction` will be passed a data row and the current filter 
 
 Columns that have a custom cell component can be filtered, but only if the data rows defined in `content` have values corresponding to the column using the custom cell component. The filtering will be based on the data in `content`, not on what's rendered by the custom cell component.
 
+
 ### Sorting
 
 Fixtable has built-in support for column sorting.
@@ -556,14 +557,25 @@ Currently, you can only sort by a single column at a time. (In other words, ther
 
 Also, just like with filtering, sorting is based on what's defined in `content`, not on the actual markup rendered in the cell. Keep this in mind when using sorting with custom cell components.
 
+### External Filters
+
+You may want to implement UI for filtering data outside of Fixtable itself. Perhaps in a sibling component that allows for more complex controls than can comfortably fit in a column header.
+
+To support this use case, Fixtable allows for an `externalFilters` property to be set. It will then monitor this value for changes and trigger your `onReloadContent` callback to refresh the table content. The current value of `externalFilters` will be passed to your callback as the fifth parameter.
+
+Fixtable does not prescribe any particular format for your external filters, so you are free to implement whatever data structure works best for your needs. This, however, means you may need to use `notifyPropertyChange()` when your external filters are updated, to explicitly notify Fixtable of the change.
+
+Note: `serverPaging` must be enabled.
+
 ### onReloadContent
 
-Let's recap `onReloadContent`, since it can be triggered by several different kinds of content updates. This property of the `fixtable-grid` should be set to an action on the owning controller or component. The bound action will be called whenever the table is paged, sorted, or filtered. (This is true regardless of whether client paging or server paging is active, but obviously it's more important for server paging.) The action will be invoked with the following parameters:
+Let's recap `onReloadContent`, since it can be triggered by several different kinds of content updates. This property of the `fixtable-grid` should be set to an action on the owning controller or component. The bound action will be called whenever the table is paged, sorted, or filtered, or when any external filters are changed. (This is true regardless of whether client paging or server paging is active, but obviously it's more important for server paging.) The action will be invoked with the following parameters:
 
 * `page` (Number) - The current 1-indexed page number.
 * `pageSize` (Number) - The maximum number of rows shown on a single page.
 * `filters` (Object) - Object where the key/value pairs map column keys to filter text.
 * `sortInfo` (Object) - Object with a string `key` property representing the column to sort by, and a boolean `ascending` property indicating the sort direction. If the table is unsorted, `sortInfo` will be null.
+* `externalFilters` (Object) - The current value of your `externalFilters` property; this is completely outside of Fixtable's control.
 
 ### Row Selection
 

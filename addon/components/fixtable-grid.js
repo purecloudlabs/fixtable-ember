@@ -2,6 +2,7 @@
 
 import DS from 'ember-data';
 import Ember from 'ember';
+import _ from 'lodash';
 import layout from '../templates/components/fixtable-grid';
 
 const checkboxColumnWidth = 40; // in pixels
@@ -52,6 +53,8 @@ export default Ember.Component.extend({
     this.set('emptyStateComponentValues.nullMessage', this.get('nullMessage'));
   }),
 
+  externalFilters: null,
+
   currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage', function fixtableGrid$afterCurrentPageChanged() {
     let currentPage = this.get('currentPage'),
@@ -83,7 +86,8 @@ export default Ember.Component.extend({
         this.get('currentPage'),
         this.get('pageSize'),
         this.get('filterToApply') || {},
-        sortInfo);
+        sortInfo,
+        this.get('externalFilters'));
     }
 
     // if we need to reload content, that also means the selection will be reset
@@ -473,5 +477,18 @@ export default Ember.Component.extend({
     if (fixtable) {
       fixtable.setDimensions();
     }
+  },
+
+  didUpdateAttrs() {
+    this._super(...arguments);
+
+    // trigger content reload when externalFilters change
+    let oldExternalFilters = this.get('_previousExternalFilters');
+    let newExternalFilters = _.cloneDeep(this.get('externalFilters'));
+    if (oldExternalFilters && !_.isEqual(oldExternalFilters, newExternalFilters)) {
+      this.set('currentPage', 1);
+      Ember.run.debounce(this, this.notifyReloadContent, 300, false);
+    }
+    this.set('_previousExternalFilters', newExternalFilters);
   }
 });
