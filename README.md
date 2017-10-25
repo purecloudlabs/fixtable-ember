@@ -289,6 +289,21 @@ Alternatively, you skip calling `this.bubbleAction` in the cell component's Java
 
 This will directly bubble the action with name `myActionName` to the parent of the `fixtable-grid` component, passing along any additional arguments that follow the action name.
 
+### Additional Custom Components
+
+#### Footer Component
+
+You can supply your own `footerComponent` which will be rendered in place of the default `fixtable-footer` component. The following properties will be made available to your custom footer:
+
+* `currentPage` - integer value of the currently selected page (starting at 1)
+* `totalRows` - integer value of the total number of rows; if you're using server-side paging, this will be equal to `totalRowsOnServer`, otherwise it's the number of rows in the current filtered content array
+* `totalPages` - integer value of the number of available pages given the current `pageSize` and `totalRows`
+* `pageSize` - integer value of the number of items in each page
+* `pageSizeOptions` - array of integers which can optionally be used to provide the user an affordance for changing `pageSize`
+* `isLoading` - boolean value to indicate when a new page is being loaded (it's up to your `onReloadContent` method to update this value)
+* `goToNextPage` - action which your component may invoke (via `sendAction`) to increment the currentPage
+* `goToPreviousPage` - action which your component may invoke (via `sendAction`) to decrement the currentPage
+
 ### Filtering
 
 Fixtable supports filtering the displayed rows, either by search text or by selected option. To set this up, add a filter property to the column definition.
