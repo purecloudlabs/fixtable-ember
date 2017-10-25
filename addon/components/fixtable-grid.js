@@ -48,8 +48,9 @@ export default Ember.Component.extend({
   footerComponent: 'fixtable-footer',
 
   // backwards-compatibility for old nullMessage option
+  // TODO: remove this in fixtable-ember v4.0.0
   nullMessageChanged: Ember.observer('nullMessage', function () {
-    Ember.Logger.warn('Deprecation warning: use emptyStateComponentValues instead of nullMessage. Support will be dropped in fixtable-ember v4.x. See TK for more info.'); // TODO: add link
+    Ember.Logger.warn('Deprecation warning: use emptyStateComponentValues instead of nullMessage. Support will be dropped in fixtable-ember v4.x. See https://github.com/MyPureCloud/fixtable-ember#empty-state-component for more info.');
     this.set('emptyStateComponentValues.nullMessage', this.get('nullMessage'));
   }),
 
