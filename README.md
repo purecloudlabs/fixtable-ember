@@ -304,6 +304,16 @@ You can supply your own `footerComponent` which will be rendered in place of the
 * `goToNextPage` - action which your component may invoke (via `sendAction`) to increment the currentPage
 * `goToPreviousPage` - action which your component may invoke (via `sendAction`) to decrement the currentPage
 
+#### Empty State Component
+
+You can supply your own `emptyStateComponent` which will be rendered in place of the default `fixtable-empty-state` component when the content array is empty. You can also supply an object using the `emptyStateComponentValues` property with dynamic values to be passed along to your component as `values`.
+
+The default empty state component simply shows a message, centered vertically and horizontally within Fixtable. This message defaults to "No data available", but you can override it by using the `emptyStateComponentValues` property to set an object with a `nullMessage` property. For example:
+
+```
+{{fixtable-grid emptyStateComponentValues={nullMessage: "Nothing to see here!"}}}
+```
+
 ### Filtering
 
 Fixtable supports filtering the displayed rows, either by search text or by selected option. To set this up, add a filter property to the column definition.
