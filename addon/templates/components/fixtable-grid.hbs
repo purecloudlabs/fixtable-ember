@@ -115,7 +115,8 @@
   </div>
   <div class="fixtable-footer {{if showPaginationFooter '' 'fixtable-footer-hidden'}}">
     {{component footerComponent
-      currentPage=currentPage totalPages=totalPages pageSize=pageSize pageSizeOptions=pageSizeOptions
+      currentPage=currentPage totalPages=totalPages totalRows=totalRows
+      isLoading=isLoading pageSize=pageSize pageSizeOptions=pageSizeOptions
       goToNextPage="goToNextPage" goToPreviousPage="goToPreviousPage"}}
   </div>
 </div>
