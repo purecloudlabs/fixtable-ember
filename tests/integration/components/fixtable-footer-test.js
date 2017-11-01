@@ -14,7 +14,6 @@ test('it renders', function(assert) {
   this.set('pageSize', 25);
   this.set('pageSizeOptions', [25, 50, 100]);
 
-  this.render(hbs`{{fixtable-footer currentPage=currentPage totalPages=totalPages pageSize=pageSize pageSizeOptions=pageSizeOptions}}`);
-
+  this.render(hbs`{{fixtable-footer class='fixtable-footer' currentPage=currentPage totalPages=totalPages pageSize=pageSize pageSizeOptions=pageSizeOptions}}`);
   assert.ok(this.$('.fixtable-footer').length); // there is an element with the fixtable-footer class
 });
