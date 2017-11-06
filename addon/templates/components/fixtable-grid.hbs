@@ -113,7 +113,7 @@
       {{/if}}
     </div>
   </div>
-  <div class="fixtable-footer {{if showPaginationFooter '' 'fixtable-footer-hidden'}}">
+  <div class="fixtable-footer {{unless showPaginationFooter 'fixtable-footer-hidden'}}">
     {{component footerComponent
       currentPage=currentPage totalPages=totalPages totalRows=totalRows
       isLoading=isLoading pageSize=pageSize pageSizeOptions=pageSizeOptions
