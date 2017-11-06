@@ -351,9 +351,12 @@ export default Ember.Component.extend({
   },
 
   notifyRowSelectionChanged(selectedDataRows) {
+    this.set('selectedDataRows', selectedDataRows.map((row) => {
+      return row.object;
+    }));
     let handler = this.get('onSelectionChanged');
     if (typeof handler === 'function') {
-      handler(selectedDataRows.map((row) => {return row.object;}));
+      handler(this.get('selectedDataRows'));
     }
   },
 
