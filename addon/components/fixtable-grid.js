@@ -408,10 +408,6 @@ export default Ember.Component.extend({
       if (typeof handler === 'function') {
         handler(row);
       }
-    },
-
-    bubbleAction(){
-      this.sendAction(...arguments);
     }
   },
 

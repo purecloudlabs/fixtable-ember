@@ -298,11 +298,13 @@ You can supply your own `footerComponent` which will be rendered in place of the
 * `currentPage` - integer value of the currently selected page (starting at 1)
 * `totalRows` - integer value of the total number of rows; if you're using server-side paging, this will be equal to `totalRowsOnServer`, otherwise it's the number of rows in the current filtered content array
 * `totalPages` - integer value of the number of available pages given the current `pageSize` and `totalRows`
+* `selectedDataRows` - array of the currently selected row objects
 * `pageSize` - integer value of the number of items in each page
 * `pageSizeOptions` - array of integers which can optionally be used to provide the user an affordance for changing `pageSize`
 * `isLoading` - boolean value to indicate when a new page is being loaded (it's up to your `onReloadContent` method to update this value)
-* `goToNextPage` - action which your component may invoke (via `sendAction`) to increment the currentPage
-* `goToPreviousPage` - action which your component may invoke (via `sendAction`) to decrement the currentPage
+* `goToNextPage` - action which your component may invoke to increment the currentPage
+* `goToPreviousPage` - action which your component may invoke to decrement the currentPage
+* `bubbleAction` - action which your component may invoke to bubble actions up to the consumer of the fixtable-grid (this works the same as custom cell components; see [Bubbling Actions from Custom Cell components](#bubbling-actions-from-custom-cell-components) above)
 
 #### Empty State Component
 
