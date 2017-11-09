@@ -16,7 +16,7 @@ export default Ember.Component.extend({
   layout: layout,
   fixtable: null,
   columnsByKey: null,
-  nullMessage: "No data available",
+  debugMode: false,
 
   // paging
   clientPaging: false,
@@ -41,6 +41,18 @@ export default Ember.Component.extend({
   rowSelection: false,
   selectedRowMap: null, // maps row indices to selected state
   suppressSelectToggle: false,
+
+  // custom components
+  emptyStateComponent: 'fixtable-empty-state',
+  emptyStateComponentValues: {nullMessage: 'No data available'},
+  footerComponent: 'fixtable-footer',
+
+  // backwards-compatibility for old nullMessage option
+  // TODO: remove this in fixtable-ember v4.0.0
+  nullMessageChanged: Ember.observer('nullMessage', function () {
+    Ember.Logger.warn('Deprecation warning: use emptyStateComponentValues instead of nullMessage. Support will be dropped in fixtable-ember v4.x. See https://github.com/MyPureCloud/fixtable-ember#empty-state-component for more info.');
+    this.set('emptyStateComponentValues.nullMessage', this.get('nullMessage'));
+  }),
 
   externalFilters: null,
 
@@ -339,9 +351,12 @@ export default Ember.Component.extend({
   },
 
   notifyRowSelectionChanged(selectedDataRows) {
+    this.set('selectedDataRows', selectedDataRows.map((row) => {
+      return row.object;
+    }));
     let handler = this.get('onSelectionChanged');
     if (typeof handler === 'function') {
-      handler(selectedDataRows.map((row) => {return row.object;}));
+      handler(this.get('selectedDataRows'));
     }
   },
 
@@ -438,7 +453,7 @@ export default Ember.Component.extend({
 
   initializeFixtable() {
     // initialize the Fixtable script
-    let fixtable = new Fixtable(this.$('.fixtable')[0]);
+    let fixtable = new Fixtable(this.$('.fixtable')[0], this.get('debugMode'));
 
     // account for the row selection checkbox column, if present
     let indexOffset = 1;

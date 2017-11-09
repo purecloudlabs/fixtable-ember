@@ -108,14 +108,16 @@
         <span class="sr-only">Loading...</span>
       {{else}}
         {{#unless visibleContent.length}}
-            <h4>{{nullMessage}}</h4>
+            {{component emptyStateComponent values=emptyStateComponentValues}}
         {{/unless}}
       {{/if}}
     </div>
   </div>
-  {{#if showPaginationFooter}}
-    {{fixtable-footer
-      currentPage=currentPage totalPages=totalPages pageSize=pageSize pageSizeOptions=pageSizeOptions
+  <div class="fixtable-footer {{unless showPaginationFooter 'fixtable-footer-hidden'}}">
+    {{component footerComponent
+      currentPage=currentPage totalPages=totalPages totalRows=totalRows
+      isLoading=isLoading pageSize=pageSize pageSizeOptions=pageSizeOptions
+      selectedDataRows=selectedDataRows bubbleAction=(action sendAction)
       goToNextPage="goToNextPage" goToPreviousPage="goToPreviousPage"}}
-  {{/if}}
+  </div>
 </div>

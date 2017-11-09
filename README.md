@@ -289,6 +289,33 @@ Alternatively, you skip calling `this.bubbleAction` in the cell component's Java
 
 This will directly bubble the action with name `myActionName` to the parent of the `fixtable-grid` component, passing along any additional arguments that follow the action name.
 
+### Additional Custom Components
+
+#### Footer Component
+
+You can supply your own `footerComponent` which will be rendered in place of the default `fixtable-footer` component. The following properties will be made available to your custom footer:
+
+* `currentPage` - integer value of the currently selected page (starting at 1)
+* `totalRows` - integer value of the total number of rows; if you're using server-side paging, this will be equal to `totalRowsOnServer`, otherwise it's the number of rows in the current filtered content array
+* `totalPages` - integer value of the number of available pages given the current `pageSize` and `totalRows`
+* `selectedDataRows` - array of the currently selected row objects
+* `pageSize` - integer value of the number of items in each page
+* `pageSizeOptions` - array of integers which can optionally be used to provide the user an affordance for changing `pageSize`
+* `isLoading` - boolean value to indicate when a new page is being loaded (it's up to your `onReloadContent` method to update this value)
+* `goToNextPage` - action which your component may invoke to increment the currentPage
+* `goToPreviousPage` - action which your component may invoke to decrement the currentPage
+* `bubbleAction` - action which your component may invoke to bubble actions up to the consumer of the fixtable-grid (this works the same as custom cell components; see [Bubbling Actions from Custom Cell components](#bubbling-actions-from-custom-cell-components) above)
+
+#### Empty State Component
+
+You can supply your own `emptyStateComponent` which will be rendered in place of the default `fixtable-empty-state` component when the content array is empty. You can also supply an object using the `emptyStateComponentValues` property with dynamic values to be passed along to your component as `values`.
+
+The default empty state component simply shows a message, centered vertically and horizontally within Fixtable. This message defaults to "No data available", but you can override it by using the `emptyStateComponentValues` property to set an object with a `nullMessage` property. For example:
+
+```
+{{fixtable-grid emptyStateComponentValues={nullMessage: "Nothing to see here!"}}}
+```
+
 ### Filtering
 
 Fixtable supports filtering the displayed rows, either by search text or by selected option. To set this up, add a filter property to the column definition.
@@ -608,6 +635,10 @@ Because "expanded" rows are actually rendered as two table rows, Fixtable takes 
 * `expanded` - present on both row elements when the dataRow is expanded
 * `hover` - present on both row elements when the user's cursor is hovering over _either_ row element (you should use this class rather than relying on the `:hover` pseudo-class if you want to use hover styles with expanded rows)
 * `active` - present on both row elements if the row is selected (see [Row Selection](#row-selection) above)
+
+### Debugging
+
+Fixtable-Ember utilizes the core [Fixtable](https://github.com/MyPureCloud/fixtable-core) library to handle the low-level DOM manipulation required for the fixed-header effect, ensuring Fixtable is styled to match your application's tables, etc. If you notice rendering issues, they're likely to originate in this core library and not Fixtable-Ember itself. If you set the `debugMode` property to `true` on your `fixtable-grid` component, it will enable debug logs on its internal `Fixtable` object which may be helpful in diagnosing issues.
 
 ## Development / Contributing
 
