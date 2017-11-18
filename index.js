@@ -47,6 +47,10 @@ module.exports = {
     treesToMerge.push(fixtableCssFunnel);
 
     return mergeTrees(treesToMerge, { overwrite: true });
+  },
+
+  isDevelopingAddon() {
+    return false;
   }
 
 };
