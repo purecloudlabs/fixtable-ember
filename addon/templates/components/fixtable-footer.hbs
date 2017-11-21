@@ -2,7 +2,7 @@
 <button type="button" class="btn btn-default page-prev" aria-label="Previous Page" {{action 'goToPreviousPage'}} disabled={{equals currentPage 1}}>
   <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 </button>
-{{input type="number" class="form-control pageInput" value=currentPage min=1 max=totalPages}}
+{{input type="number" class="form-control page-input" value=currentPage min=1 max=totalPages}}
 <button type="button" class="btn btn-default page-next" aria-label="Next Page" {{action 'goToNextPage'}} disabled={{equals currentPage totalPages}}>
   <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 </button>
