@@ -56,7 +56,6 @@ export default Ember.Component.extend({
 
   externalFilters: null,
 
-  currentPage: defaultPage,
   afterCurrentPageChanged: Ember.observer('currentPage', function fixtableGrid$afterCurrentPageChanged() {
     let currentPage = this.get('currentPage'),
         totalPages = this.get('totalPages');
@@ -70,8 +69,6 @@ export default Ember.Component.extend({
     Ember.run.debounce(this, this.notifyReloadContent, 300, false);
   }),
 
-  pageSize: defaultPageSize,
-  possiblePageSizes: defaultPossiblePageSizes,
   afterPageSizeChanged: Ember.observer('pageSize', function fixtableGrid$afterPageSizeChanged() {
     Ember.run.once(this, this.notifyReloadContent);
     this.set('currentPage', defaultPage);
@@ -417,6 +414,7 @@ export default Ember.Component.extend({
     this.indexColumns();
     this.updateFilterObservers();
     this.resetSelection();
+    this.setDefaults();
   },
 
   indexColumns() {
@@ -444,6 +442,18 @@ export default Ember.Component.extend({
         filters.addObserver(key, self, 'onFilterChanged');
       }
     });
+  },
+
+  setDefaults() {
+    if (!this.get('pageSize')) {
+        this.set('pageSize', defaultPageSize);
+    }
+    if (!this.get('possiblePageSizes')) {
+        this.set('possiblePageSizes', defaultPossiblePageSizes);
+    }
+    if (!this.get('currentPage')) {
+        this.set('currentPage', defaultPage);
+    }
   },
 
   didInsertElement() {
