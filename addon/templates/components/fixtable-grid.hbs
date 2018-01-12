@@ -1,123 +1,123 @@
 <div class={{if fixtableClass (concat 'fixtable ' fixtableClass) 'fixtable'}}>
-  <div class="fixtable-header"></div>
-  <div class="fixtable-filters">
-    {{#if showManualFilterButtons}}
-      {{#if filtersAreDirty}}
-        <button type="button" class="btn btn-primary" {{action 'applyManualFilter'}}>Apply</button>
-      {{/if}}
-      {{#if filtersAreActive}}
-        <button type="button" class="btn btn-primary" {{action 'clearManualFilter'}}>Clear</button>
-      {{/if}}
-    {{/if}}
-  </div>
-  <div class="fixtable-inner">
-    <table class={{if tableClass (concat 'table ' tableClass) 'table'}}>
-      <thead>
-        <tr class="fixtable-column-headers">
-          {{#if rowSelection}}
-            <th>
-              <div class="fixtable-checkbox">
-                {{input type="checkbox" checked=selectAllToggle}}
-              </div>
-            </th>
-          {{/if}}
-          {{#each columns as |column|}}
-            {{fixtable-column-header column=column sortBy=sortBy sortAscending=sortAscending sortColumn="sortColumn"}}
-          {{/each}}
-        </tr>
-        <tr class="fixtable-column-filters">
-          {{#if rowSelection}}
-            <th>
-              {{!-- empty cell in filter row to account for checkbox column --}}
-            </th>
-          {{/if}}
-          {{#each columns as |column|}}
-            <th>
-              {{#if column.filter}}
-                <div>
-                  <div class='form-group'>
-                    {{#if column.filter.component}}
-                      {{component column.filter.component columnDef=column filter=(mut (get filters column.key))}}
-                    {{else}}
-                      <div class='input-group'>
-                        {{#if (equals column.filter.type 'select')}}
-                          <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
-                            <option value="">{{column.filter.placeholder}}</option>
-                            {{#each (get-select-options column content serverPaging) as |choice|}}
-                              <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
-                                {{if choice.label choice.label choice.value}}
-                              </option>
-                            {{/each}}
-                          </select>
-                        {{else}}
-                          {{input class='form-control' type='search' aria-label="Filter by column" placeholder=column.filter.placeholder
-                            value=(mut (get filters column.key))}}
-                          <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                          </span>
-                        {{/if}}
-                      </div>
-                    {{/if}}
-                  </div>
-                </div>
-              {{/if}}
-            </th>
-          {{/each}}
-        </tr>
-      </thead>
-      <tbody>
-        {{#unless isLoading}}
-          {{#each visibleContent as |row rowIndex|}}
-            {{#fixtable-row primary=true hover=row.hover expanded=row.expanded active=(get selectedRowMap (concat '' rowIndex)) onClick=(action 'onRowClick' row.object)}}
-              {{#if rowSelection}}
-                <td>
-                  <div class="fixtable-checkbox">
-                    {{!-- we need concat here to convert rowIndex into a string for the get helper --}}
-                    {{input type="checkbox" checked=(mut (get selectedRowMap (concat '' rowIndex)))}}
-                  </div>
-                </td>
-              {{/if}}
-              {{#each columns as |column|}}
-                <td class={{column.cellClass}}>
-                  {{#if column.component}}
-                    {{!-- render the passed-in component --}}
-                    {{component column.component dataRow=row.object rowExpanded=row.expanded columnDef=column bubbleAction=(action sendAction)}}
-                  {{else}}
-                    {{!-- directly render the cell --}}
-                    <span>{{get row.object column.key}}</span>
-                  {{/if}}
-                </td>
-              {{/each}}
-            {{/fixtable-row}}
-            {{#if row.expanded}}
-              {{#if expandedRowComponent}}
-                {{#fixtable-row primary=false hover=row.hover expanded=row.expanded active=(get selectedRowMap (concat '' rowIndex))}}
-                  <td colspan="{{totalColumns}}">
-                    {{component expandedRowComponent dataRow=row.object}}
-                  </td>
-                {{/fixtable-row}}
-              {{/if}}
+    <div class="fixtable-header"></div>
+    <div class="fixtable-filters">
+        {{#if showManualFilterButtons}}
+            {{#if filtersAreDirty}}
+                <button type="button" class="btn btn-primary" {{action 'applyManualFilter'}}>Apply</button>
             {{/if}}
-          {{/each}}
-        {{/unless}}
-      </tbody>
-    </table>
-    <div class="fixtable-centered">
-      {{#if isLoading}}
-        <i class="fa fa-refresh fa-spin fa-4x fa-fw fixtable-loading" aria-hidden="true"></i>
-        <span class="sr-only">Loading...</span>
-      {{else}}
-        {{#unless visibleContent.length}}
-            {{component emptyStateComponent values=emptyStateComponentValues}}
-        {{/unless}}
-      {{/if}}
+            {{#if filtersAreActive}}
+                <button type="button" class="btn btn-primary" {{action 'clearManualFilter'}}>Clear</button>
+            {{/if}}
+        {{/if}}
     </div>
-  </div>
-  <div class="fixtable-footer {{unless showPaginationFooter 'fixtable-footer-hidden'}}">
-    {{component footerComponent
-      currentPage=currentPage totalPages=totalPages totalRows=totalRows
-      isLoading=isLoading pageSize=pageSize pageSizeOptions=pageSizeOptions
-      selectedDataRows=selectedDataRows bubbleAction=(action sendAction)
-      goToNextPage="goToNextPage" goToPreviousPage="goToPreviousPage"}}
-  </div>
+    <div class="fixtable-inner">
+        <table class={{if tableClass (concat 'table ' tableClass) 'table'}}>
+            <thead>
+                <tr class="fixtable-column-headers">
+                    {{#if rowSelection}}
+                        <th>
+                            <div class="fixtable-checkbox">
+                                {{input type="checkbox" checked=selectAllToggle}}
+                            </div>
+                        </th>
+                    {{/if}}
+                    {{#each columns as |column|}}
+                        {{fixtable-column-header column=column sortBy=sortBy sortAscending=sortAscending sortColumn="sortColumn"}}
+                    {{/each}}
+                </tr>
+                <tr class="fixtable-column-filters">
+                    {{#if rowSelection}}
+                        <th>
+                            {{!-- empty cell in filter row to account for checkbox column --}}
+                        </th>
+                    {{/if}}
+                    {{#each columns as |column|}}
+                        <th>
+                            {{#if column.filter}}
+                                <div>
+                                    <div class='form-group'>
+                                        {{#if column.filter.component}}
+                                            {{component column.filter.component columnDef=column filter=(mut (get filters column.key))}}
+                                        {{else}}
+                                            <div class='input-group'>
+                                                {{#if (equals column.filter.type 'select')}}
+                                                    <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
+                                                        <option value="">{{column.filter.placeholder}}</option>
+                                                        {{#each (get-select-options column content serverPaging) as |choice|}}
+                                                            <option value={{choice.value}} selected={{equals (get filters column.key) choice.value}}>
+                                                                {{if choice.label choice.label choice.value}}
+                                                            </option>
+                                                        {{/each}}
+                                                    </select>
+                                                {{else}}
+                                                    {{input class='form-control' type='search' aria-label="Filter by column" placeholder=column.filter.placeholder
+                                                        value=(mut (get filters column.key))}}
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                    </span>
+                                                {{/if}}
+                                            </div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                        </th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#unless isLoading}}
+                    {{#each visibleContent as |row rowIndex|}}
+                        {{#fixtable-row primary=true hover=row.hover expanded=row.expanded active=(get selectedRowMap (concat '' rowIndex)) onClick=(action 'onRowClick' row.object)}}
+                            {{#if rowSelection}}
+                                <td>
+                                    <div class="fixtable-checkbox">
+                                        {{!-- we need concat here to convert rowIndex into a string for the get helper --}}
+                                        {{input type="checkbox" checked=(mut (get selectedRowMap (concat '' rowIndex)))}}
+                                    </div>
+                                </td>
+                            {{/if}}
+                            {{#each columns as |column|}}
+                                <td class={{column.cellClass}}>
+                                    {{#if column.component}}
+                                        {{!-- render the passed-in component --}}
+                                        {{component column.component dataRow=row.object rowExpanded=row.expanded columnDef=column bubbleAction=(action sendAction)}}
+                                    {{else}}
+                                        {{!-- directly render the cell --}}
+                                        <span>{{get row.object column.key}}</span>
+                                    {{/if}}
+                                </td>
+                            {{/each}}
+                        {{/fixtable-row}}
+                        {{#if row.expanded}}
+                            {{#if expandedRowComponent}}
+                                {{#fixtable-row primary=false hover=row.hover expanded=row.expanded active=(get selectedRowMap (concat '' rowIndex))}}
+                                    <td colspan="{{totalColumns}}">
+                                        {{component expandedRowComponent dataRow=row.object}}
+                                    </td>
+                                {{/fixtable-row}}
+                            {{/if}}
+                        {{/if}}
+                    {{/each}}
+                {{/unless}}
+            </tbody>
+        </table>
+        <div class="fixtable-centered">
+            {{#if isLoading}}
+                <i class="fa fa-refresh fa-spin fa-4x fa-fw fixtable-loading" aria-hidden="true"></i>
+                <span class="sr-only">Loading...</span>
+            {{else}}
+                {{#unless visibleContent.length}}
+                    {{component emptyStateComponent values=emptyStateComponentValues}}
+                {{/unless}}
+            {{/if}}
+        </div>
+    </div>
+    <div class="fixtable-footer {{unless showPaginationFooter 'fixtable-footer-hidden'}}">
+        {{component footerComponent
+            currentPage=currentPage totalPages=totalPages totalRows=totalRows
+            isLoading=isLoading pageSize=pageSize pageSizeOptions=pageSizeOptions
+            selectedDataRows=selectedDataRows bubbleAction=(action sendAction)
+            goToNextPage="goToNextPage" goToPreviousPage="goToPreviousPage"}}
+    </div>
 </div>
