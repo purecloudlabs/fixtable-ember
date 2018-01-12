@@ -3,10 +3,10 @@
     <div class="fixtable-filters">
         {{#if showManualFilterButtons}}
             {{#if filtersAreDirty}}
-                <button type="button" class="btn btn-primary" {{action 'applyManualFilter'}}>Apply</button>
+                <button type="button" class="btn btn-primary" {{action 'applyManualFilter'}}>{{t 'fixtable-ember.apply'}}</button>
             {{/if}}
             {{#if filtersAreActive}}
-                <button type="button" class="btn btn-primary" {{action 'clearManualFilter'}}>Clear</button>
+                <button type="button" class="btn btn-primary" {{action 'clearManualFilter'}}>{{t 'fixtable-ember.clear'}}</button>
             {{/if}}
         {{/if}}
     </div>
@@ -105,7 +105,7 @@
         <div class="fixtable-centered">
             {{#if isLoading}}
                 <i class="fa fa-refresh fa-spin fa-4x fa-fw fixtable-loading" aria-hidden="true"></i>
-                <span class="sr-only">Loading...</span>
+                <span class="sr-only">{{t 'fixtable-ember.loading'}}</span>
             {{else}}
                 {{#unless visibleContent.length}}
                     {{component emptyStateComponent values=emptyStateComponentValues}}

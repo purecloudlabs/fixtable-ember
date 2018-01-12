@@ -1,0 +1,7 @@
+fixtable-ember:
+    apply: 'Apply'
+    clear: 'Clear'
+    items_per_page: 'items per page'
+    loading: 'Loading...'
+    of: 'of'
+    page: 'Page'

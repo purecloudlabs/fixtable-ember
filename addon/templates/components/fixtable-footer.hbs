@@ -1,4 +1,4 @@
-<span>Page</span>
+<span>{{t 'fixtable-ember.page'}}</span>
 <button type="button" class="btn btn-default page-prev" aria-label="Previous Page" {{action 'goToPreviousPage'}} disabled={{equals currentPage 1}}>
     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 </button>
@@ -6,7 +6,7 @@
 <button type="button" class="btn btn-default page-next" aria-label="Next Page" {{action 'goToNextPage'}} disabled={{equals currentPage totalPages}}>
     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 </button>
-<span>of {{totalPages}}</span>
+<span>{{t 'fixtable-ember.of'}} {{totalPages}}</span>
 
 <span class="pull-right">
     <select class="form-control page-size" onchange={{action (mut pageSize) value="target.value"}}>
@@ -15,6 +15,6 @@
         {{/each}}
     </select>
     <span>
-        items per page
+        {{t 'fixtable-ember.items_per_page'}}
     </span>
 </span>
