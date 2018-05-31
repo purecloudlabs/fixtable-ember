@@ -452,6 +452,10 @@ export default Ember.Component.extend({
   },
 
   initializeFixtable() {
+    let fixtableElement = this.$('.fixtable') ? this.$('.fixtable')[0] : undefined; //codes around a bug in ember test where jquery can't find the fixtable element initially
+    if (!fixtableElement) {
+        return;
+    }
     // initialize the Fixtable script
     let fixtable = new Fixtable(this.$('.fixtable')[0], this.get('debugMode'));
 
