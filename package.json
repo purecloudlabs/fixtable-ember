@@ -1,6 +1,6 @@
 {
   "name": "fixtable-ember",
-  "version": "3.4.4",
+  "version": "3.4.5",
   "description": "Ember wrapper for the Fixtable table library",
   "directories": {
     "doc": "doc",
