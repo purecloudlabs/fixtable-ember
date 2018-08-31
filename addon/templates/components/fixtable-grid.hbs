@@ -39,7 +39,7 @@
                                         {{#if column.filter.component}}
                                             {{component column.filter.component columnDef=column filter=(mut (get filters column.key))}}
                                         {{else}}
-                                            <div class='input-group'>
+                                            <div class='input-group' data-t="{{column.filter.dataT}}">
                                                 {{#if (equals column.filter.type 'select')}}
                                                     <select class="form-control" onchange={{action (mut (get filters column.key)) value="target.value"}}>
                                                         <option value="">{{column.filter.placeholder}}</option>

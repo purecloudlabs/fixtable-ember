@@ -431,6 +431,23 @@ By default, the Fixtable will automatically filter itself as the user types into
 
 To disable real-time filtering, simply set the `realtimeFiltering` property to `false`. The Fixtable will automatically show Apply and Clear buttons that apply or clear the entered filters, respectively.
 
+#### Finding your filter from an automated test
+
+For ease of identifying a particular filter text box from within your automated tests, you can specify a data-t to be associated with the filter. Just specify a `dataT` property in your column definition. 
+
+```javascript
+[
+  {
+    key: 'name',
+    header: 'Name',
+    filter: {
+      type: 'search',
+      dataT: 'name-search-filter'
+    }
+  }
+]
+```
+
 #### Filter Placeholder Text
 
 You can specify placeholder text for search- and select-type filters by setting the value of the `placeholder` property within the `filter` object of the column definition.
