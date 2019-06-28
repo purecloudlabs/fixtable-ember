@@ -1,7 +1,7 @@
 # Fixtable-Ember
 
 [![npm](https://img.shields.io/npm/v/fixtable-ember.svg)](https://www.npmjs.com/package/fixtable-ember)
-[![Build Status](https://travis-ci.org/MyPureCloud/fixtable-ember.svg?branch=master)](https://travis-ci.org/MyPureCloud/fixtable-ember)
+[![Build Status](https://travis-ci.org/purecloudlabs/fixtable-ember.svg?branch=master)](https://travis-ci.org/purecloudlabs/fixtable-ember)
 
 This addon provides an Ember-specific wrapper around the the [Fixtable](https://github.com/MyPureCloud/fixtable-core) library. Fixtable provides an easy way to create data grids with scrollable content and a fixed header/footer. In addition, Fixtable-Ember provides enhanced functionality such as sorting, filtering, and pagination.
 

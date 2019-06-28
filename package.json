@@ -36,6 +36,7 @@
     "ember-cli-htmlbars-inline-precompile": "^2.1.0",
     "ember-cli-inject-live-reload": "^2.0.1",
     "ember-cli-qunit": "^4.4.0",
+    "ember-cli-sass": "^10.0.1",
     "ember-cli-shims": "^1.0.2",
     "ember-cli-uglify": "^3.0.0",
     "ember-data": "^3.10.0",
@@ -44,7 +45,8 @@
     "ember-load-initializers": "^2.0.0",
     "ember-resolver": "^5.1.3",
     "ember-source": "^3.11.0",
-    "loader.js": "^4.2.3"
+    "loader.js": "^4.2.3",
+    "sass": "^1.22.1"
   },
   "keywords": [
     "ember-addon",
