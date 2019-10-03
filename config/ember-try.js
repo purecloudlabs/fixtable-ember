@@ -1,7 +1,7 @@
-/* eslint-env node */
 module.exports = {
   scenarios: [
     {
+<<<<<<< HEAD
       name: 'default',
       bower: {
         dependencies: {}
@@ -26,10 +26,17 @@ module.exports = {
         },
         resolutions: {
           'ember': 'lts-2-4'
+=======
+      name: 'ember-lts-2.12',
+      npm: {
+        devDependencies: {
+          'ember-source': '~2.12.0'
+>>>>>>> 978dee1... message
         }
       }
     },
     {
+<<<<<<< HEAD
       name: 'ember-lts-2.8',
       bower: {
         dependencies: {
@@ -37,6 +44,12 @@ module.exports = {
         },
         resolutions: {
           'ember': 'lts-2-8'
+=======
+      name: 'ember-lts-2.16',
+      npm: {
+        devDependencies: {
+          'ember-source': '~2.16.0'
+>>>>>>> 978dee1... message
         }
       }
     },

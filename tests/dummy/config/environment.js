@@ -1,11 +1,21 @@
+<<<<<<< HEAD
 /* jshint node: true */
+=======
+'use strict';
+>>>>>>> 978dee1... message
 
 module.exports = function(environment) {
-  var ENV = {
+  let ENV = {
     modulePrefix: 'dummy',
+<<<<<<< HEAD
     environment: environment,
     rootURL: '/fixtable-ember',
     locationType: 'hash',
+=======
+    environment,
+    rootURL: '/',
+    locationType: 'auto',
+>>>>>>> 978dee1... message
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -40,10 +50,11 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
   if (environment === 'production') {
-
+    // here you can enable a production-specific feature
   }
 
   return ENV;
