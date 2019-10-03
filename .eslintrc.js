@@ -1,12 +1,7 @@
 module.exports = {
   root: true,
   parserOptions: {
-<<<<<<< HEAD
-    ecmaVersion: 6,
-    sourceType: 'module'
-  },
   extends: 'eslint:recommended',
-=======
     ecmaVersion: 2017,
     sourceType: 'module'
   },
@@ -17,14 +12,10 @@ module.exports = {
     'eslint:recommended',
     'plugin:ember/recommended'
   ],
->>>>>>> 978dee1... message
   env: {
     browser: true
   },
   rules: {
-<<<<<<< HEAD
-  }
-=======
   },
   overrides: [
     // node files
@@ -64,5 +55,4 @@ module.exports = {
       }
     }
   ]
->>>>>>> 978dee1... message
 };
