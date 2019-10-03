@@ -10,10 +10,10 @@ export default Component.extend({
 
   actions: {
     goToPreviousPage() {
-      this.sendAction("goToPreviousPage");
+      this.goToPreviousPage();
     },
     goToNextPage() {
-      this.sendAction("goToNextPage");
+      this.goToNextPage();
     }
   }
 });

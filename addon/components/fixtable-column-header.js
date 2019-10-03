@@ -11,7 +11,7 @@ export default Component.extend({
 
   actions: {
     sortColumn(columnKey) {
-      this.sendAction('sortColumn', columnKey);
+      this.sortColumn(columnKey);
     }
   }
 });

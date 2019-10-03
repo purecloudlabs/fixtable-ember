@@ -51,7 +51,7 @@ export default Component.extend({
 
   // custom components
   emptyStateComponent: 'fixtable-empty-state',
-  emptyStateComponentValues: {nullMessage: 'No data available'},
+  // now set it init --> emptyStateComponentValues: {nullMessage: 'No data available'},
   footerComponent: 'fixtable-footer',
 
   // backwards-compatibility for old nullMessage option
@@ -422,6 +422,8 @@ export default Component.extend({
     this.updateFilterObservers();
     this.resetSelection();
     this.setDefaults();
+
+    this.set('emptyStateComponentValues', {nullMessage: 'No data available'});
   },
 
   indexColumns() {

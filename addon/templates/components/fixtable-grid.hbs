@@ -22,7 +22,7 @@
                         </th>
                     {{/if}}
                     {{#each columns as |column|}}
-                        {{fixtable-column-header column=column sortBy=sortBy sortAscending=sortAscending sortColumn="sortColumn"}}
+                        {{fixtable-column-header column=column sortBy=sortBy sortAscending=sortAscending sortColumn=(action "sortColumn")}}
                     {{/each}}
                 </tr>
                 <tr class="fixtable-column-filters">
@@ -118,6 +118,6 @@
             currentPage=currentPage totalPages=totalPages totalRows=totalRows
             isLoading=isLoading pageSize=pageSize pageSizeOptions=pageSizeOptions
             selectedDataRows=selectedDataRows bubbleAction=(action sendAction)
-            goToNextPage="goToNextPage" goToPreviousPage="goToPreviousPage"}}
+            goToNextPage=(action "goToNextPage") goToPreviousPage=(action "goToPreviousPage")}}
     </div>
 </div>
