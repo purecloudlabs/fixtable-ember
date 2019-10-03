@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import { later } from '@ember/runloop';
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   serverPageIsLoading: false,
   manualFilterPageIsLoading: false,
 
@@ -23,7 +24,7 @@ export default Ember.Controller.extend({
       this.set(loadingProp, true);
 
       // simulate server-side filtering and pagination
-      Ember.run.later(this, () => {
+      later(this, () => {
         this.set(loadingProp, false);
 
         // apply filters

@@ -1,6 +1,8 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { A } from '@ember/array';
+import Service from '@ember/service';
 
-export default Ember.Service.extend({
+export default Service.extend({
   // returns a raw array of data that can be used to mimic an API response
   getRawData() {
     let dataRows = [
@@ -119,9 +121,9 @@ export default Ember.Service.extend({
 
   getObservableData() {
     let rawData = this.getRawData();
-    let observable = Ember.A();
+    let observable = A();
     rawData.forEach(dataRow => {
-      let observableRow = Ember.Object.create();
+      let observableRow = EmberObject.create();
       for (var key in dataRow) {
         if (dataRow.hasOwnProperty(key)) {
           observableRow.set(key, dataRow[key]);

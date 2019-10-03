@@ -1,8 +1,11 @@
 /* global alert */
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 
-export default Ember.Controller.extend({
-  data: Ember.inject.service(),
+import { inject as service } from '@ember/service';
+import Controller from '@ember/controller';
+
+export default Controller.extend({
+  data: service(),
 
   sortKey: 'id',
   selected: null, // object where keys are IDs of selected rows
@@ -75,7 +78,7 @@ export default Ember.Controller.extend({
       let id = dataRows.get('lastObject.id');
       id = id ? id + 1 : 1; // increment ID, or start at 1
 
-      let row = Ember.Object.create();
+      let row = EmberObject.create();
       row.set('id', id);
       row.set('name', this.get('newRowName'));
       row.set('address', this.get('newRowAddress'));
