@@ -22,46 +22,49 @@ export default Controller.extend({
   editRowAddress: null,
   editRowAlignment: null,
 
-  columnDefs: [
-    {
-      key: 'id',
-      header: 'ID',
-      width: 50,
-      sortable: true,
-      sortFunction: (x, y) => x - y
-    },
-    {
-      key: 'name',
-      header: 'Name',
-      cellClass: 'name',
-      sortable: true,
-      filter: { type: 'search' }
-    },
-    {
-      key: 'address',
-      header: 'Address',
-      sortable: true,
-      filter: { type: 'search' }
-    },
-    {
-      key: 'alignment',
-      header: 'Alignment',
-      sortable: true,
-      filter: { type: 'select', automaticOptions: true }
-    },
-    {
-      key: 'purify',
-      header: 'Purify',
-      component: 'purify-button',
-      width: 100
-    },
-    {
-      key: 'condemn',
-      header: 'Condemn',
-      component: 'condemn-button',
-      width: 100
-    }
-  ],
+  init() {
+    this._super(...arguments);
+    this.set('columnDefs', [
+      {
+        key: 'id',
+        header: 'ID',
+        width: 50,
+        sortable: true,
+        sortFunction: (x, y) => x - y
+      },
+      {
+        key: 'name',
+        header: 'Name',
+        cellClass: 'name',
+        sortable: true,
+        filter: { type: 'search' }
+      },
+      {
+        key: 'address',
+        header: 'Address',
+        sortable: true,
+        filter: { type: 'search' }
+      },
+      {
+        key: 'alignment',
+        header: 'Alignment',
+        sortable: true,
+        filter: { type: 'select', automaticOptions: true }
+      },
+      {
+        key: 'purify',
+        header: 'Purify',
+        component: 'purify-button',
+        width: 100
+      },
+      {
+        key: 'condemn',
+        header: 'Condemn',
+        component: 'condemn-button',
+        width: 100
+      }
+    ])
+  },
 
   getEditRow() {
     let id = this.get('idToEdit');

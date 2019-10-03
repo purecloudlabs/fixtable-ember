@@ -11,9 +11,13 @@ export default Controller.extend({
   manualFilterPageSortKey: 'id',
   customFilterSortKey: 'id',
   rowSelectionSortKey: 'id',
-  possiblePageSizes: [5, 25, 50, 100],
 
   selectedNames: null,
+
+  init() {
+    this._super(...arguments);
+    this.set('possiblePageSizes', [5, 25, 50, 100]);
+  },
 
   actions: {
     toggle(propertyName) {
