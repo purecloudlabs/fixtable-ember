@@ -1,21 +1,12 @@
-<<<<<<< HEAD
 /* jshint node: true */
-=======
 'use strict';
->>>>>>> 978dee1... message
 
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'dummy',
-<<<<<<< HEAD
     environment: environment,
     rootURL: '/fixtable-ember',
     locationType: 'hash',
-=======
-    environment,
-    rootURL: '/',
-    locationType: 'auto',
->>>>>>> 978dee1... message
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
