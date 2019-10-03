@@ -10,8 +10,10 @@ See a live demo here:
 
 (Note: The source for the demo site linked above can be found in this repo's tests/dummy/app directory in the master branch.)
 
-## Installation
+Installation
+------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 ### Getting Started
 
 Navigate to the root directory of the project where you want to install this addon. Then, install this addon in your app using the following commands:
@@ -659,7 +661,46 @@ Fixtable-Ember utilizes the core [Fixtable](https://github.com/MyPureCloud/fixta
 * `ember test --server`
 
 ### Building
+=======
+```
+ember install my-addon
+```
 
-* `ember build`
 
-For more information on using ember-cli, visit [http://ember-cli.com/](http://ember-cli.com/).
+Usage
+------------------------------------------------------------------------------
+
+[Longer description of how to use the addon in apps.]
+
+
+Contributing
+------------------------------------------------------------------------------
+
+### Installation
+
+* `git clone <repository-url>`
+* `cd my-addon`
+* `npm install`
+
+### Linting
+
+* `npm run lint:js`
+* `npm run lint:js -- --fix`
+
+### Running tests
+
+* `ember test` – Runs the test suite on the current Ember version
+* `ember test --server` – Runs the test suite in "watch mode"
+* `npm test` – Runs `ember try:each` to test your addon against multiple Ember versions
+
+### Running the dummy application
+
+* `ember serve`
+* Visit the dummy application at [http://localhost:4200](http://localhost:4200).
+
+For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+
+License
+------------------------------------------------------------------------------
+
+This project is licensed under the [MIT License](LICENSE.md).
