@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper as buildHelper } from '@ember/component/helper';
 
 const isNullEmptyOrUndefined = val =>
   val === null || val === '' || typeof val === 'undefined';
@@ -11,4 +11,4 @@ export function equals([left, right]/*, hash*/) {
   return left === right;
 }
 
-export default Ember.Helper.helper(equals);
+export default buildHelper(equals);

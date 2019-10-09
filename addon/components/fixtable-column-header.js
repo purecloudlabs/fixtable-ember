@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import layout from '../templates/components/fixtable-column-header';
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   tagName: 'th',
 
@@ -11,7 +11,7 @@ export default Ember.Component.extend({
 
   actions: {
     sortColumn(columnKey) {
-      this.sendAction('sortColumn', columnKey);
+      this.sortColumn(columnKey);
     }
   }
 });

@@ -1,5 +1,12 @@
 /* global Fixtable */
 
+import ArrayProxy from '@ember/array/proxy';
+
+import { debounce, once, later } from '@ember/runloop';
+import EmberObject, { observer, computed } from '@ember/object';
+import { or, and } from '@ember/object/computed';
+import Component from '@ember/component';
+
 import DS from 'ember-data';
 import Ember from 'ember';
 import _ from 'lodash';
@@ -12,7 +19,7 @@ const defaultPageSize = 25;
 const toComparableString = x => x === null || typeof x === 'undefined' ? '' : x + '';
 const getCellData = (row, key) => row.get ? row.get(key) : row[key];
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout: layout,
   fixtable: null,
   columnsByKey: null,
@@ -21,9 +28,9 @@ export default Ember.Component.extend({
   // paging
   clientPaging: false,
   serverPaging: false,
-  showPaging: Ember.computed.or('clientPaging', 'serverPaging'),
+  showPaging: or('clientPaging', 'serverPaging'),
   totalRowsOnServer: 0, // only used for server paging
-  showPaginationFooter: Ember.computed.and('showPaging', 'visibleContent.length'),
+  showPaginationFooter: and('showPaging', 'visibleContent.length'),
 
   // filters
   filters: null,
@@ -44,19 +51,19 @@ export default Ember.Component.extend({
 
   // custom components
   emptyStateComponent: 'fixtable-empty-state',
-  emptyStateComponentValues: {nullMessage: 'No data available'},
+  // now set it init --> emptyStateComponentValues: {nullMessage: 'No data available'},
   footerComponent: 'fixtable-footer',
 
   // backwards-compatibility for old nullMessage option
   // TODO: remove this in fixtable-ember v4.0.0
-  nullMessageChanged: Ember.observer('nullMessage', function () {
+  nullMessageChanged: observer('nullMessage', function () {
     Ember.Logger.warn('Deprecation warning: use emptyStateComponentValues instead of nullMessage. Support will be dropped in fixtable-ember v4.x. See https://github.com/MyPureCloud/fixtable-ember#empty-state-component for more info.');
     this.set('emptyStateComponentValues.nullMessage', this.get('nullMessage'));
   }),
 
   externalFilters: null,
 
-  afterCurrentPageChanged: Ember.observer('currentPage', function fixtableGrid$afterCurrentPageChanged() {
+  afterCurrentPageChanged: observer('currentPage', function fixtableGrid$afterCurrentPageChanged() {
     let currentPage = this.get('currentPage'),
         totalPages = this.get('totalPages');
 
@@ -66,11 +73,11 @@ export default Ember.Component.extend({
       this.set('currentPage', totalPages);
     }
     //Ember.run.once(this, this.notifyReloadContent);
-    Ember.run.debounce(this, this.notifyReloadContent, 300, false);
+    debounce(this, this.notifyReloadContent, 300, false);
   }),
 
-  afterPageSizeChanged: Ember.observer('pageSize', function fixtableGrid$afterPageSizeChanged() {
-    Ember.run.once(this, this.notifyReloadContent);
+  afterPageSizeChanged: observer('pageSize', function fixtableGrid$afterPageSizeChanged() {
+    once(this, this.notifyReloadContent);
     this.set('currentPage', defaultPage);
   }),
 
@@ -92,7 +99,7 @@ export default Ember.Component.extend({
     this.notifyRowSelectionChanged([]);
   },
 
-  pageSizeOptions: Ember.computed('totalRows', function fixtableGrid$pageSizeOptions() {
+  pageSizeOptions: computed('totalRows', function fixtableGrid$pageSizeOptions() {
     // limit the page size options based on content size
     let i = 0;
     let possiblePageSizes = this.get('possiblePageSizes');
@@ -102,7 +109,7 @@ export default Ember.Component.extend({
     return possiblePageSizes.slice(0, i + 1);
   }),
 
-  showManualFilterButtons: Ember.computed('realtimeFiltering', 'filters',
+  showManualFilterButtons: computed('realtimeFiltering', 'filters',
     function fixtableGrid$showManualFilterButtons() {
       return !this.get('realtimeFiltering') && Object.keys(this.get('filters')).length;
     }),
@@ -110,7 +117,7 @@ export default Ember.Component.extend({
   onFilterChanged(/*filters, columnKey*/) {
     this.set('filtersAreDirty', true);
     if (this.get('realtimeFiltering')) {
-      Ember.run.debounce(this, this.applyFilter, this.get('filterDebounce'));
+      debounce(this, this.applyFilter, this.get('filterDebounce'));
     }
   },
 
@@ -124,7 +131,7 @@ export default Ember.Component.extend({
     let filtersAreActive = Object.keys(filters).some(key => !!filters[key]);
     this.set('filtersAreActive', filtersAreActive);
 
-    Ember.run.once(this, this.notifyReloadContent);
+    once(this, this.notifyReloadContent);
   },
 
   clearFilter() {
@@ -144,12 +151,12 @@ export default Ember.Component.extend({
     }
   },
 
-  afterSortChanged: Ember.observer('sortBy', 'sortAscending', function fixtableGrid$afterSortChanged() {
+  afterSortChanged: observer('sortBy', 'sortAscending', function fixtableGrid$afterSortChanged() {
     this.set('currentPage', defaultPage);
-    Ember.run.once(this, this.notifyReloadContent);
+    once(this, this.notifyReloadContent);
   }),
 
-  sortedContent: Ember.computed('content.[]', 'serverPaging', 'sortBy', 'sortAscending',
+  sortedContent: computed('content.[]', 'serverPaging', 'sortBy', 'sortAscending',
     function fixtableGrid$sortedContent() {
       let content = this.get('content') || [];
       let sortBy = this.get('sortBy');
@@ -186,7 +193,7 @@ export default Ember.Component.extend({
     }
   },
 
-  sortedFilteredContent: Ember.computed('sortedContent', 'filterToApply', 'serverPaging',
+  sortedFilteredContent: computed('sortedContent', 'filterToApply', 'serverPaging',
     function fixtableGrid$sortedFilteredContent() {
       let sortedContent = this.get('sortedContent') || [];
 
@@ -234,12 +241,12 @@ export default Ember.Component.extend({
     });
   },
 
-  visibleContent: Ember.computed('sortedFilteredContent', 'currentPage', 'pageSize', 'clientPaging',
+  visibleContent: computed('sortedFilteredContent', 'currentPage', 'pageSize', 'clientPaging',
     function fixtableGrid$visibleContent() {
       let sortedFilteredContent = this.get('sortedFilteredContent');
 
       // ensure sortedFilteredContent is a supported type
-      let allowedTypes = [Array, Ember.ArrayProxy, DS.ManyArray];
+      let allowedTypes = [Array, ArrayProxy, DS.ManyArray];
       let isAllowedType = allowedTypes.some(function (type) {
         return sortedFilteredContent instanceof type;
       });
@@ -263,11 +270,11 @@ export default Ember.Component.extend({
       });
     }),
 
-  totalColumns: Ember.computed('columns.[]', 'rowSelection', function fixtableGrid$totalColumns() {
+  totalColumns: computed('columns.[]', 'rowSelection', function fixtableGrid$totalColumns() {
     return this.get('columns').length + (this.get('rowSelection') ? 1 : 0);
   }),
 
-  totalRows: Ember.computed('sortedFilteredContent.[]', 'serverPaging', 'totalRowsOnServer',
+  totalRows: computed('sortedFilteredContent.[]', 'serverPaging', 'totalRowsOnServer',
     function fixtableGrid$totalRows() {
       if (this.get('serverPaging')) {
         return this.get('totalRowsOnServer');
@@ -277,14 +284,14 @@ export default Ember.Component.extend({
       return sortedFilteredContent.length;
     }),
 
-  totalPages: Ember.computed('totalRows', 'pageSize', function fixtableGrid$totalPages() {
+  totalPages: computed('totalRows', 'pageSize', function fixtableGrid$totalPages() {
     return Math.ceil(this.get('totalRows') / this.get('pageSize'));
   }),
 
-  resetSelection: Ember.observer('visibleContent.[]', function fixtableGrid$resetSelection() {
+  resetSelection: observer('visibleContent.[]', function fixtableGrid$resetSelection() {
     if (!this.get('rowSelection')) { return; }
 
-    let selectedRowMap = Ember.Object.create();
+    let selectedRowMap = EmberObject.create();
     this.set('selectedRowMap', selectedRowMap);
     this.get('visibleContent').forEach((row, rowIndex) => {
       selectedRowMap.set(rowIndex.toString(), false);
@@ -357,7 +364,7 @@ export default Ember.Component.extend({
     }
   },
 
-  toggleSelectAll: Ember.observer('selectAllToggle', function fixtableGrid$toggleSelectAll() {
+  toggleSelectAll: observer('selectAllToggle', function fixtableGrid$toggleSelectAll() {
     if (this.get('suppressSelectToggle') || !this.get('rowSelection')) {
       return; // quit if we're programmatically setting the property, not responding to user input
     }
@@ -415,6 +422,8 @@ export default Ember.Component.extend({
     this.updateFilterObservers();
     this.resetSelection();
     this.setDefaults();
+
+    this.set('emptyStateComponentValues', {nullMessage: 'No data available'});
   },
 
   indexColumns() {
@@ -426,7 +435,7 @@ export default Ember.Component.extend({
   },
 
   updateFilterObservers() {
-    let filters = Ember.Object.create();
+    let filters = EmberObject.create();
     this.set('filters', filters);
 
     this.get('columns').forEach(colDef => {
@@ -458,7 +467,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
-    Ember.run.later(this, this.initializeFixtable, 0);
+    later(this, this.initializeFixtable, 0);
   },
 
   initializeFixtable() {
@@ -505,7 +514,7 @@ export default Ember.Component.extend({
     let newExternalFilters = _.cloneDeep(this.get('externalFilters'));
     if (oldExternalFilters && !_.isEqual(oldExternalFilters, newExternalFilters)) {
       this.set('currentPage', 1);
-      Ember.run.debounce(this, this.notifyReloadContent, 300, false);
+      debounce(this, this.notifyReloadContent, 300, false);
     }
     this.set('_previousExternalFilters', newExternalFilters);
   }

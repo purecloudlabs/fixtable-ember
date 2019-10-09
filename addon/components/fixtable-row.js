@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import layout from '../templates/components/fixtable-row';
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   tagName: 'tr',
   classNames: ['fixtable-row'],

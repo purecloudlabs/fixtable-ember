@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import layout from '../templates/components/fixtable-footer';
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   currentPage: null,
   totalPages: null,
@@ -10,10 +10,10 @@ export default Ember.Component.extend({
 
   actions: {
     goToPreviousPage() {
-      this.sendAction("goToPreviousPage");
+      this.goToPreviousPage();
     },
     goToNextPage() {
-      this.sendAction("goToNextPage");
+      this.goToNextPage();
     }
   }
 });

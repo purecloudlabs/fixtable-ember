@@ -1,36 +1,38 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('fixtable-column-label', 'Integration | Component | fixtable column label', {
-  integration: true
-});
+module('Integration | Component | fixtable column label', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders the header text if specified in the column definition', function(assert) {
-  this.set('column', {
-    key: 'key',
-    header: 'header'
+  test('it renders the header text if specified in the column definition', async function(assert) {
+    this.set('column', {
+      key: 'key',
+      header: 'header'
+    });
+    await render(hbs`{{fixtable-column-label column=column}}`);
+
+    assert.equal(find('*').textContent.trim(), 'header');
   });
-  this.render(hbs`{{fixtable-column-label column=column}}`);
 
-  assert.equal(this.$().text().trim(), 'header');
-});
+  test('it renders the column key text if no header text is specified in the column definition', async function(assert) {
+    this.set('column', {
+      key: 'key'
+    });
+    await render(hbs`{{fixtable-column-label column=column}}`);
 
-test('it renders the column key text if no header text is specified in the column definition', function(assert) {
-  this.set('column', {
-    key: 'key'
+    assert.equal(find('*').textContent.trim(), 'key');
   });
-  this.render(hbs`{{fixtable-column-label column=column}}`);
 
-  assert.equal(this.$().text().trim(), 'key');
-});
+  test('it renders only whitespace if hideLabel is set to true in the column definition', async function(assert) {
+    this.set('column', {
+      key: 'key',
+      header: 'header',
+      hideLabel: true
+    });
+    await render(hbs`{{fixtable-column-label column=column}}`);
 
-test('it renders only whitespace if hideLabel is set to true in the column definition', function(assert) {
-  this.set('column', {
-    key: 'key',
-    header: 'header',
-    hideLabel: true
+    assert.equal(find('*').textContent.trim(), '');
   });
-  this.render(hbs`{{fixtable-column-label column=column}}`);
-
-  assert.equal(this.$().text().trim(), '');
 });

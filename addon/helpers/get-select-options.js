@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper as buildHelper } from '@ember/component/helper';
 
 export function getSelectOptions([column, dataRows, serverPaging]/*, hash*/) {
   if (!column || !column.filter || column.filter.type !== 'select') {
@@ -31,4 +31,4 @@ export function getSelectOptions([column, dataRows, serverPaging]/*, hash*/) {
   return column.filter.selectOptions;
 }
 
-export default Ember.Helper.helper(getSelectOptions);
+export default buildHelper(getSelectOptions);

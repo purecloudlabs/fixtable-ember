@@ -1,11 +1,13 @@
-import Ember from 'ember';
+import ArrayProxy from '@ember/array/proxy';
+import { inject as service } from '@ember/service';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
-  data: Ember.inject.service(),
+export default Route.extend({
+  data: service(),
 
   model() {
     return {
-      dataRows: Ember.ArrayProxy.create({
+      dataRows: ArrayProxy.create({
         content: this.get('data').getObservableData()
       })
     };

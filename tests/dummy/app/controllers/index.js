@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import { later } from '@ember/runloop';
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   serverPageIsLoading: false,
   manualFilterPageIsLoading: false,
 
@@ -10,9 +11,13 @@ export default Ember.Controller.extend({
   manualFilterPageSortKey: 'id',
   customFilterSortKey: 'id',
   rowSelectionSortKey: 'id',
-  possiblePageSizes: [5, 25, 50, 100],
 
   selectedNames: null,
+
+  init() {
+    this._super(...arguments);
+    this.set('possiblePageSizes', [5, 25, 50, 100]);
+  },
 
   actions: {
     toggle(propertyName) {
@@ -23,7 +28,7 @@ export default Ember.Controller.extend({
       this.set(loadingProp, true);
 
       // simulate server-side filtering and pagination
-      Ember.run.later(this, () => {
+      later(this, () => {
         this.set(loadingProp, false);
 
         // apply filters
