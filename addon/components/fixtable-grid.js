@@ -599,8 +599,8 @@ export default Component.extend({
         JSON.stringify(this.get('externalFilters'))
       );
       newFilters = JSON.stringify(oldExternalFilters) !== JSON.stringify(newExternalFilters);
-    } catch {
-      console.error('There was an issue parsing the external filters');
+    } catch (error) {
+      console.error('There was an issue parsing the external filters', error);
     }
 
     if (oldExternalFilters && newFilters) {
