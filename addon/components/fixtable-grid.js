@@ -592,13 +592,18 @@ export default Component.extend({
 
     // trigger content reload when externalFilters change
     const oldExternalFilters = this.get('_previousExternalFilters');
-    const newExternalFilters = JSON.parse(
-      JSON.stringify(this.get('externalFilters'))
-    );
-    if (
-      oldExternalFilters &&
-      JSON.stringify(oldExternalFilters) !== JSON.stringify(newExternalFilters)
-    ) {
+    let newExternalFilters = null;
+    let newFilters = false;
+    try {
+      newExternalFilters = JSON.parse(
+        JSON.stringify(this.get('externalFilters'))
+      );
+      newFilters = JSON.stringify(oldExternalFilters) !== JSON.stringify(newExternalFilters);
+    } catch {
+      console.error('There was an issue parsing the external filters');
+    }
+
+    if (oldExternalFilters && newFilters) {
       this.set('currentPage', 1);
       debounce(this, this.notifyReloadContent, 300, false);
     }
