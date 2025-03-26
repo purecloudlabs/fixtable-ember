@@ -1,20 +1,20 @@
 /* global Fixtable */
 
-import ArrayProxy from "@ember/array/proxy";
-import Component from "@ember/component";
-import EmberObject, { computed, observer } from "@ember/object";
-import { and, or } from "@ember/object/computed";
-import { debounce, later, once } from "@ember/runloop";
-import Ember from "ember";
-import DS from "ember-data";
-import layout from "../templates/components/fixtable-grid";
+import ArrayProxy from '@ember/array/proxy';
+import Component from '@ember/component';
+import EmberObject, { computed, observer } from '@ember/object';
+import { and, or } from '@ember/object/computed';
+import { debounce, later, once } from '@ember/runloop';
+import Ember from 'ember';
+import DS from 'ember-data';
+import layout from '../templates/components/fixtable-grid';
 
 const checkboxColumnWidth = 40; // in pixels
 const defaultPossiblePageSizes = [25, 50, 100, 250, 500];
 const defaultPage = 1;
 const defaultPageSize = 25;
 const toComparableString = (x) =>
-  x === null || typeof x === "undefined" ? "" : x + "";
+  x === null || typeof x === 'undefined' ? '' : x + '';
 const getCellData = (row, key) => (row.get ? row.get(key) : row[key]);
 
 export default Component.extend({
@@ -26,9 +26,9 @@ export default Component.extend({
   // paging
   clientPaging: false,
   serverPaging: false,
-  showPaging: or("clientPaging", "serverPaging"),
+  showPaging: or('clientPaging', 'serverPaging'),
   totalRowsOnServer: 0, // only used for server paging
-  showPaginationFooter: and("showPaging", "visibleContent.length"),
+  showPaginationFooter: and('showPaging', 'visibleContent.length'),
 
   // filters
   filters: null,
@@ -48,31 +48,31 @@ export default Component.extend({
   suppressSelectToggle: false,
 
   // custom components
-  emptyStateComponent: "fixtable-empty-state",
+  emptyStateComponent: 'fixtable-empty-state',
   // now set it init --> emptyStateComponentValues: {nullMessage: 'No data available'},
-  footerComponent: "fixtable-footer",
+  footerComponent: 'fixtable-footer',
 
   // backwards-compatibility for old nullMessage option
   // TODO: remove this in fixtable-ember v4.0.0
-  nullMessageChanged: observer("nullMessage", function () {
+  nullMessageChanged: observer('nullMessage', function () {
     Ember.Logger.warn(
-      "Deprecation warning: use emptyStateComponentValues instead of nullMessage. Support will be dropped in fixtable-ember v4.x. See https://github.com/MyPureCloud/fixtable-ember#empty-state-component for more info."
+      'Deprecation warning: use emptyStateComponentValues instead of nullMessage. Support will be dropped in fixtable-ember v4.x. See https://github.com/MyPureCloud/fixtable-ember#empty-state-component for more info.'
     );
-    this.set("emptyStateComponentValues.nullMessage", this.get("nullMessage"));
+    this.set('emptyStateComponentValues.nullMessage', this.get('nullMessage'));
   }),
 
   externalFilters: null,
 
   afterCurrentPageChanged: observer(
-    "currentPage",
+    'currentPage',
     function fixtableGrid$afterCurrentPageChanged() {
-      let currentPage = this.get("currentPage"),
-        totalPages = this.get("totalPages");
+      let currentPage = this.get('currentPage'),
+        totalPages = this.get('totalPages');
 
       if (currentPage < 1) {
-        this.set("currentPage", 1);
+        this.set('currentPage', 1);
       } else if (currentPage > totalPages) {
-        this.set("currentPage", totalPages);
+        this.set('currentPage', totalPages);
       }
       //Ember.run.once(this, this.notifyReloadContent);
       debounce(this, this.notifyReloadContent, 300, false);
@@ -80,27 +80,27 @@ export default Component.extend({
   ),
 
   afterPageSizeChanged: observer(
-    "pageSize",
+    'pageSize',
     function fixtableGrid$afterPageSizeChanged() {
       once(this, this.notifyReloadContent);
-      this.set("currentPage", defaultPage);
+      this.set('currentPage', defaultPage);
     }
   ),
 
   notifyReloadContent() {
-    let handler = this.get("onReloadContent");
-    if (typeof handler === "function") {
-      let sortBy = this.get("sortBy");
+    let handler = this.get('onReloadContent');
+    if (typeof handler === 'function') {
+      let sortBy = this.get('sortBy');
       let sortInfo = sortBy
-        ? { key: sortBy, ascending: this.get("sortAscending") }
+        ? { key: sortBy, ascending: this.get('sortAscending') }
         : null;
 
       handler(
-        this.get("currentPage"),
-        this.get("pageSize"),
-        this.get("filterToApply") || {},
+        this.get('currentPage'),
+        this.get('pageSize'),
+        this.get('filterToApply') || {},
         sortInfo,
-        this.get("externalFilters")
+        this.get('externalFilters')
       );
     }
 
@@ -109,14 +109,14 @@ export default Component.extend({
   },
 
   pageSizeOptions: computed(
-    "totalRows",
+    'totalRows',
     function fixtableGrid$pageSizeOptions() {
       // limit the page size options based on content size
       let i = 0;
-      let possiblePageSizes = this.get("possiblePageSizes");
+      let possiblePageSizes = this.get('possiblePageSizes');
       while (
         i < possiblePageSizes.length &&
-        possiblePageSizes[i] < this.get("totalRows")
+        possiblePageSizes[i] < this.get('totalRows')
       ) {
         i++;
       }
@@ -125,72 +125,72 @@ export default Component.extend({
   ),
 
   showManualFilterButtons: computed(
-    "realtimeFiltering",
-    "filters",
+    'realtimeFiltering',
+    'filters',
     function fixtableGrid$showManualFilterButtons() {
       return (
-        !this.get("realtimeFiltering") &&
-        Object.keys(this.get("filters")).length
+        !this.get('realtimeFiltering') &&
+        Object.keys(this.get('filters')).length
       );
     }
   ),
 
   onFilterChanged(/*filters, columnKey*/) {
-    this.set("filtersAreDirty", true);
-    if (this.get("realtimeFiltering")) {
-      debounce(this, this.applyFilter, this.get("filterDebounce"));
+    this.set('filtersAreDirty', true);
+    if (this.get('realtimeFiltering')) {
+      debounce(this, this.applyFilter, this.get('filterDebounce'));
     }
   },
 
   applyFilter() {
     // update the filterToApply property to trigger a change in sortedFilteredContent
-    let filters = this.get("filters");
-    this.set("filterToApply", JSON.parse(JSON.stringify(filters)));
-    this.set("currentPage", 1);
-    this.set("filtersAreDirty", false);
+    let filters = this.get('filters');
+    this.set('filterToApply', JSON.parse(JSON.stringify(filters)));
+    this.set('currentPage', 1);
+    this.set('filtersAreDirty', false);
 
     let filtersAreActive = Object.keys(filters).some((key) => !!filters[key]);
-    this.set("filtersAreActive", filtersAreActive);
+    this.set('filtersAreActive', filtersAreActive);
 
     once(this, this.notifyReloadContent);
   },
 
   clearFilter() {
     // clear all the bound filter values and re-apply
-    let filters = this.get("filters");
-    Object.keys(filters).forEach((key) => filters.set(key, ""));
+    let filters = this.get('filters');
+    Object.keys(filters).forEach((key) => filters.set(key, ''));
     this.applyFilter();
   },
 
   sortByColumn(columnKey) {
-    if (this.get("sortBy") === columnKey) {
-      this.set("sortAscending", !this.get("sortAscending"));
+    if (this.get('sortBy') === columnKey) {
+      this.set('sortAscending', !this.get('sortAscending'));
     } else {
-      this.set("sortBy", columnKey);
-      this.set("sortAscending", true);
+      this.set('sortBy', columnKey);
+      this.set('sortAscending', true);
     }
   },
 
   afterSortChanged: observer(
-    "sortBy",
-    "sortAscending",
+    'sortBy',
+    'sortAscending',
     function fixtableGrid$afterSortChanged() {
-      this.set("currentPage", defaultPage);
+      this.set('currentPage', defaultPage);
       once(this, this.notifyReloadContent);
     }
   ),
 
   sortedContent: computed(
-    "content.[]",
-    "serverPaging",
-    "sortBy",
-    "sortAscending",
+    'content.[]',
+    'serverPaging',
+    'sortBy',
+    'sortAscending',
     function fixtableGrid$sortedContent() {
-      let content = this.get("content") || [];
-      let sortBy = this.get("sortBy");
+      let content = this.get('content') || [];
+      let sortBy = this.get('sortBy');
 
       // don't sort on the client if server pagination is on, or if no sort specified
-      if (this.get("serverPaging") || !sortBy) {
+      if (this.get('serverPaging') || !sortBy) {
         return content;
       }
 
@@ -203,15 +203,15 @@ export default Component.extend({
 
   getSortFunction(sortBy) {
     let customSort =
-      this.get("columnsByKey")[sortBy] &&
-      this.get("columnsByKey")[sortBy].sortFunction;
+      this.get('columnsByKey')[sortBy] &&
+      this.get('columnsByKey')[sortBy].sortFunction;
 
-    if (typeof customSort === "function") {
+    if (typeof customSort === 'function') {
       // use the custom sort function
       return (leftRow, rightRow) => {
         let leftVal = getCellData(leftRow, sortBy);
         let rightVal = getCellData(rightRow, sortBy);
-        return this.get("sortAscending")
+        return this.get('sortAscending')
           ? customSort(leftVal, rightVal)
           : customSort(rightVal, leftVal);
       };
@@ -220,7 +220,7 @@ export default Component.extend({
       return (leftRow, rightRow) => {
         let leftVal = toComparableString(getCellData(leftRow, sortBy));
         let rightVal = toComparableString(getCellData(rightRow, sortBy));
-        return this.get("sortAscending")
+        return this.get('sortAscending')
           ? leftVal.localeCompare(rightVal)
           : rightVal.localeCompare(leftVal);
       };
@@ -228,13 +228,13 @@ export default Component.extend({
   },
 
   sortedFilteredContent: computed(
-    "sortedContent",
-    "filterToApply",
-    "serverPaging",
+    'sortedContent',
+    'filterToApply',
+    'serverPaging',
     function fixtableGrid$sortedFilteredContent() {
-      let sortedContent = this.get("sortedContent") || [];
+      let sortedContent = this.get('sortedContent') || [];
 
-      if (this.get("serverPaging")) {
+      if (this.get('serverPaging')) {
         return sortedContent; // don't filter on the client if server pagination is on
       }
 
@@ -244,8 +244,8 @@ export default Component.extend({
 
   getFilteredContent(content) {
     // client filtering
-    let columnsByKey = this.get("columnsByKey");
-    let filters = this.get("filterToApply") || {};
+    let columnsByKey = this.get('columnsByKey');
+    let filters = this.get('filterToApply') || {};
     let columnKeys = Object.keys(filters);
 
     return content.filter((row) => {
@@ -255,7 +255,7 @@ export default Component.extend({
         let filterValue = filters[columnKey];
 
         // custom filter
-        if (typeof filterFunction === "function") {
+        if (typeof filterFunction === 'function') {
           return filterFunction(row, filterValue);
         }
 
@@ -265,11 +265,11 @@ export default Component.extend({
         }
 
         // normalize the cell and filter values
-        let cellData = (getCellData(row, columnKey) || "").toLowerCase();
+        let cellData = (getCellData(row, columnKey) || '').toLowerCase();
         filterValue = filterValue.toLowerCase();
 
         // select-type filter
-        if (columnsByKey[columnKey].filter.type === "select") {
+        if (columnsByKey[columnKey].filter.type === 'select') {
           return cellData === filterValue;
         }
 
@@ -280,12 +280,12 @@ export default Component.extend({
   },
 
   visibleContent: computed(
-    "sortedFilteredContent",
-    "currentPage",
-    "pageSize",
-    "clientPaging",
+    'sortedFilteredContent',
+    'currentPage',
+    'pageSize',
+    'clientPaging',
     function fixtableGrid$visibleContent() {
-      let sortedFilteredContent = this.get("sortedFilteredContent");
+      let sortedFilteredContent = this.get('sortedFilteredContent');
 
       // ensure sortedFilteredContent is a supported type
       let allowedTypes = [Array, ArrayProxy, DS.ManyArray];
@@ -294,14 +294,14 @@ export default Component.extend({
       });
       if (!isAllowedType) {
         Ember.Logger.warn(
-          "Content supplied to Fixtable is not a supported type"
+          'Content supplied to Fixtable is not a supported type'
         );
         return [];
       }
 
-      if (this.get("clientPaging")) {
-        let currentPage = this.get("currentPage");
-        let pageSize = this.get("pageSize");
+      if (this.get('clientPaging')) {
+        let currentPage = this.get('currentPage');
+        let pageSize = this.get('pageSize');
         sortedFilteredContent = sortedFilteredContent.slice(
           (currentPage - 1) * pageSize,
           currentPage * pageSize
@@ -319,45 +319,45 @@ export default Component.extend({
   ),
 
   totalColumns: computed(
-    "columns.[]",
-    "rowSelection",
+    'columns.[]',
+    'rowSelection',
     function fixtableGrid$totalColumns() {
-      return this.get("columns").length + (this.get("rowSelection") ? 1 : 0);
+      return this.get('columns').length + (this.get('rowSelection') ? 1 : 0);
     }
   ),
 
   totalRows: computed(
-    "sortedFilteredContent.[]",
-    "serverPaging",
-    "totalRowsOnServer",
+    'sortedFilteredContent.[]',
+    'serverPaging',
+    'totalRowsOnServer',
     function fixtableGrid$totalRows() {
-      if (this.get("serverPaging")) {
-        return this.get("totalRowsOnServer");
+      if (this.get('serverPaging')) {
+        return this.get('totalRowsOnServer');
       }
 
-      let sortedFilteredContent = this.get("sortedFilteredContent") || [];
+      let sortedFilteredContent = this.get('sortedFilteredContent') || [];
       return sortedFilteredContent.length;
     }
   ),
 
   totalPages: computed(
-    "totalRows",
-    "pageSize",
+    'totalRows',
+    'pageSize',
     function fixtableGrid$totalPages() {
-      return Math.ceil(this.get("totalRows") / this.get("pageSize"));
+      return Math.ceil(this.get('totalRows') / this.get('pageSize'));
     }
   ),
 
   resetSelection: observer(
-    "visibleContent.[]",
+    'visibleContent.[]',
     function fixtableGrid$resetSelection() {
-      if (!this.get("rowSelection")) {
+      if (!this.get('rowSelection')) {
         return;
       }
 
       let selectedRowMap = EmberObject.create();
-      this.set("selectedRowMap", selectedRowMap);
-      this.get("visibleContent").forEach((row, rowIndex) => {
+      this.set('selectedRowMap', selectedRowMap);
+      this.get('visibleContent').forEach((row, rowIndex) => {
         selectedRowMap.set(rowIndex.toString(), false);
       });
 
@@ -365,7 +365,7 @@ export default Component.extend({
       let self = this;
       selectionKeys.forEach((key) => {
         if (!selectedRowMap.hasObserverFor(key)) {
-          selectedRowMap.addObserver(key, self, "onRowSelectedOrDeselected");
+          selectedRowMap.addObserver(key, self, 'onRowSelectedOrDeselected');
         }
       });
 
@@ -375,19 +375,19 @@ export default Component.extend({
   ),
 
   setSelectAllToggleChecked(value) {
-    this.set("suppressSelectToggle", true);
-    this.set("selectAllToggle", value);
-    this.set("suppressSelectToggle", false);
+    this.set('suppressSelectToggle', true);
+    this.set('selectAllToggle', value);
+    this.set('suppressSelectToggle', false);
   },
 
   setSelectAllToggleIndeterminate(indeterminate) {
-    if (!this.get("rowSelection")) {
+    if (!this.get('rowSelection')) {
       return;
     }
 
     let selector =
-      ".fixtable-column-headers th .fixtable-checkbox input[type=checkbox]";
-    let element = this.get("element");
+      '.fixtable-column-headers th .fixtable-checkbox input[type=checkbox]';
+    let element = this.get('element');
     if (element) {
       let checkbox = element.querySelector(selector);
       checkbox.indeterminate = indeterminate;
@@ -396,16 +396,16 @@ export default Component.extend({
 
   onRowSelectedOrDeselected(selectedRowMap /*, rowIndex*/) {
     // selectedRowMap maps row indices in visibleContent to their selection status
-    if (!this.get("rowSelection")) {
+    if (!this.get('rowSelection')) {
       return;
     }
 
     let selectedDataRows = Object.keys(selectedRowMap)
       .filter((index) => selectedRowMap[index])
-      .map((index) => this.get("visibleContent")[index]);
+      .map((index) => this.get('visibleContent')[index]);
 
     let numSelected = selectedDataRows.length;
-    let allRowsAreSelected = numSelected === this.get("visibleContent").length;
+    let allRowsAreSelected = numSelected === this.get('visibleContent').length;
     let someRowsAreSelected = numSelected > 0;
 
     if (allRowsAreSelected) {
@@ -424,32 +424,32 @@ export default Component.extend({
 
   notifyRowSelectionChanged(selectedDataRows) {
     this.set(
-      "selectedDataRows",
+      'selectedDataRows',
       selectedDataRows.map((row) => {
         return row.object;
       })
     );
-    let handler = this.get("onSelectionChanged");
-    if (typeof handler === "function") {
-      handler(this.get("selectedDataRows"));
+    let handler = this.get('onSelectionChanged');
+    if (typeof handler === 'function') {
+      handler(this.get('selectedDataRows'));
     }
   },
 
   toggleSelectAll: observer(
-    "selectAllToggle",
+    'selectAllToggle',
     function fixtableGrid$toggleSelectAll() {
-      if (this.get("suppressSelectToggle") || !this.get("rowSelection")) {
+      if (this.get('suppressSelectToggle') || !this.get('rowSelection')) {
         return; // quit if we're programmatically setting the property, not responding to user input
       }
 
-      let selectedRowMap = this.get("selectedRowMap");
+      let selectedRowMap = this.get('selectedRowMap');
       let selectedRowKeys = Object.keys(selectedRowMap);
 
       let numSelected = selectedRowKeys.filter(
         (rowIndex) => selectedRowMap[rowIndex]
       ).length;
       let allRowsAreSelected =
-        numSelected === this.get("visibleContent").length;
+        numSelected === this.get('visibleContent').length;
 
       // If all rows already selected, deselect all. Otherwise, select all.
       selectedRowKeys.forEach((rowIndex) =>
@@ -461,17 +461,17 @@ export default Component.extend({
   ),
 
   safeSetCurrentPage(newPage) {
-    let validPageNum = Math.min(Math.max(1, newPage), this.get("totalPages"));
-    this.set("currentPage", validPageNum);
+    let validPageNum = Math.min(Math.max(1, newPage), this.get('totalPages'));
+    this.set('currentPage', validPageNum);
   },
 
   actions: {
     goToPreviousPage() {
-      let currentPage = parseInt(this.get("currentPage"));
+      let currentPage = parseInt(this.get('currentPage'));
       this.safeSetCurrentPage(currentPage - 1);
     },
     goToNextPage() {
-      let currentPage = parseInt(this.get("currentPage"));
+      let currentPage = parseInt(this.get('currentPage'));
       this.safeSetCurrentPage(currentPage + 1);
     },
 
@@ -487,8 +487,8 @@ export default Component.extend({
     },
 
     onRowClick(row) {
-      var handler = this.get("onRowClick");
-      if (typeof handler === "function") {
+      var handler = this.get('onRowClick');
+      if (typeof handler === 'function') {
         handler(row);
       }
     },
@@ -512,19 +512,19 @@ export default Component.extend({
 
   indexColumns() {
     let columnsByKey = {};
-    this.get("columns").forEach((column) => {
+    this.get('columns').forEach((column) => {
       columnsByKey[column.key] = column;
     });
-    this.set("columnsByKey", columnsByKey);
+    this.set('columnsByKey', columnsByKey);
   },
 
   updateFilterObservers() {
     let filters = EmberObject.create();
-    this.set("filters", filters);
+    this.set('filters', filters);
 
-    this.get("columns").forEach((colDef) => {
-      if (colDef.filter && typeof filters[colDef.key] === "undefined") {
-        filters[colDef.key] = "";
+    this.get('columns').forEach((colDef) => {
+      if (colDef.filter && typeof filters[colDef.key] === 'undefined') {
+        filters[colDef.key] = '';
       }
     });
 
@@ -532,20 +532,20 @@ export default Component.extend({
     let self = this;
     filterKeys.forEach((key) => {
       if (!filters.hasObserverFor(key)) {
-        filters.addObserver(key, self, "onFilterChanged");
+        filters.addObserver(key, self, 'onFilterChanged');
       }
     });
   },
 
   setDefaults() {
-    if (!this.get("pageSize")) {
-      this.set("pageSize", defaultPageSize);
+    if (!this.get('pageSize')) {
+      this.set('pageSize', defaultPageSize);
     }
-    if (!this.get("possiblePageSizes")) {
-      this.set("possiblePageSizes", defaultPossiblePageSizes);
+    if (!this.get('possiblePageSizes')) {
+      this.set('possiblePageSizes', defaultPossiblePageSizes);
     }
-    if (!this.get("currentPage")) {
-      this.set("currentPage", defaultPage);
+    if (!this.get('currentPage')) {
+      this.set('currentPage', defaultPage);
     }
   },
 
@@ -555,38 +555,38 @@ export default Component.extend({
   },
 
   initializeFixtable() {
-    let fixtableElement = this.$(".fixtable")
-      ? this.$(".fixtable")[0]
+    let fixtableElement = this.$('.fixtable')
+      ? this.$('.fixtable')[0]
       : undefined; //codes around a bug in ember test where jquery can't find the fixtable element initially
     if (!fixtableElement) {
       return;
     }
     // initialize the Fixtable script
-    let fixtable = new Fixtable(this.$(".fixtable")[0], this.get("debugMode"));
+    let fixtable = new Fixtable(this.$('.fixtable')[0], this.get('debugMode'));
 
     // account for the row selection checkbox column, if present
     let indexOffset = 1;
-    if (this.get("rowSelection")) {
+    if (this.get('rowSelection')) {
       indexOffset++;
       fixtable.setColumnWidth(1, checkboxColumnWidth);
     }
 
     // set fixtable column widths
-    this.get("columns").forEach((col, index) => {
+    this.get('columns').forEach((col, index) => {
       if (col.width) {
         fixtable.setColumnWidth(index + indexOffset, col.width);
       }
     });
 
     fixtable.setDimensions();
-    this.set("fixtable", fixtable);
+    this.set('fixtable', fixtable);
     this.notifyReloadContent();
   },
 
   didRender() {
     // force the Fixtable to resize itself when rendered
     this._super(...arguments);
-    let fixtable = this.get("fixtable");
+    let fixtable = this.get('fixtable');
     if (fixtable) {
       fixtable.setDimensions();
     }
@@ -596,24 +596,22 @@ export default Component.extend({
     this._super(...arguments);
 
     // trigger content reload when externalFilters change
-    const oldExternalFilters = this.get("_previousExternalFilters");
+    const oldExternalFilters = this.get('_previousExternalFilters');
     let newExternalFilters = null;
     let newFilters = false;
     try {
       newExternalFilters = JSON.parse(
-        JSON.stringify(this.get("externalFilters"))
+        JSON.stringify(this.get('externalFilters'))
       );
-      newFilters =
-        JSON.stringify(oldExternalFilters) !==
-        JSON.stringify(newExternalFilters);
+      newFilters = JSON.stringify(oldExternalFilters) !== JSON.stringify(newExternalFilters);
     } catch (error) {
-      console.error("There was an issue parsing the external filters", error);
+      console.error('There was an issue parsing the external filters', error);
     }
 
     if (oldExternalFilters && newFilters) {
-      this.set("currentPage", 1);
+      this.set('currentPage', 1);
       debounce(this, this.notifyReloadContent, 300, false);
     }
-    this.set("_previousExternalFilters", newExternalFilters);
+    this.set('_previousExternalFilters', newExternalFilters);
   },
 });
