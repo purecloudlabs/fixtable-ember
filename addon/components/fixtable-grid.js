@@ -502,7 +502,12 @@ export default Component.extend({
     this.resetSelection();
     this.setDefaults();
 
-    this.set('emptyStateComponentValues', { nullMessage: 'No data available' });
+    const emptyStateComponentValues = this.get("emptyStateComponentValues");
+    if (emptyStateComponentValues && !emptyStateComponentValues.nullMessage) {
+      this.set("emptyStateComponentValues", {
+        nullMessage: "No data available",
+      });
+    }
   },
 
   indexColumns() {
