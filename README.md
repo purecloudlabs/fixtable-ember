@@ -645,6 +645,7 @@ Fixtable-Ember utilizes the core [Fixtable](https://github.com/MyPureCloud/fixta
 ### Installation
 
 * `git clone` this repository
+* `node v12` is recommended. 
 * `npm install`
 
 ### Running

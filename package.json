@@ -1,6 +1,6 @@
 {
   "name": "fixtable-ember",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Ember wrapper for the Fixtable table library",
   "directories": {
     "doc": "doc",
@@ -17,7 +17,7 @@
     "url": "https://github.com/MyPureCloud/fixtable-ember.git"
   },
   "engines": {
-    "node": "12.*"
+    "node": ">=12"
   },
   "author": "Interactive Intelligence",
   "contributors": [
